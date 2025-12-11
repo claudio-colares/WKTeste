@@ -24,7 +24,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Color = clGray
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 1008
     object lblTitulo: TLabel
       AlignWithMargins = True
       Left = 3
@@ -41,8 +40,8 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
-      ExplicitTop = 0
-      ExplicitWidth = 910
+      ExplicitWidth = 187
+      ExplicitHeight = 30
     end
   end
   object pnlPrincipal: TPanel
@@ -53,8 +52,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 60
-    ExplicitHeight = 615
     object pnlCabecalhoPedido: TPanel
       Left = 0
       Top = 0
@@ -147,8 +144,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Align = alClient
         Caption = 'Dados do Pedido'
         TabOrder = 1
-        ExplicitWidth = 1042
-        ExplicitHeight = 94
         object Label1: TLabel
           Left = 9
           Top = 35
@@ -195,10 +190,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alClient
       Caption = 'pnlgrid'
       TabOrder = 1
-      ExplicitLeft = 416
-      ExplicitTop = 296
-      ExplicitWidth = 185
-      ExplicitHeight = 41
       object dbgrdItens: TDBGrid
         AlignWithMargins = True
         Left = 4
@@ -264,9 +255,9 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Top = 3
           Width = 120
           Height = 29
+          Action = actInserirItem
           Align = alLeft
-          Caption = '&inserir Item'
-          ImageIndex = 1
+          Caption = '&Inserir Item'
           Images = imgListPrincipal
           Layout = blGlyphRight
           TabOrder = 0
@@ -282,9 +273,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Color = clMoneyGreen
       ParentBackground = False
       TabOrder = 2
-      ExplicitLeft = 416
-      ExplicitTop = 296
-      ExplicitWidth = 185
       object Label7: TLabel
         Left = 693
         Top = 1
@@ -300,7 +288,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Font.Style = [fsBold]
         ParentFont = False
         Layout = tlCenter
-        ExplicitLeft = 662
         ExplicitHeight = 30
       end
       object Edit4: TEdit
@@ -331,7 +318,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 666
     object BitBtn1: TBitBtn
       AlignWithMargins = True
       Left = 889
@@ -342,8 +328,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alRight
       Caption = 'Fechar (Esc)'
       TabOrder = 0
-      ExplicitTop = 20
-      ExplicitHeight = 47
     end
     object BitBtn2: TBitBtn
       AlignWithMargins = True
@@ -355,9 +339,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alRight
       Caption = 'Gravar Pedido'
       TabOrder = 1
-      ExplicitLeft = 3
-      ExplicitTop = 20
-      ExplicitHeight = 47
     end
   end
   object imgListPrincipal: TImageList
@@ -504,5 +485,15 @@ object FrmPedidoVenda: TFrmPedidoVenda
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object actListPedidoVenda: TActionList
+    Images = imgListPrincipal
+    Left = 504
+    Top = 368
+    object actInserirItem: TAction
+      Caption = '&Inserir Item'
+      ImageIndex = 1
+      OnExecute = actInserirItemExecute
+    end
   end
 end

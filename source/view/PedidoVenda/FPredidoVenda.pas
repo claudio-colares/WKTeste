@@ -1,11 +1,11 @@
-unit FrmPredidoVenda;
+unit FPredidoVenda;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, System.ImageList,
-  Vcl.ImgList, Vcl.ComCtrls, Vcl.Buttons;
+  Vcl.ImgList, Vcl.ComCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -38,13 +38,15 @@ type
     pnlTotalizador: TPanel;
     Edit4: TEdit;
     Label7: TLabel;
+    actListPedidoVenda: TActionList;
+    actInserirItem: TAction;
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
     procedure btneditCodigoClienteChange(Sender: TObject);
+    procedure actInserirItemExecute(Sender: TObject);
   private
     { Private declarations }
-    procedure IniciarTela;
-    procedure ExibirBotoesPesquisa(ButtonedEdit: TButtonedEdit);
+    procedure DimencionarForm;
   public
     { Public declarations }
   end;
@@ -56,32 +58,36 @@ implementation
 
 {$R *.dfm}
 
+uses FPedidoVendaItem, FuncoesController;
+
 { TFrmPedidoVenda }
+
+procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
+begin
+  try
+    FrmPedidoVendaItem := TFrmPedidoVendaItem.Create(nil);
+    FrmPedidoVendaItem.ShowModal;
+  finally
+    FrmPedidoVendaItem.Free;
+  end;
+end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteChange(Sender: TObject);
 begin
- ExibirBotoesPesquisa(btneditCodigoCliente);
+ ExibirBotaoPesquisa(btneditCodigoCliente);
 end;
 
 procedure TFrmPedidoVenda.btneditNumeroPedidoChange(Sender: TObject);
 begin
-  ExibirBotoesPesquisa(btneditNumeroPedido);
-end;
-
-procedure TFrmPedidoVenda.ExibirBotoesPesquisa(ButtonedEdit: TButtonedEdit);
-begin
- if ButtonedEdit.Text = '' then
-   ButtonedEdit.RightButton.Visible := True
- else
-   ButtonedEdit.RightButton.Visible := False;
+ ExibirBotaoPesquisa(btneditNumeroPedido);
 end;
 
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
- IniciarTela;
+ DimencionarForm;
 end;
 
-procedure TFrmPedidoVenda.IniciarTela;
+procedure TFrmPedidoVenda.DimencionarForm;
 begin
  Self.Position := poScreenCenter;
  Self.Width    := 1024;

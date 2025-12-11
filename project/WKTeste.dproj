@@ -126,13 +126,22 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\source\view\PedidoVenda\FrmPredidoVenda.pas">
+        <DCCReference Include="..\source\view\PedidoVenda\FPredidoVenda.pas">
             <Form>FrmPedidoVenda</Form>
         </DCCReference>
-        <DCCReference Include="..\source\view\PedidoVenda\FrmPedidoVendaItem.pas">
-            <Form>Form1</Form>
+        <DCCReference Include="..\source\view\PedidoVenda\FPedidoVendaItem.pas">
+            <Form>FrmPedidoVendaItem</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\source\controller\classesGlobal\FuncoesController.pas"/>
+        <DCCReference Include="..\source\controller\PedidoVenda\PedidoVendaController.pas"/>
+        <DCCReference Include="..\source\controller\PedidoVenda\PedidoVendaItemController.pas"/>
+        <DCCReference Include="..\source\controller\Produtos\ProdutosController.pas"/>
+        <DCCReference Include="..\source\controller\Cliente\ClienteController.pas"/>
+        <DCCReference Include="..\source\model\Produtos\ProdutosModel.pas"/>
+        <DCCReference Include="..\source\model\Cliente\ClienteModel.pas"/>
+        <DCCReference Include="..\source\model\PedidoVenda\PedidoVendaItemModel.pas"/>
+        <DCCReference Include="..\source\model\PedidoVenda\PedidoVendaModel.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
