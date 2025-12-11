@@ -1,4 +1,4 @@
-unit FrmPredidoVenda;
+unit FrmPedidoVendaItem;
 
 interface
 
@@ -7,8 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
 
 type
-  TFrmPedidoVenda = class(TForm)
-    procedure FormCreate(Sender: TObject);
+  TForm1 = class(TForm)
   private
     { Private declarations }
   public
@@ -16,11 +15,10 @@ type
   end;
 
 var
-  FrmPedidoVenda: TFrmPedidoVenda;
+  Form1: TForm1;
 
 implementation
 
 {$R *.dfm}
-
 
 end.

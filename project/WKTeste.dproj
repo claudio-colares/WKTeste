@@ -129,6 +129,10 @@
         <DCCReference Include="..\source\view\PedidoVenda\FrmPredidoVenda.pas">
             <Form>FrmPedidoVenda</Form>
         </DCCReference>
+        <DCCReference Include="..\source\view\PedidoVenda\FrmPedidoVendaItem.pas">
+            <Form>Form1</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -155,7 +159,7 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">
-                <DeployFile LocalName="Win32\Debug\WKTeste.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="bin\WKTeste.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>WKTeste.exe</RemoteName>
                         <Overwrite>true</Overwrite>
