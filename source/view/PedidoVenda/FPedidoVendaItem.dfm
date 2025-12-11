@@ -28,8 +28,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 160
-      Height = 30
+      Width = 778
+      Height = 34
       Align = alClient
       Alignment = taCenter
       Caption = 'ITEM DE VENDA'
@@ -40,6 +40,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
+      ExplicitWidth = 160
+      ExplicitHeight = 30
     end
   end
   object pnlBotoes: TPanel
@@ -51,6 +53,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
     BevelOuter = bvNone
     TabOrder = 1
     object BitBtn1: TBitBtn
+      Tag = 5
       AlignWithMargins = True
       Left = 661
       Top = 3
@@ -125,7 +128,6 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 332
       Height = 29
-      Enabled = False
       TabOrder = 1
     end
     object editQuantidade: TEdit
@@ -133,7 +135,6 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 91
       Height = 29
-      Enabled = False
       TabOrder = 2
     end
     object editVlrUnitario: TEdit
@@ -141,7 +142,6 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 99
       Height = 29
-      Enabled = False
       TabOrder = 3
     end
     object Edit4: TEdit
@@ -149,7 +149,6 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 99
       Height = 29
-      Enabled = False
       ImeName = 'editVlrTotal'
       TabOrder = 4
     end

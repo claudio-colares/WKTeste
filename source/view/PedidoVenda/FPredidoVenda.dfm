@@ -84,14 +84,14 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Caption = 'Nome'
         end
         object Label5: TLabel
-          Left = 453
+          Left = 663
           Top = 23
           Width = 48
           Height = 21
           Caption = 'Cidade'
         end
         object Label6: TLabel
-          Left = 667
+          Left = 877
           Top = 23
           Width = 19
           Height = 21
@@ -110,26 +110,26 @@ object FrmPedidoVenda: TFrmPedidoVenda
           TabOrder = 0
           OnChange = btneditCodigoClienteChange
         end
-        object Edit1: TEdit
+        object DBEdit1: TDBEdit
           Left = 115
           Top = 46
-          Width = 332
+          Width = 542
           Height = 29
           Enabled = False
           TabOrder = 1
         end
-        object Edit2: TEdit
-          Left = 453
+        object DBEdit2: TDBEdit
+          Left = 663
           Top = 46
           Width = 208
           Height = 29
           Enabled = False
           TabOrder = 2
         end
-        object Edit3: TEdit
-          Left = 667
+        object DBEdit3: TDBEdit
+          Left = 877
           Top = 46
-          Width = 50
+          Width = 121
           Height = 29
           Enabled = False
           TabOrder = 3
@@ -197,6 +197,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Width = 1004
         Height = 298
         Align = alClient
+        DataSource = dsPedidoVendaItem
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -495,5 +496,51 @@ object FrmPedidoVenda: TFrmPedidoVenda
       ImageIndex = 1
       OnExecute = actInserirItemExecute
     end
+  end
+  object QryPedidoVenda: TFDQuery
+    Active = True
+    Connection = DBConexao
+    SQL.Strings = (
+      'select * from pedidos_venda')
+    Left = 48
+    Top = 474
+  end
+  object QryPedidoVendaItem: TFDQuery
+    Active = True
+    Connection = DBConexao
+    SQL.Strings = (
+      'select * from pedidos_vendas_itens'
+      'where numero_pedido = :pnumPedido')
+    Left = 176
+    Top = 482
+    ParamData = <
+      item
+        Name = 'PNUMPEDIDO'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object DBConexao: TFDConnection
+    Params.Strings = (
+      'Database=db_wkteste'
+      'Server=localhost'
+      'User_Name=root'
+      'Password=masterkey'
+      'DriverID=MySQL')
+    Connected = True
+    LoginPrompt = False
+    Left = 56
+    Top = 394
+  end
+  object dsPedidoVenda: TDataSource
+    DataSet = QryPedidoVenda
+    Left = 48
+    Top = 544
+  end
+  object dsPedidoVendaItem: TDataSource
+    DataSet = QryPedidoVendaItem
+    Left = 176
+    Top = 544
   end
 end

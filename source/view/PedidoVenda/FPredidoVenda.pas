@@ -5,7 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, System.ImageList,
-  Vcl.ImgList, Vcl.ComCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList;
+  Vcl.ImgList, Vcl.ComCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async,
+  FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -20,11 +23,8 @@ type
     Label3: TLabel;
     btneditCodigoCliente: TButtonedEdit;
     Label4: TLabel;
-    Edit1: TEdit;
     Label5: TLabel;
-    Edit2: TEdit;
     Label6: TLabel;
-    Edit3: TEdit;
     grpBoxDadosDoPedido: TGroupBox;
     Label1: TLabel;
     btneditNumeroPedido: TButtonedEdit;
@@ -40,6 +40,14 @@ type
     Label7: TLabel;
     actListPedidoVenda: TActionList;
     actInserirItem: TAction;
+    QryPedidoVenda: TFDQuery;
+    QryPedidoVendaItem: TFDQuery;
+    DBConexao: TFDConnection;
+    dsPedidoVenda: TDataSource;
+    dsPedidoVendaItem: TDataSource;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
     procedure btneditCodigoClienteChange(Sender: TObject);
