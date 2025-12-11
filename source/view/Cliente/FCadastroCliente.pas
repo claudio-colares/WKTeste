@@ -10,7 +10,8 @@ uses
   Vcl.DBGrids, Vcl.Buttons, Vcl.ExtCtrls;
 
 type
-  TFrmCadastroBase1 = class(TFrmCadastroBase)
+  TFrmCadastroCliente = class(TFrmCadastroBase)
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -18,10 +19,16 @@ type
   end;
 
 var
-  FrmCadastroBase1: TFrmCadastroBase1;
+  FrmCadastroCliente: TFrmCadastroCliente;
 
 implementation
 
 {$R *.dfm}
+
+procedure TFrmCadastroCliente.FormShow(Sender: TObject);
+begin
+ inherited;
+ QryCadastroBase.Active := true;
+end;
 
 end.

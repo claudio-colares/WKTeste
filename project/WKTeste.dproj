@@ -147,9 +147,11 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\source\view\Cliente\FCadastroCliente.pas">
-            <Form>FrmCadastroBase1</Form>
+            <Form>FrmCadastroCliente</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\source\controller\classesGlobal\uConectarBaseController.pas"/>
+        <DCCReference Include="..\source\controller\classesGlobal\uConstantesController.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -8,7 +8,8 @@ uses
   Vcl.ImgList, Vcl.ComCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async,
   FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef;
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
+  uConectarBaseController, uConstantesController;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -48,25 +49,33 @@ type
     DBEdit1: TDBEdit;
     DBEdit2: TDBEdit;
     DBEdit3: TDBEdit;
+    QryClientes: TFDQuery;
+    FDQuery2: TFDQuery;
+
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
     procedure btneditCodigoClienteChange(Sender: TObject);
     procedure actInserirItemExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
   private
     { Private declarations }
     procedure DimencionarForm;
+
+
   public
     { Public declarations }
   end;
 
 var
-  FrmPedidoVenda: TFrmPedidoVenda;
+  FrmPedidoVenda : TFrmPedidoVenda;
+  BaseDados      : TConectarBase;
 
 implementation
 
 {$R *.dfm}
 
-uses FPedidoVendaItem, FuncoesController;
+uses FPedidoVendaItem, FuncoesController, FCadastroCliente;
 
 { TFrmPedidoVenda }
 
@@ -85,14 +94,41 @@ begin
  ExibirBotaoPesquisa(btneditCodigoCliente);
 end;
 
+procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
+begin
+ FrmCadastroCliente          := TFrmCadastroCliente.Create(nil);
+ FrmCadastroCliente.Position := poOwnerFormCenter;
+ FrmCadastroCliente.ShowModal;
+end;
+
 procedure TFrmPedidoVenda.btneditNumeroPedidoChange(Sender: TObject);
 begin
  ExibirBotaoPesquisa(btneditNumeroPedido);
 end;
 
+procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
+begin
+  SetConstantes;
+  BaseDados.AcessarBase(DBConexao);
+
+  try
+    DBConexao.Open;
+  except
+    on E: Exception do
+    begin
+      ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak+
+        'Análise o arquivo de configuração.' + sLineBreak+ _PATH_SISTEMA + _ARQUIVO_INI);
+      Application.Terminate;
+    end;
+
+  end;
+end;
+
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
  DimencionarForm;
+ QryPedidoVenda.Active     := true;
+ QryPedidoVendaItem.Active := true;
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;

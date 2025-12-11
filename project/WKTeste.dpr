@@ -14,7 +14,9 @@ uses
   PedidoVendaItemModel in '..\source\model\PedidoVenda\PedidoVendaItemModel.pas',
   PedidoVendaModel in '..\source\model\PedidoVenda\PedidoVendaModel.pas',
   FBaseListagemCadastro in '..\source\view\Template\FBaseListagemCadastro.pas' {FrmCadastroBase},
-  FCadastroCliente in '..\source\view\Cliente\FCadastroCliente.pas' {FrmCadastroBase1};
+  FCadastroCliente in '..\source\view\Cliente\FCadastroCliente.pas' {FrmCadastroCliente},
+  uConectarBaseController in '..\source\controller\classesGlobal\uConectarBaseController.pas',
+  uConstantesController in '..\source\controller\classesGlobal\uConstantesController.pas';
 
 {$R *.res}
 
@@ -23,6 +25,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmPedidoVenda, FrmPedidoVenda);
   Application.CreateForm(TFrmCadastroBase, FrmCadastroBase);
-  Application.CreateForm(TFrmCadastroBase1, FrmCadastroBase1);
+  Application.CreateForm(TFrmCadastroCliente, FrmCadastroCliente);
   Application.Run;
 end.

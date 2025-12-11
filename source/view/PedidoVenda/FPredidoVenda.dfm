@@ -12,6 +12,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
   Font.Style = []
   KeyPreview = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
@@ -109,6 +110,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           RightButton.Visible = True
           TabOrder = 0
           OnChange = btneditCodigoClienteChange
+          OnRightButtonClick = btneditCodigoClienteRightButtonClick
         end
         object DBEdit1: TDBEdit
           Left = 115
@@ -498,7 +500,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
     end
   end
   object QryPedidoVenda: TFDQuery
-    Active = True
     Connection = DBConexao
     SQL.Strings = (
       'select * from pedidos_venda')
@@ -506,7 +507,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Top = 474
   end
   object QryPedidoVendaItem: TFDQuery
-    Active = True
     Connection = DBConexao
     SQL.Strings = (
       'select * from pedidos_vendas_itens'
@@ -525,10 +525,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Params.Strings = (
       'Database=db_wkteste'
       'Server=localhost'
-      'User_Name=root'
-      'Password=masterkey'
       'DriverID=MySQL')
-    Connected = True
     LoginPrompt = False
     Left = 56
     Top = 394
@@ -542,5 +539,17 @@ object FrmPedidoVenda: TFrmPedidoVenda
     DataSet = QryPedidoVendaItem
     Left = 176
     Top = 544
+  end
+  object QryClientes: TFDQuery
+    Connection = DBConexao
+    SQL.Strings = (
+      ' SELECT * FROM CLIENTES;')
+    Left = 536
+    Top = 472
+  end
+  object FDQuery2: TFDQuery
+    Connection = DBConexao
+    Left = 752
+    Top = 466
   end
 end
