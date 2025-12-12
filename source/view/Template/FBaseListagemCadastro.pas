@@ -14,7 +14,7 @@ type
     pnlTitulo: TPanel;
     lblTitulo: TLabel;
     pnlBotoes: TPanel;
-    BitBtn1: TBitBtn;
+    btnSelecionar: TBitBtn;
     dbgrdCadastroBase: TDBGrid;
     pnlPesquisaCadastro: TPanel;
     grpboxPesquisaCadastro: TGroupBox;
@@ -23,6 +23,7 @@ type
     editPesquisa: TEdit;
     BitBtn2: TBitBtn;
     imgListCadastroBase: TImageList;
+    procedure btnSelecionarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -35,5 +36,10 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFrmCadastroBase.btnSelecionarClick(Sender: TObject);
+begin
+ Modalresult := mrOk;
+end;
 
 end.

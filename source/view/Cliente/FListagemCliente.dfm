@@ -1,6 +1,8 @@
-inherited FrmCadastroCliente: TFrmCadastroCliente
-  Caption = 'FrmCadastroCliente'
+inherited FrmListagemCliente: TFrmListagemCliente
+  Caption = 'FrmListagemCliente'
   StyleElements = [seFont, seClient, seBorder]
+  OnClose = FormClose
+  OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 21
   inherited pnlTitulo: TPanel
@@ -10,7 +12,7 @@ inherited FrmCadastroCliente: TFrmCadastroCliente
       Height = 34
       Caption = 'CADASTRO DE CLIENTE'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 618
+      ExplicitWidth = 232
     end
   end
   inherited pnlBotoes: TPanel
@@ -35,13 +37,14 @@ inherited FrmCadastroCliente: TFrmCadastroCliente
         Expanded = False
         FieldName = 'cidade'
         Title.Caption = 'Cidade'
-        Width = 200
+        Width = 130
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'uf'
         Title.Caption = 'UF'
+        Width = 70
         Visible = True
       end>
   end
@@ -55,6 +58,6 @@ inherited FrmCadastroCliente: TFrmCadastroCliente
   end
   inherited QryCadastroBase: TFDQuery
     SQL.Strings = (
-      'SELECT * FROM CLIENTES')
+      '')
   end
 end

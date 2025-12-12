@@ -13,6 +13,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
   KeyPreview = True
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
@@ -172,6 +173,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           RightButton.Visible = True
           TabOrder = 0
           OnChange = btneditNumeroPedidoChange
+          OnRightButtonClick = btneditNumeroPedidoRightButtonClick
         end
         object DateTimePicker1: TDateTimePicker
           Left = 115

@@ -1,4 +1,4 @@
-unit FCadastroCliente;
+unit FListagenPedidoVenda;
 
 interface
 
@@ -10,8 +10,7 @@ uses
   Vcl.DBGrids, Vcl.Buttons, Vcl.ExtCtrls;
 
 type
-  TFrmCadastroCliente = class(TFrmCadastroBase)
-    procedure FormShow(Sender: TObject);
+  TFrmListagemPedidoVenda = class(TFrmCadastroBase)
   private
     { Private declarations }
   public
@@ -19,16 +18,10 @@ type
   end;
 
 var
-  FrmCadastroCliente: TFrmCadastroCliente;
+  FrmListagemPedidoVenda: TFrmListagemPedidoVenda;
 
 implementation
 
 {$R *.dfm}
-
-procedure TFrmCadastroCliente.FormShow(Sender: TObject);
-begin
- inherited;
- QryCadastroBase.Active := true;
-end;
 
 end.

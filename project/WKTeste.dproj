@@ -146,12 +146,20 @@
             <Form>FrmCadastroBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\source\view\Cliente\FCadastroCliente.pas">
-            <Form>FrmCadastroCliente</Form>
+        <DCCReference Include="..\source\view\Cliente\FListagemCliente.pas">
+            <Form>FrmListagemCliente</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\source\controller\classesGlobal\uConectarBaseController.pas"/>
         <DCCReference Include="..\source\controller\classesGlobal\uConstantesController.pas"/>
+        <DCCReference Include="..\source\view\PedidoVenda\FListagenPedidoVenda.pas">
+            <Form>FrmListagemPedidoVenda</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\source\view\Produto\FListagemProdutos.pas">
+            <Form>FrmListagemProdutos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

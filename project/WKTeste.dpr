@@ -14,9 +14,11 @@ uses
   PedidoVendaItemModel in '..\source\model\PedidoVenda\PedidoVendaItemModel.pas',
   PedidoVendaModel in '..\source\model\PedidoVenda\PedidoVendaModel.pas',
   FBaseListagemCadastro in '..\source\view\Template\FBaseListagemCadastro.pas' {FrmCadastroBase},
-  FCadastroCliente in '..\source\view\Cliente\FCadastroCliente.pas' {FrmCadastroCliente},
+  FListagemCliente in '..\source\view\Cliente\FListagemCliente.pas' {FrmListagemCliente},
   uConectarBaseController in '..\source\controller\classesGlobal\uConectarBaseController.pas',
-  uConstantesController in '..\source\controller\classesGlobal\uConstantesController.pas';
+  uConstantesController in '..\source\controller\classesGlobal\uConstantesController.pas',
+  FListagenPedidoVenda in '..\source\view\PedidoVenda\FListagenPedidoVenda.pas' {FrmListagemPedidoVenda},
+  FListagemProdutos in '..\source\view\Produto\FListagemProdutos.pas' {FrmListagemProdutos};
 
 {$R *.res}
 
@@ -25,6 +27,8 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmPedidoVenda, FrmPedidoVenda);
   Application.CreateForm(TFrmCadastroBase, FrmCadastroBase);
-  Application.CreateForm(TFrmCadastroCliente, FrmCadastroCliente);
+  Application.CreateForm(TFrmListagemCliente, FrmListagemCliente);
+  Application.CreateForm(TFrmListagemPedidoVenda, FrmListagemPedidoVenda);
+  Application.CreateForm(TFrmListagemProdutos, FrmListagemProdutos);
   Application.Run;
 end.

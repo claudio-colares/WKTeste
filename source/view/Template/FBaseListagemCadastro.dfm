@@ -21,8 +21,6 @@ object FrmCadastroBase: TFrmCadastroBase
     Color = clGray
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -160
-    ExplicitWidth = 784
     object lblTitulo: TLabel
       AlignWithMargins = True
       Left = 3
@@ -51,10 +49,7 @@ object FrmCadastroBase: TFrmCadastroBase
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = -160
-    ExplicitTop = 190
-    ExplicitWidth = 784
-    object BitBtn1: TBitBtn
+    object btnSelecionar: TBitBtn
       Tag = 5
       AlignWithMargins = True
       Left = 501
@@ -62,9 +57,9 @@ object FrmCadastroBase: TFrmCadastroBase
       Width = 120
       Height = 35
       Align = alRight
-      Caption = 'Confirmar (F2)'
+      Caption = 'Selecionar (F2)'
       TabOrder = 0
-      ExplicitLeft = 661
+      OnClick = btnSelecionarClick
     end
   end
   object dbgrdCadastroBase: TDBGrid
@@ -75,6 +70,7 @@ object FrmCadastroBase: TFrmCadastroBase
     Height = 289
     Align = alClient
     DataSource = dsCadastroBase
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -99,10 +95,6 @@ object FrmCadastroBase: TFrmCadastroBase
       Align = alClient
       Caption = 'Pesquisar Cadastro'
       TabOrder = 0
-      ExplicitLeft = 224
-      ExplicitTop = -16
-      ExplicitWidth = 185
-      ExplicitHeight = 105
       object editPesquisa: TEdit
         Left = 16
         Top = 24

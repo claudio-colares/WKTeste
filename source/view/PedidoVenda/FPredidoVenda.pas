@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async,
   FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
-  uConectarBaseController, uConstantesController;
+  uConectarBaseController, uConstantesController, ClienteController;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -58,31 +58,34 @@ type
     procedure actInserirItemExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure btneditNumeroPedidoRightButtonClick(Sender: TObject);
   private
     { Private declarations }
     procedure DimencionarForm;
-
 
   public
     { Public declarations }
   end;
 
 var
-  FrmPedidoVenda : TFrmPedidoVenda;
-  BaseDados      : TConectarBase;
+  FrmPedidoVenda      : TFrmPedidoVenda;
+  BaseDados           : TConectarBase;
+  ClienteController   : TClienteController;
 
 implementation
 
 {$R *.dfm}
 
-uses FPedidoVendaItem, FuncoesController, FCadastroCliente;
+uses FPedidoVendaItem, FuncoesController, FListagemCliente,FListagenPedidoVenda;
 
 { TFrmPedidoVenda }
 
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   try
-    FrmPedidoVendaItem := TFrmPedidoVendaItem.Create(nil);
+    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(nil);
+    FrmPedidoVendaItem.Position := poOwnerFormCenter;
     FrmPedidoVendaItem.ShowModal;
   finally
     FrmPedidoVendaItem.Free;
@@ -91,19 +94,34 @@ end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteChange(Sender: TObject);
 begin
- ExibirBotaoPesquisa(btneditCodigoCliente);
+  ExibirBotaoPesquisa(btneditCodigoCliente);
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
 begin
- FrmCadastroCliente          := TFrmCadastroCliente.Create(nil);
- FrmCadastroCliente.Position := poOwnerFormCenter;
- FrmCadastroCliente.ShowModal;
+  try
+    FrmListagemCliente          := TFrmListagemCliente.Create(nil);
+    FrmListagemCliente.Position := poOwnerFormCenter;
+    FrmListagemCliente.ShowModal;
+  finally
+    FrmListagemCliente.Free;
+  end;
 end;
 
 procedure TFrmPedidoVenda.btneditNumeroPedidoChange(Sender: TObject);
 begin
- ExibirBotaoPesquisa(btneditNumeroPedido);
+  ExibirBotaoPesquisa(btneditNumeroPedido);
+end;
+
+procedure TFrmPedidoVenda.btneditNumeroPedidoRightButtonClick(Sender: TObject);
+begin
+   try
+    FrmListagemPedidoVenda          := TFrmListagemPedidoVenda.Create(nil);
+    FrmListagemPedidoVenda.Position := poOwnerFormCenter;
+    FrmListagemPedidoVenda.ShowModal;
+  finally
+    FrmListagemPedidoVenda.Free;
+  end;
 end;
 
 procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
@@ -116,26 +134,32 @@ begin
   except
     on E: Exception do
     begin
-      ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak+
-        'Análise o arquivo de configuração.' + sLineBreak+ _PATH_SISTEMA + _ARQUIVO_INI);
+      ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak + 'Análise o arquivo de configuração.' + sLineBreak +
+	_PATH_SISTEMA + _ARQUIVO_INI);
       Application.Terminate;
     end;
 
   end;
 end;
 
+procedure TFrmPedidoVenda.FormDestroy(Sender: TObject);
+begin
+ if ClienteController <> nil then
+   ClienteController.Free;
+end;
+
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
- DimencionarForm;
- QryPedidoVenda.Active     := true;
- QryPedidoVendaItem.Active := true;
+  DimencionarForm;
+  QryPedidoVenda.Active     := true;
+  QryPedidoVendaItem.Active := true;
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;
 begin
- Self.Position := poScreenCenter;
- Self.Width    := 1024;
- Self.Height   := 768;
+  Self.Position := poScreenCenter;
+  Self.Width    := 1024;
+  Self.Height   := 768;
 end;
 
 end.
