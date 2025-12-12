@@ -13,41 +13,24 @@ type
   TFrmListagemCliente = class(TFrmCadastroBase)
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btnSelecionarClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    nIDCliente : Integer;
   end;
 
 var
   FrmListagemCliente   : TFrmListagemCliente;
   ClienteController    : TClienteController;
-
-
 implementation
 
 {$R *.dfm}
-
-procedure TFrmListagemCliente.btnSelecionarClick(Sender: TObject);
-begin
-  inherited;
-  nIDCliente := QryCadastroBase.FieldByName('codigo').AsInteger;
-end;
 
 procedure TFrmListagemCliente.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   inherited;
   if ClienteController <> nil then
     ClienteController.Free;
-end;
-
-procedure TFrmListagemCliente.FormCreate(Sender: TObject);
-begin
-  inherited;
-  nIDCliente := 0;
 end;
 
 procedure TFrmListagemCliente.FormShow(Sender: TObject);

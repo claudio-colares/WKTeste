@@ -2,7 +2,6 @@ inherited FrmListagemCliente: TFrmListagemCliente
   Caption = 'FrmListagemCliente'
   StyleElements = [seFont, seClient, seBorder]
   OnClose = FormClose
-  OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 21
   inherited pnlTitulo: TPanel

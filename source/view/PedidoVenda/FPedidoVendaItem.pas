@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
+  FListagemProdutos, Vcl.Mask, Vcl.DBCtrls;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -15,19 +16,20 @@ type
     btneditCodigo: TButtonedEdit;
     Label3: TLabel;
     Label4: TLabel;
-    Edit1: TEdit;
     Label5: TLabel;
-    editQuantidade: TEdit;
     Label6: TLabel;
-    editVlrUnitario: TEdit;
     Label1: TLabel;
-    Edit4: TEdit;
     BitBtn1: TBitBtn;
     imgListPedidoVendaItem: TImageList;
+    dbeditDescricao: TDBEdit;
+    dbeditQuantidade: TDBEdit;
+    dbeditPrecoUnitario: TDBEdit;
+    dbeditValorTotal: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btneditCodigoChange(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure btneditCodigoRightButtonClick(Sender: TObject);
   private
     { Private declarations }
     procedure DimencionarForm;
@@ -53,6 +55,17 @@ end;
 procedure TFrmPedidoVendaItem.btneditCodigoChange(Sender: TObject);
 begin
   ExibirBotaoPesquisa(btneditCodigo);
+end;
+
+procedure TFrmPedidoVendaItem.btneditCodigoRightButtonClick(Sender: TObject);
+begin
+    try
+    FrmListagemProdutos          := TFrmListagemProdutos.Create(nil);
+    FrmListagemProdutos.Position := poOwnerFormCenter;
+    FrmListagemProdutos.ShowModal;
+  finally
+    FrmListagemProdutos.Free;
+  end;
 end;
 
 procedure TFrmPedidoVendaItem.DimencionarForm;

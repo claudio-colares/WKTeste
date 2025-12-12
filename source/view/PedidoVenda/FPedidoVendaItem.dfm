@@ -122,42 +122,42 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       RightButton.Visible = True
       TabOrder = 0
       OnChange = btneditCodigoChange
+      OnRightButtonClick = btneditCodigoRightButtonClick
     end
-    object Edit1: TEdit
+    object dbeditDescricao: TDBEdit
       Left = 123
       Top = 62
       Width = 332
       Height = 29
       TabOrder = 1
     end
-    object editQuantidade: TEdit
+    object dbeditQuantidade: TDBEdit
       Left = 461
       Top = 62
       Width = 91
       Height = 29
       TabOrder = 2
     end
-    object editVlrUnitario: TEdit
+    object dbeditPrecoUnitario: TDBEdit
       Left = 558
       Top = 62
       Width = 99
       Height = 29
       TabOrder = 3
     end
-    object Edit4: TEdit
+    object dbeditValorTotal: TDBEdit
       Left = 663
       Top = 62
       Width = 99
       Height = 29
-      ImeName = 'editVlrTotal'
       TabOrder = 4
     end
   end
   object imgListPedidoVendaItem: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 384
-    Top = 144
+    Left = 48
+    Top = 160
     Bitmap = {
       494C010101000800040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010

@@ -26,9 +26,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmPedidoVenda, FrmPedidoVenda);
-  Application.CreateForm(TFrmCadastroBase, FrmCadastroBase);
-  Application.CreateForm(TFrmListagemCliente, FrmListagemCliente);
-  Application.CreateForm(TFrmListagemPedidoVenda, FrmListagemPedidoVenda);
-  Application.CreateForm(TFrmListagemProdutos, FrmListagemProdutos);
   Application.Run;
 end.

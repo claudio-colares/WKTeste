@@ -1,6 +1,7 @@
 inherited FrmListagemProdutos: TFrmListagemProdutos
   Caption = 'Listagem de Produtos'
   StyleElements = [seFont, seClient, seBorder]
+  OnShow = FormShow
   TextHeight = 21
   inherited pnlTitulo: TPanel
     StyleElements = [seFont, seClient, seBorder]
@@ -15,6 +16,28 @@ inherited FrmListagemProdutos: TFrmListagemProdutos
   inherited pnlBotoes: TPanel
     StyleElements = [seFont, seClient, seBorder]
   end
+  inherited dbgrdCadastroBase: TDBGrid
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'codigo'
+        Title.Caption = 'C'#243'digo'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'descricao'
+        Title.Caption = 'Descricao'
+        Width = 350
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'precoVenda'
+        Title.Caption = 'Prc. Venda'
+        Visible = True
+      end>
+  end
   inherited pnlPesquisaCadastro: TPanel
     StyleElements = [seFont, seClient, seBorder]
     inherited grpboxPesquisaCadastro: TGroupBox
@@ -22,5 +45,10 @@ inherited FrmListagemProdutos: TFrmListagemProdutos
         StyleElements = [seFont, seClient, seBorder]
       end
     end
+  end
+  inherited QryCadastroBase: TFDQuery
+    Active = True
+    SQL.Strings = (
+      'SELECT * FROM PRODUTOS')
   end
 end

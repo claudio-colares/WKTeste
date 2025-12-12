@@ -527,7 +527,10 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Params.Strings = (
       'Database=db_wkteste'
       'Server=localhost'
+      'User_Name=root'
+      'Password=masterkey'
       'DriverID=MySQL')
+    Connected = True
     LoginPrompt = False
     Left = 56
     Top = 394
