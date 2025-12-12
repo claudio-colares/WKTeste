@@ -15,13 +15,13 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    PedidoVendaController: TPedidoVendaController;
   public
     { Public declarations }
   end;
 
 var
-  FrmListagemPedidoVenda : TFrmListagemPedidoVenda;
-  PedidoVendaController  : TPedidoVendaController;
+  FrmListagemPedidoVenda: TFrmListagemPedidoVenda;
 
 implementation
 
@@ -30,15 +30,19 @@ implementation
 procedure TFrmListagemPedidoVenda.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   inherited;
-    if PedidoVendaController <> nil then
-    PedidoVendaController.Free;
+  FreeAndNil(PedidoVendaController);
 end;
 
 procedure TFrmListagemPedidoVenda.FormShow(Sender: TObject);
 begin
   inherited;
-  PedidoVendaController := TPedidoVendaController.Create;
-  PedidoVendaController.CarregarTabela(QryCadastroBase);
+  try
+    PedidoVendaController := TPedidoVendaController.Create;
+    PedidoVendaController.CarregarTabela(QryCadastroBase);
+  except
+    on E: Exception do
+      ShowMessage('Erro ao carregar lista de pedidos: ' + E.Message);
+  end;
 end;
 
 end.

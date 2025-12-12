@@ -11,7 +11,7 @@ inherited FrmListagemPedidoVenda: TFrmListagemPedidoVenda
       Height = 34
       Caption = 'LISTAGEM DE PEDIDOS'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 229
+      ExplicitWidth = 618
     end
   end
   inherited pnlBotoes: TPanel

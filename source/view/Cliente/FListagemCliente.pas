@@ -13,15 +13,17 @@ type
   TFrmListagemCliente = class(TFrmCadastroBase)
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+
   private
     { Private declarations }
+    ClienteController: TClienteController;
   public
     { Public declarations }
   end;
 
 var
-  FrmListagemCliente   : TFrmListagemCliente;
-  ClienteController    : TClienteController;
+  FrmListagemCliente: TFrmListagemCliente;
+
 implementation
 
 {$R *.dfm}
@@ -29,15 +31,18 @@ implementation
 procedure TFrmListagemCliente.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   inherited;
-  if ClienteController <> nil then
-    ClienteController.Free;
+  FreeAndNil(ClienteController);
 end;
 
 procedure TFrmListagemCliente.FormShow(Sender: TObject);
 begin
   inherited;
-  ClienteController := TClienteController.Create;
-  ClienteController.CarregarTabela(QryCadastroBase);
+  try
+    ClienteController := TClienteController.Create;
+    ClienteController.CarregarTabela(QryCadastroBase);
+  except
+    on E: Exception do
+      ShowMessage('Erro ao carregar lista de clientes: ' + E.Message);
+  end;
 end;
-
 end.

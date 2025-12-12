@@ -12,25 +12,37 @@ uses
 type
   TFrmListagemProdutos = class(TFrmCadastroBase)
     procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    ProdutoController: TProdutoController;
   public
     { Public declarations }
   end;
 
 var
   FrmListagemProdutos: TFrmListagemProdutos;
-  ProdutoController    : TProdutoController;
 
 implementation
 
 {$R *.dfm}
 
+procedure TFrmListagemProdutos.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  FreeAndNil(ProdutoController);
+end;
+
 procedure TFrmListagemProdutos.FormShow(Sender: TObject);
 begin
   inherited;
-  ProdutoController := TProdutoController.Create;
-  ProdutoController.CarregarTabela(QryCadastroBase);
+  try
+    ProdutoController := TProdutoController.Create;
+    ProdutoController.CarregarTabela(QryCadastroBase);
+  except
+    on E: Exception do
+      ShowMessage('Erro ao carregar lista de produtos: ' + E.Message);
+  end;
 end;
 
 end.

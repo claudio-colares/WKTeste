@@ -9,7 +9,6 @@ type
   private
     ClienteModel: TClienteModel;
   public
-    constructor Create;
     procedure CarregarTabela(aQuery: TFDQuery);
     procedure ObterDadosCliente(aID: Integer);
   end;
@@ -20,18 +19,12 @@ implementation
 
 procedure TClienteController.CarregarTabela(aQuery: TFDQuery);
 begin
-  ClienteModel.CarregarTabela(aQuery);
-end;
-
-constructor TClienteController.Create;
-begin
- ClienteModel.Limpar;
+   ClienteModel.CarregarTabela(aQuery);
 end;
 
 procedure TClienteController.ObterDadosCliente(aID: Integer);
 begin
- ClienteModel.Limpar;
- ClienteModel.GetClienteByID(aID);
+   ClienteModel.GetClienteByID(aID);
 end;
 
 end.

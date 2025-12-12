@@ -9,7 +9,6 @@ type
   private
     ProdutoModel: TProdutoModel;
   public
-    constructor Create;
     procedure CarregarTabela(aQuery: TFDQuery);
     procedure ObterDadosProduto(aID: Integer);
   end;
@@ -23,14 +22,8 @@ begin
   ProdutoModel.CarregarTabela(aQuery);
 end;
 
-constructor TProdutoController.Create;
-begin
- ProdutoModel.Limpar;
-end;
-
 procedure TProdutoController.ObterDadosProduto(aID: Integer);
 begin
- ProdutoModel.Limpar;
  ProdutoModel.GetProdutoByID(aID);
 end;
 

@@ -33,7 +33,7 @@ uses FuncoesController, FPredidoVenda;
 procedure TPedidoVendaItemModel.CarregarTabela(aQuery: TFDQuery);
 begin
   aQuery.SQL.Text :=
-    'SELECT codigo, descricao, precoVenda FROM produtos';
+    'SELECT codigo, numero_pedido, codigo_produto,,quantidade,valor_unitario,valor_total FROM pedidos_vendas_itens';
   aQuery.Open;
 end;
 
@@ -50,7 +50,8 @@ var
 begin
   QueryCriar(aQuery, FrmPedidoVenda.DBConexao);
   aQuery.SQL.Clear;
-  aQuery.SQL.Add('SELECT codigo,descricao,precoVenda FROM produtos WHERE codigo = ' + IntToStr(aID));
+  aQuery.SQL.Add('SELECT codigo, numero_pedido, codigo_produto,quantidade,valor_unitario,valor_total FROM produtos ' +
+                 'WHERE numero_pedido = ' + IntToStr(aID));
   try
     aQuery.Open;
 

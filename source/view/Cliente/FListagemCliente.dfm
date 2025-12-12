@@ -11,7 +11,7 @@ inherited FrmListagemCliente: TFrmListagemCliente
       Height = 34
       Caption = 'CADASTRO DE CLIENTE'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 232
+      ExplicitWidth = 618
     end
   end
   inherited pnlBotoes: TPanel

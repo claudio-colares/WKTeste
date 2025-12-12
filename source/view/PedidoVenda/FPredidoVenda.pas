@@ -150,8 +150,7 @@ end;
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
-  QryPedidoVenda.Active     := true;
-  QryPedidoVendaItem.Active := true;
+  btneditNumeroPedido.SetFocus;
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;

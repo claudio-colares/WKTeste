@@ -1,6 +1,7 @@
 inherited FrmListagemProdutos: TFrmListagemProdutos
   Caption = 'Listagem de Produtos'
   StyleElements = [seFont, seClient, seBorder]
+  OnClose = FormClose
   OnShow = FormShow
   TextHeight = 21
   inherited pnlTitulo: TPanel
