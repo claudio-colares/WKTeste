@@ -72,12 +72,11 @@ var
   FrmPedidoVenda      : TFrmPedidoVenda;
   BaseDados           : TConectarBase;
   ClienteController   : TClienteController;
-
 implementation
 
 {$R *.dfm}
 
-uses FPedidoVendaItem, FuncoesController, FListagemCliente,FListagenPedidoVenda;
+uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda;
 
 { TFrmPedidoVenda }
 
@@ -116,7 +115,7 @@ end;
 procedure TFrmPedidoVenda.btneditNumeroPedidoRightButtonClick(Sender: TObject);
 begin
    try
-    FrmListagemPedidoVenda          := TFrmListagemPedidoVenda.Create(nil);
+    FrmListagemPedidoVenda          :=  TFrmListagemPedidoVenda.Create(nil);
     FrmListagemPedidoVenda.Position := poOwnerFormCenter;
     FrmListagemPedidoVenda.ShowModal;
   finally

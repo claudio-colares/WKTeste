@@ -35,7 +35,6 @@ begin
   aQuery.Open;
 end;
 
-
 procedure TClienteModel.Dados(var aQuery: TFDQuery);
 begin
   Limpar;
