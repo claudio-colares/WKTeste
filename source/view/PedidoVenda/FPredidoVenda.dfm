@@ -110,6 +110,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           RightButton.Visible = True
           TabOrder = 0
           OnChange = btneditCodigoClienteChange
+          OnExit = btneditCodigoClienteExit
           OnRightButtonClick = btneditCodigoClienteRightButtonClick
         end
         object editClienteNome: TEdit
@@ -179,15 +180,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Date = 46001.000000000000000000
           Time = 0.935553182869625700
           TabOrder = 1
-        end
-        object Button1: TButton
-          Left = 464
-          Top = 40
-          Width = 75
-          Height = 25
-          Caption = 'Button1'
-          TabOrder = 2
-          OnClick = Button1Click
         end
       end
     end

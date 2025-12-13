@@ -8,9 +8,10 @@ inherited FrmListagemCliente: TFrmListagemCliente
     StyleElements = [seFont, seClient, seBorder]
     inherited lblTitulo: TLabel
       Width = 618
+      Height = 34
       Caption = 'CADASTRO DE CLIENTE'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 618
+      ExplicitWidth = 232
     end
   end
   inherited pnlBotoes: TPanel

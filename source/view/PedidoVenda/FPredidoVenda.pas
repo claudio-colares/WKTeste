@@ -48,7 +48,6 @@ type
     editClienteNome: TEdit;
     editClienteCidade: TEdit;
     editClienteUF: TEdit;
-    Button1: TButton;
 
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
@@ -58,17 +57,20 @@ type
     procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
     procedure btneditNumeroPedidoRightButtonClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure btneditCodigoClienteExit(Sender: TObject);
 
   private
     { Private declarations }
     procedure DimencionarForm;
+    procedure LimparDadosCliente;
+
   var
   DBConexao : TFDConnection;
   ClienteController   : TClienteController;
   BaseDados           : TConectarBaseController;
-
   public
     { Public declarations }
+    procedure ObterDadosCliente(aID: Integer);
   end;
 
 var
@@ -98,6 +100,12 @@ begin
   ExibirBotaoPesquisa(btneditCodigoCliente);
 end;
 
+procedure TFrmPedidoVenda.btneditCodigoClienteExit(Sender: TObject);
+begin
+ if btneditCodigoCliente.Text <> ''  then
+      ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0));
+end;
+
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
 begin
   try
@@ -116,37 +124,18 @@ end;
 
 procedure TFrmPedidoVenda.btneditNumeroPedidoRightButtonClick(Sender: TObject);
 begin
-   try
-    FrmListagemPedidoVenda          :=  TFrmListagemPedidoVenda.Create(nil);
-    FrmListagemPedidoVenda.Position := poOwnerFormCenter;
-    FrmListagemPedidoVenda.ShowModal;
-  finally
-    FrmListagemPedidoVenda.Free;
-  end;
+//   try
+//    FrmListagemPedidoVenda          :=  TFrmListagemPedidoVenda.Create(nil);
+//    FrmListagemPedidoVenda.Position := poOwnerFormCenter;
+//    FrmListagemPedidoVenda.ShowModal;
+//  finally
+//    FrmListagemPedidoVenda.Free;
+//  end;
 end;
 
 procedure TFrmPedidoVenda.Button1Click(Sender: TObject);
-var
-  Cliente: TClienteModel;
 begin
-  ClienteController := TClienteController.Create(DBConexao);
-  Cliente      := ClienteController.ObterClientePorID(strToIntDef(btneditCodigoCliente.Text,0));
-  try
-    if Cliente = nil then
-    begin
-      ShowMessage('Cliente não encontrado.');
-      Exit;
-    end;
-
-    btneditCodigoCliente.Text := Cliente.Codigo.ToString;
-    editClienteNome.Text      := Cliente.Nome;
-    editClienteCidade.Text    := Cliente.Cidade;
-    editClienteUF.Text        := Cliente.UF;
-
-  finally
-    FreeAndNil(Cliente);
-    FreeAndNil(ClienteController);
-  end;
+  ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0));
 end;
 
 procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
@@ -166,6 +155,40 @@ procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
   btneditNumeroPedido.SetFocus;
+end;
+
+procedure TFrmPedidoVenda.LimparDadosCliente;
+begin
+ btneditCodigoCliente.Clear;
+ editClienteNome.Clear;
+ editClienteCidade.Clear;
+ editClienteUF.Clear;
+end;
+
+procedure TFrmPedidoVenda.ObterDadosCliente(aID: Integer);
+var
+  Cliente: TClienteModel;
+begin
+  ClienteController := TClienteController.Create(DBConexao);
+  Cliente           := ClienteController.ObterClientePorID(aID);
+  try
+    if Cliente = nil then
+    begin
+      ShowMessage('Cliente não encontrado.');
+      LimparDadosCliente;
+      btneditCodigoCliente.SetFocus;
+      Exit;
+    end;
+
+    btneditCodigoCliente.Text := Cliente.Codigo.ToString;
+    editClienteNome.Text      := Cliente.Nome;
+    editClienteCidade.Text    := Cliente.Cidade;
+    editClienteUF.Text        := Cliente.UF;
+
+  finally
+    FreeAndNil(Cliente);
+    FreeAndNil(ClienteController);
+  end;
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;
