@@ -2,29 +2,44 @@ unit ClienteController;
 
 interface
 
-uses Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param, ClienteModel;
+uses
+  ClienteModel, Data.DB, FireDAC.Comp.Client, uClienteDao;
 
 type
   TClienteController = class
   private
-    ClienteModel: TClienteModel;
+    FClienteDAO: TClienteDAO;
   public
-    procedure CarregarTabela(aQuery: TFDQuery);
-    procedure ObterDadosCliente(aID: Integer);
+    constructor Create(aConnection: TFDConnection);
+    destructor Destroy; override;
+
+    procedure CarregarTabela(Qry: TFDQuery);
+    function ObterClientePorID(ID: Integer): TClienteModel;
   end;
 
 implementation
 
 { TClienteController }
 
-procedure TClienteController.CarregarTabela(aQuery: TFDQuery);
+constructor TClienteController.Create(aConnection: TFDConnection);
 begin
-   ClienteModel.CarregarTabela(aQuery);
+  FClienteDAO := TClienteDAO.Create(aConnection);
 end;
 
-procedure TClienteController.ObterDadosCliente(aID: Integer);
+destructor TClienteController.Destroy;
 begin
-   ClienteModel.GetClienteByID(aID);
+  FClienteDAO.Free;
+  inherited;
+end;
+
+procedure TClienteController.CarregarTabela(Qry: TFDQuery);
+begin
+  FClienteDAO.CarregarTabela(Qry);
+end;
+
+function TClienteController.ObterClientePorID(ID: Integer): TClienteModel;
+begin
+  Result := FClienteDAO.GetClienteByID(ID);
 end;
 
 end.

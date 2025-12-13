@@ -11,7 +11,7 @@ inherited FrmListagemProdutos: TFrmListagemProdutos
       Height = 34
       Caption = 'Listagem de Produtos'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 214
+      ExplicitWidth = 618
     end
   end
   inherited pnlBotoes: TPanel
@@ -48,7 +48,6 @@ inherited FrmListagemProdutos: TFrmListagemProdutos
     end
   end
   inherited QryCadastroBase: TFDQuery
-    Active = True
     SQL.Strings = (
       'SELECT * FROM PRODUTOS')
   end

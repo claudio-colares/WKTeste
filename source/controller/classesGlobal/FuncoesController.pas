@@ -32,7 +32,7 @@ begin
     aQuery.Name := '_FDQuery_' + (aQuery.GetHashCode).ToString;
     aQuery.DisableControls;
     aQuery.SQL.Clear;
-    aQuery.Connection := FrmPedidoVenda.DBConexao;
+  //  aQuery.Connection := FrmPedidoVenda.DBConexao;
     if aConexao <> Nil then
       aQuery.Connection := aConexao;
   except

@@ -9,14 +9,15 @@ uses
   FireDAC.Phys.MSSQL,
   FireDAC.Phys.MySQL,
   FireDAC.Phys.FB;
+
 Type
 
-  TConectarBase = Record
-    BaseDados  : String;
-    IP         : String;
-    Porta      : Integer;
-    Usuario    : String;
-    Senha      : String;
+  TConectarBaseController = Record
+    BaseDados: String;
+    IP: String;
+    Porta: Integer;
+    Usuario: String;
+    Senha: String;
   private
 
     procedure GetAcesso();
@@ -27,10 +28,11 @@ Type
     procedure LerINI;
     procedure GetDriverLinkMySQL(var aDriverLink: TFDPhysMySQLDriverLink);
     procedure AcessarBase(var aFDConnection: TFDConnection);
+    function Conectar(var aConnection: TFDConnection): Boolean;
   end;
 
 Var
-  oConectarBase: TConectarBase;
+  oConectarBase: TConectarBaseController;
 
 implementation
 
@@ -38,16 +40,16 @@ implementation
 
 uses FuncoesController, uConstantesController;
 
-procedure TConectarBase.Limpar;
+procedure TConectarBaseController.Limpar;
 begin
-  BaseDados   := '';
-  IP          := '';
-  Porta       := 0;
-  Usuario     := '';
-  Senha       := '';
+  BaseDados := '';
+  IP        := '';
+  Porta     := 0;
+  Usuario   := '';
+  Senha     := '';
 end;
 
-procedure TConectarBase.VerificarINI;
+procedure TConectarBaseController.VerificarINI;
 begin
   if not FileExists(_PATH_SISTEMA + _ARQUIVO_INI) then
   begin
@@ -57,7 +59,20 @@ begin
   end;
 end;
 
-procedure TConectarBase.GetAcesso();
+function TConectarBaseController.Conectar(var aConnection: TFDConnection): Boolean;
+begin
+  Result := False;
+  AcessarBase(aConnection);
+
+  if not aConnection.Connected then
+  begin
+    aConnection.Open;
+    if aConnection.Connected then
+      Result := True;
+  end;
+end;
+
+procedure TConectarBaseController.GetAcesso();
 begin
   Limpar;
   BaseDados := _DB_BASEDADOS;
@@ -67,26 +82,26 @@ begin
   Senha     := _DB_SENHA;
 end;
 
-procedure TConectarBase.LerINI;
+procedure TConectarBaseController.LerINI;
 var
   oArqINI: TIniFile;
 begin
   Limpar;
   oArqINI := TIniFile.create(_PATH_SISTEMA + _ARQUIVO_INI);
   try
-    BaseDados := oArqINI.ReadString(_SECAO_SERVIDOR,_CHAVE_BASEDADOS, _DB_BASEDADOS);
-    IP        := oArqINI.ReadString(_SECAO_SERVIDOR,_CHAVE_IP, _DB_SERVIDOR);
-    Porta     := oArqINI.ReadInteger(_SECAO_SERVIDOR, _CHAVE_PORTA,_DB_PORTA);
-    Usuario   := oArqINI.ReadString(_SECAO_SERVIDOR,_CHAVE_USUARIO,_DB_USUARIO);
-    Senha     := oArqINI.ReadString(_SECAO_SERVIDOR, _CHAVE_SENHA,_DB_SENHA);
+    BaseDados := oArqINI.ReadString(_SECAO_SERVIDOR, _CHAVE_BASEDADOS, _DB_BASEDADOS);
+    IP        := oArqINI.ReadString(_SECAO_SERVIDOR, _CHAVE_IP, _DB_SERVIDOR);
+    Porta     := oArqINI.ReadInteger(_SECAO_SERVIDOR, _CHAVE_PORTA, _DB_PORTA);
+    Usuario   := oArqINI.ReadString(_SECAO_SERVIDOR, _CHAVE_USUARIO, _DB_USUARIO);
+    Senha     := oArqINI.ReadString(_SECAO_SERVIDOR, _CHAVE_SENHA, _DB_SENHA);
   finally
     oArqINI.Free;
   end;
 end;
 
-procedure TConectarBase.GravarINI;
+procedure TConectarBaseController.GravarINI;
 var
-  oArqINI           : TIniFile;
+  oArqINI: TIniFile;
 begin
   oArqINI := TIniFile.create(_PATH_SISTEMA + _ARQUIVO_INI);
   try
@@ -100,7 +115,7 @@ begin
   end;
 end;
 
-procedure TConectarBase.AcessarBase(var aFDConnection: TFDConnection);
+procedure TConectarBaseController.AcessarBase(var aFDConnection: TFDConnection);
 begin
   if (aFDConnection = nil) then
   begin
@@ -109,15 +124,16 @@ begin
 
   VerificarINI();
   LerINI();
-  aFDConnection.Params.Values['Server']            := IP;
-  aFDConnection.Params.Values['Database']          := BaseDados;
-  aFDConnection.Params.Values['User_Name']         := Usuario;
-  aFDConnection.Params.Values['Password']          := Senha;
-  aFDConnection.Params.Values['Port']              := Porta.ToString;
-  aFDConnection.Params.Values['Compress']          := 'True';
+  aFDConnection.Params.Values['Server']    := IP;
+  aFDConnection.Params.Values['Database']  := BaseDados;
+  aFDConnection.Params.Values['User_Name'] := Usuario;
+  aFDConnection.Params.Values['Password']  := Senha;
+  aFDConnection.Params.Values['Port']      := Porta.ToString;
+  aFDConnection.Params.Values['Compress']  := 'True';
+  aFDConnection.Params.Values['DriverID']  := 'MySQL';
 end;
 
-procedure TConectarBase.GetDriverLinkMySQL(var aDriverLink: TFDPhysMySQLDriverLink);
+procedure TConectarBaseController.GetDriverLinkMySQL(var aDriverLink: TFDPhysMySQLDriverLink);
 begin
   if aDriverLink = nil then
     raise Exception.create('Objeto TFDPhysMySQLDriverLink não instanciado.');

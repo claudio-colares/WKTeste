@@ -16,9 +16,12 @@ type
 
   private
     { Private declarations }
+  var
+    DBConexao        : TFDConnection;
     ClienteController: TClienteController;
   public
     { Public declarations }
+    constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
   end;
 
 var
@@ -27,6 +30,13 @@ var
 implementation
 
 {$R *.dfm}
+
+constructor TFrmListagemCliente.Create(AOwner: TComponent; AConnection: TFDConnection);
+begin
+  inherited Create(AOwner);
+  DBConexao         := AConnection;
+  ClienteController := TClienteController.Create(DBConexao);
+end;
 
 procedure TFrmListagemCliente.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -38,11 +48,11 @@ procedure TFrmListagemCliente.FormShow(Sender: TObject);
 begin
   inherited;
   try
-    ClienteController := TClienteController.Create;
     ClienteController.CarregarTabela(QryCadastroBase);
   except
     on E: Exception do
       ShowMessage('Erro ao carregar lista de clientes: ' + E.Message);
   end;
 end;
+
 end.

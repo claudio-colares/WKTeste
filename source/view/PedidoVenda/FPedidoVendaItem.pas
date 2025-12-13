@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
-  FListagemProdutos, Vcl.Mask, Vcl.DBCtrls;
+  FListagemProdutos, Vcl.Mask, Vcl.DBCtrls, FireDAC.Comp.Client,
+  ClienteController;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -25,7 +26,6 @@ type
     dbeditQuantidade: TDBEdit;
     dbeditPrecoUnitario: TDBEdit;
     dbeditValorTotal: TDBEdit;
-    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btneditCodigoChange(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -33,8 +33,13 @@ type
   private
     { Private declarations }
     procedure DimencionarForm;
+
+  var
+    DBConexao        : TFDConnection;
+   // ClienteController: TClienteController;
   public
     { Public declarations }
+    constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
   end;
 
 var
@@ -49,7 +54,7 @@ uses FuncoesController;
 
 procedure TFrmPedidoVendaItem.BitBtn1Click(Sender: TObject);
 begin
- Self.Close;
+  Self.Close;
 end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoChange(Sender: TObject);
@@ -59,8 +64,8 @@ end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoRightButtonClick(Sender: TObject);
 begin
-    try
-    FrmListagemProdutos          := TFrmListagemProdutos.Create(nil);
+  try
+    FrmListagemProdutos          := TFrmListagemProdutos.Create(self,DBConexao);
     FrmListagemProdutos.Position := poOwnerFormCenter;
     FrmListagemProdutos.ShowModal;
   finally
@@ -68,16 +73,20 @@ begin
   end;
 end;
 
+constructor TFrmPedidoVendaItem.Create(AOwner: TComponent; AConnection: TFDConnection);
+begin
+
+  inherited Create(AOwner);
+  DimencionarForm;
+  DBConexao         := AConnection;
+ // ClienteController := TClienteController.Create(DBConexao);
+end;
+
 procedure TFrmPedidoVendaItem.DimencionarForm;
 begin
   Self.Position := poOwnerFormCenter;
   Self.Width    := 800;
   Self.Height   := 270;
-end;
-
-procedure TFrmPedidoVendaItem.FormCreate(Sender: TObject);
-begin
-  DimencionarForm;
 end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);

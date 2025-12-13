@@ -42,7 +42,7 @@ procedure TPedidoVendaModel.GetPedidoVendaByID(aID: Integer);
 var
   aQuery: TFDQuery;
 begin
-  QueryCriar(aQuery, FrmPedidoVenda.DBConexao);
+ // QueryCriar(aQuery, FrmPedidoVenda.DBConexao);
   aQuery.SQL.Clear;
   aQuery.SQL.Add('SELECT codigo,descricao,precoVenda FROM produtos WHERE codigo = ' + IntToStr(aID));
   try

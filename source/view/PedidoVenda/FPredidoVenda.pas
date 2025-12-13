@@ -43,14 +43,12 @@ type
     actInserirItem: TAction;
     QryPedidoVenda: TFDQuery;
     QryPedidoVendaItem: TFDQuery;
-    DBConexao: TFDConnection;
     dsPedidoVenda: TDataSource;
     dsPedidoVendaItem: TDataSource;
-    DBEdit1: TDBEdit;
-    DBEdit2: TDBEdit;
-    DBEdit3: TDBEdit;
-    QryClientes: TFDQuery;
-    FDQuery2: TFDQuery;
+    editClienteNome: TEdit;
+    editClienteCidade: TEdit;
+    editClienteUF: TEdit;
+    Button1: TButton;
 
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
@@ -58,11 +56,16 @@ type
     procedure actInserirItemExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure btneditNumeroPedidoRightButtonClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
   private
     { Private declarations }
     procedure DimencionarForm;
+  var
+  DBConexao : TFDConnection;
+  ClienteController   : TClienteController;
+  BaseDados           : TConectarBaseController;
 
   public
     { Public declarations }
@@ -70,20 +73,19 @@ type
 
 var
   FrmPedidoVenda      : TFrmPedidoVenda;
-  BaseDados           : TConectarBase;
-  ClienteController   : TClienteController;
+
 implementation
 
 {$R *.dfm}
 
-uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda;
+uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda, ClienteModel;
 
 { TFrmPedidoVenda }
 
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   try
-    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(nil);
+    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self,DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
     FrmPedidoVendaItem.ShowModal;
   finally
@@ -99,7 +101,7 @@ end;
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
 begin
   try
-    FrmListagemCliente          := TFrmListagemCliente.Create(nil);
+    FrmListagemCliente          := TFrmListagemCliente.Create(Self,DBConexao);
     FrmListagemCliente.Position := poOwnerFormCenter;
     FrmListagemCliente.ShowModal;
   finally
@@ -123,29 +125,42 @@ begin
   end;
 end;
 
-procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
+procedure TFrmPedidoVenda.Button1Click(Sender: TObject);
+var
+  Cliente: TClienteModel;
 begin
-  SetConstantes;
-  BaseDados.AcessarBase(DBConexao);
-
+  ClienteController := TClienteController.Create(DBConexao);
+  Cliente      := ClienteController.ObterClientePorID(strToIntDef(btneditCodigoCliente.Text,0));
   try
-    DBConexao.Open;
-  except
-    on E: Exception do
+    if Cliente = nil then
     begin
-      ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak + 'Análise o arquivo de configuração.' + sLineBreak +
-	_PATH_SISTEMA + _ARQUIVO_INI);
-      Application.Terminate;
+      ShowMessage('Cliente não encontrado.');
+      Exit;
     end;
 
+    btneditCodigoCliente.Text := Cliente.Codigo.ToString;
+    editClienteNome.Text      := Cliente.Nome;
+    editClienteCidade.Text    := Cliente.Cidade;
+    editClienteUF.Text        := Cliente.UF;
+
+  finally
+    FreeAndNil(Cliente);
+    FreeAndNil(ClienteController);
   end;
 end;
 
-procedure TFrmPedidoVenda.FormDestroy(Sender: TObject);
+procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
 begin
- if ClienteController <> nil then
-   ClienteController.Free;
+  DBConexao := TFDConnection.Create(nil);
+  SetConstantes;
+  if not BaseDados.Conectar(DBConexao) then
+  begin
+    ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak + 'Análise o arquivo de configuração.' + sLineBreak +
+      _PATH_SISTEMA + _ARQUIVO_INI);
+    Application.Terminate;
+  end;
 end;
+
 
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin

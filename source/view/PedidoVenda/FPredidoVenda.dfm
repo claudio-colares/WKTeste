@@ -13,7 +13,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
   KeyPreview = True
   Position = poScreenCenter
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
@@ -58,14 +57,14 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Left = 0
       Top = 0
       Width = 1012
-      Height = 225
+      Height = 217
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 0
       object GroupBox1: TGroupBox
         AlignWithMargins = True
         Left = 3
-        Top = 120
+        Top = 112
         Width = 1006
         Height = 102
         Align = alBottom
@@ -113,28 +112,25 @@ object FrmPedidoVenda: TFrmPedidoVenda
           OnChange = btneditCodigoClienteChange
           OnRightButtonClick = btneditCodigoClienteRightButtonClick
         end
-        object DBEdit1: TDBEdit
+        object editClienteNome: TEdit
           Left = 115
           Top = 46
           Width = 542
           Height = 29
-          Enabled = False
           TabOrder = 1
         end
-        object DBEdit2: TDBEdit
+        object editClienteCidade: TEdit
           Left = 663
           Top = 46
           Width = 208
           Height = 29
-          Enabled = False
           TabOrder = 2
         end
-        object DBEdit3: TDBEdit
+        object editClienteUF: TEdit
           Left = 877
           Top = 46
           Width = 121
           Height = 29
-          Enabled = False
           TabOrder = 3
         end
       end
@@ -143,7 +139,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Left = 3
         Top = 3
         Width = 1006
-        Height = 111
+        Height = 103
         Align = alClient
         Caption = 'Dados do Pedido'
         TabOrder = 1
@@ -184,13 +180,22 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Time = 0.935553182869625700
           TabOrder = 1
         end
+        object Button1: TButton
+          Left = 464
+          Top = 40
+          Width = 75
+          Height = 25
+          Caption = 'Button1'
+          TabOrder = 2
+          OnClick = Button1Click
+        end
       end
     end
     object pnlgrid: TPanel
       Left = 0
-      Top = 225
+      Top = 217
       Width = 1012
-      Height = 341
+      Height = 349
       Align = alClient
       Caption = 'pnlgrid'
       TabOrder = 1
@@ -199,7 +204,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Left = 4
         Top = 39
         Width = 1004
-        Height = 298
+        Height = 306
         Align = alClient
         DataSource = dsPedidoVendaItem
         Font.Charset = DEFAULT_CHARSET
@@ -502,19 +507,17 @@ object FrmPedidoVenda: TFrmPedidoVenda
     end
   end
   object QryPedidoVenda: TFDQuery
-    Connection = DBConexao
     SQL.Strings = (
       'select * from pedidos_venda')
     Left = 48
     Top = 474
   end
   object QryPedidoVendaItem: TFDQuery
-    Connection = DBConexao
     SQL.Strings = (
       'select * from pedidos_vendas_itens'
       'where numero_pedido = :pnumPedido')
-    Left = 176
-    Top = 482
+    Left = 264
+    Top = 426
     ParamData = <
       item
         Name = 'PNUMPEDIDO'
@@ -523,17 +526,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Value = Null
       end>
   end
-  object DBConexao: TFDConnection
-    Params.Strings = (
-      'Database=db_wkteste'
-      'Server=localhost'
-      'User_Name=root'
-      'Password=masterkey'
-      'DriverID=MySQL')
-    LoginPrompt = False
-    Left = 56
-    Top = 394
-  end
   object dsPedidoVenda: TDataSource
     DataSet = QryPedidoVenda
     Left = 48
@@ -541,19 +533,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
   end
   object dsPedidoVendaItem: TDataSource
     DataSet = QryPedidoVendaItem
-    Left = 176
-    Top = 544
-  end
-  object QryClientes: TFDQuery
-    Connection = DBConexao
-    SQL.Strings = (
-      ' SELECT * FROM CLIENTES;')
-    Left = 536
-    Top = 472
-  end
-  object FDQuery2: TFDQuery
-    Connection = DBConexao
-    Left = 752
-    Top = 466
+    Left = 264
+    Top = 528
   end
 end

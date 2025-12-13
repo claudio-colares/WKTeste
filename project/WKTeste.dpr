@@ -15,10 +15,12 @@ uses
   PedidoVendaModel in '..\source\model\PedidoVenda\PedidoVendaModel.pas',
   FBaseListagemCadastro in '..\source\view\Template\FBaseListagemCadastro.pas' {FrmCadastroBase},
   FListagemCliente in '..\source\view\Cliente\FListagemCliente.pas' {FrmListagemCliente},
-  uConectarBaseController in '..\source\controller\classesGlobal\uConectarBaseController.pas',
   uConstantesController in '..\source\controller\classesGlobal\uConstantesController.pas',
   FListagenPedidoVenda in '..\source\view\PedidoVenda\FListagenPedidoVenda.pas' {FrmListagemPedidoVenda},
-  FListagemProdutos in '..\source\view\Produto\FListagemProdutos.pas' {FrmListagemProdutos};
+  FListagemProdutos in '..\source\view\Produto\FListagemProdutos.pas' {FrmListagemProdutos},
+  uClienteDao in '..\source\dao\uClienteDao.pas',
+  uConectarBaseController in '..\source\controller\ClassesGlobal\uConectarBaseController.pas',
+  uProdutoDao in '..\source\dao\uProdutoDao.pas';
 
 {$R *.res}
 

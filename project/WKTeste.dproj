@@ -150,7 +150,6 @@
             <Form>FrmListagemCliente</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\source\controller\classesGlobal\uConectarBaseController.pas"/>
         <DCCReference Include="..\source\controller\classesGlobal\uConstantesController.pas"/>
         <DCCReference Include="..\source\view\PedidoVenda\FListagenPedidoVenda.pas">
             <Form>FrmListagemPedidoVenda</Form>
@@ -160,6 +159,9 @@
             <Form>FrmListagemProdutos</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\source\dao\uClienteDao.pas"/>
+        <DCCReference Include="..\source\controller\ClassesGlobal\uConectarBaseController.pas"/>
+        <DCCReference Include="..\source\dao\uProdutoDao.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

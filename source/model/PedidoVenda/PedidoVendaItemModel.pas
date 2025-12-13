@@ -48,7 +48,7 @@ procedure TPedidoVendaItemModel.GetItemVendaByID(aID: Integer);
 var
   aQuery: TFDQuery;
 begin
-  QueryCriar(aQuery, FrmPedidoVenda.DBConexao);
+  //QueryCriar(aQuery, FrmPedidoVenda.DBConexao);
   aQuery.SQL.Clear;
   aQuery.SQL.Add('SELECT codigo, numero_pedido, codigo_produto,quantidade,valor_unitario,valor_total FROM produtos ' +
                  'WHERE numero_pedido = ' + IntToStr(aID));

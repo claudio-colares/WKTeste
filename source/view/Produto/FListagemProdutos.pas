@@ -15,9 +15,12 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+  var
+    DBConexao        : TFDConnection;
     ProdutoController: TProdutoController;
   public
     { Public declarations }
+    constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
   end;
 
 var
@@ -26,6 +29,13 @@ var
 implementation
 
 {$R *.dfm}
+
+constructor TFrmListagemProdutos.Create(AOwner: TComponent; AConnection: TFDConnection);
+begin
+  inherited Create(AOwner);
+  DBConexao         := AConnection;
+  ProdutoController := TProdutoController.Create(DBConexao);
+end;
 
 procedure TFrmListagemProdutos.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -37,7 +47,6 @@ procedure TFrmListagemProdutos.FormShow(Sender: TObject);
 begin
   inherited;
   try
-    ProdutoController := TProdutoController.Create;
     ProdutoController.CarregarTabela(QryCadastroBase);
   except
     on E: Exception do
