@@ -3,7 +3,7 @@ unit ProdutosController;
 interface
 
 uses Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param,
-  uProdutoDAO;
+  uProdutoDAO, ProdutosModel;
 
 type
   TProdutoController = class
@@ -14,7 +14,8 @@ type
     destructor Destroy; override;
 
     procedure CarregarTabela(aQuery: TFDQuery);
-    procedure ObterDadosProduto(aID: Integer);
+    function ObterDadosProduto(aID: Integer): TProdutoModel;
+
   end;
 
 implementation
@@ -37,9 +38,14 @@ begin
   inherited;
 end;
 
-procedure TProdutoController.ObterDadosProduto(aID: Integer);
+function TProdutoController.ObterDadosProduto(aID: Integer): TProdutoModel;
 begin
- FProdutoDAO.GetProdutoByID(aID);
+   result := FProdutoDAO.GetProdutoByID(aID);
 end;
+
+//procedure TProdutoController.ObterDadosProduto(aID: Integer);
+//begin
+// FProdutoDAO.GetProdutoByID(aID);
+//end;
 
 end.

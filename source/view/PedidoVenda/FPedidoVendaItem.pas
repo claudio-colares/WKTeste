@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
   FListagemProdutos, Vcl.Mask, Vcl.DBCtrls, FireDAC.Comp.Client,
-  ClienteController;
+  ProdutosController;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -22,10 +22,10 @@ type
     Label1: TLabel;
     BitBtn1: TBitBtn;
     imgListPedidoVendaItem: TImageList;
-    dbeditDescricao: TDBEdit;
-    dbeditQuantidade: TDBEdit;
-    dbeditPrecoUnitario: TDBEdit;
-    dbeditValorTotal: TDBEdit;
+    editDescricao: TEdit;
+    editQuantidade: TEdit;
+    editValorUnitario: TEdit;
+    editValorTotal: TEdit;
     procedure FormShow(Sender: TObject);
     procedure btneditCodigoChange(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
@@ -33,13 +33,15 @@ type
   private
     { Private declarations }
     procedure DimencionarForm;
+    procedure LimparDadosItemVenda;
 
   var
     DBConexao        : TFDConnection;
-   // ClienteController: TClienteController;
+    ProdutoController: TProdutoController;
   public
     { Public declarations }
     constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
+    procedure ObterDadosProduto(aID: Integer);
   end;
 
 var
@@ -49,7 +51,7 @@ implementation
 
 {$R *.dfm}
 
-uses FuncoesController;
+uses FuncoesController, ProdutosModel;
 { TFrmPedidoVendaItem }
 
 procedure TFrmPedidoVendaItem.BitBtn1Click(Sender: TObject);
@@ -92,6 +94,42 @@ end;
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
   btneditCodigo.SetFocus;
+end;
+
+procedure TFrmPedidoVendaItem.LimparDadosItemVenda;
+begin
+  btneditCodigo.Clear;
+  editDescricao.Clear;
+  editQuantidade.Clear;
+  editValorUnitario.Clear;
+  editValorTotal.Clear;
+end;
+
+procedure TFrmPedidoVendaItem.ObterDadosProduto(aID: Integer);
+var
+  Produto: TProdutoModel;
+begin
+  ProdutoController := TProdutoController.Create(DBConexao);
+  Produto           := ProdutoController.ObterDadosProduto(aID);
+
+  try
+    if Produto = nil then
+    begin
+      ShowMessage('Produto não encontrado.');
+      LimparDadosItemVenda;
+      btneditCodigo.SetFocus;
+      Exit;
+    end;
+
+    btneditCodigo.Text := Produto.Codigo.ToString;
+    editDescricao.Text := Produto.Descricao;
+
+    editValorUnitario.Text := Produto.PrecoVenda.ToString;
+
+  finally
+    FreeAndNil(Produto);
+    FreeAndNil(ProdutoController);
+  end;
 end;
 
 end.

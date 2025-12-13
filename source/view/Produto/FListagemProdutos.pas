@@ -13,6 +13,7 @@ type
   TFrmListagemProdutos = class(TFrmCadastroBase)
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnSelecionarClick(Sender: TObject);
   private
     { Private declarations }
   var
@@ -29,6 +30,14 @@ var
 implementation
 
 {$R *.dfm}
+
+uses FPedidoVendaItem;
+
+procedure TFrmListagemProdutos.btnSelecionarClick(Sender: TObject);
+begin
+  inherited;
+  FrmPedidoVendaItem.ObterDadosProduto(QryCadastroBase.FieldByName('codigo').AsInteger);
+end;
 
 constructor TFrmListagemProdutos.Create(AOwner: TComponent; AConnection: TFDConnection);
 begin

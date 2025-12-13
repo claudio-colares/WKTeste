@@ -7,7 +7,7 @@ uses Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param, Pedido
 type
   TPedidoVendaItemController = class
   private
-    PedidoVendaItemModel: TPedidoVendaItemModel;
+   // PedidoVendaItemModel: TPedidoVendaItemModel;
 
   public
     procedure CarregarTabela(aQuery: TFDQuery);
@@ -20,12 +20,12 @@ implementation
 
 procedure TPedidoVendaItemController.CarregarTabela(aQuery: TFDQuery);
 begin
-  PedidoVendaItemModel.CarregarTabela(aQuery);
+  //PedidoVendaItemModel.CarregarTabela(aQuery);
 end;
 
 procedure TPedidoVendaItemController.ObterDadosItem(aID: Integer);
 begin
-  PedidoVendaItemModel.GetItemVendaByID(aID);
+ // PedidoVendaItemModel.GetItemVendaByID(aID);
 end;
 
 end.

@@ -20,7 +20,8 @@ uses
   FListagemProdutos in '..\source\view\Produto\FListagemProdutos.pas' {FrmListagemProdutos},
   uClienteDao in '..\source\dao\uClienteDao.pas',
   uConectarBaseController in '..\source\controller\ClassesGlobal\uConectarBaseController.pas',
-  uProdutoDao in '..\source\dao\uProdutoDao.pas';
+  uProdutoDao in '..\source\dao\uProdutoDao.pas',
+  uPedidoVendaItemDao in '..\source\dao\uPedidoVendaItemDao.pas';
 
 {$R *.res}
 

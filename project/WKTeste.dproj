@@ -162,6 +162,7 @@
         <DCCReference Include="..\source\dao\uClienteDao.pas"/>
         <DCCReference Include="..\source\controller\ClassesGlobal\uConectarBaseController.pas"/>
         <DCCReference Include="..\source\dao\uProdutoDao.pas"/>
+        <DCCReference Include="..\source\dao\uPedidoVendaItemDao.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

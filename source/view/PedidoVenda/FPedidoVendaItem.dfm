@@ -123,28 +123,28 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       OnChange = btneditCodigoChange
       OnRightButtonClick = btneditCodigoRightButtonClick
     end
-    object dbeditDescricao: TDBEdit
+    object editDescricao: TEdit
       Left = 123
       Top = 62
       Width = 332
       Height = 29
       TabOrder = 1
     end
-    object dbeditQuantidade: TDBEdit
+    object editQuantidade: TEdit
       Left = 461
       Top = 62
       Width = 91
       Height = 29
       TabOrder = 2
     end
-    object dbeditPrecoUnitario: TDBEdit
+    object editValorUnitario: TEdit
       Left = 558
       Top = 62
       Width = 99
       Height = 29
       TabOrder = 3
     end
-    object dbeditValorTotal: TDBEdit
+    object editValorTotal: TEdit
       Left = 663
       Top = 62
       Width = 99
