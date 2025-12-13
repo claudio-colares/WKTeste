@@ -109,8 +109,10 @@ object FrmPedidoVenda: TFrmPedidoVenda
           RightButton.ImageIndex = 0
           RightButton.Visible = True
           TabOrder = 0
+          TextHint = 'Press. F8'
           OnChange = btneditCodigoClienteChange
           OnExit = btneditCodigoClienteExit
+          OnKeyDown = btneditCodigoClienteKeyDown
           OnRightButtonClick = btneditCodigoClienteRightButtonClick
         end
         object editClienteNome: TEdit
@@ -118,6 +120,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Top = 46
           Width = 542
           Height = 29
+          Enabled = False
           TabOrder = 1
         end
         object editClienteCidade: TEdit
@@ -125,6 +128,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Top = 46
           Width = 208
           Height = 29
+          Enabled = False
           TabOrder = 2
         end
         object editClienteUF: TEdit
@@ -132,6 +136,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Top = 46
           Width = 121
           Height = 29
+          Enabled = False
           TabOrder = 3
         end
       end
@@ -144,6 +149,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Align = alClient
         Caption = 'Dados do Pedido'
         TabOrder = 1
+        ExplicitLeft = 2
         object Label1: TLabel
           Left = 9
           Top = 35
@@ -163,16 +169,16 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Top = 59
           Width = 100
           Height = 29
+          Enabled = False
           Images = imgListPrincipal
           LeftButton.Enabled = False
           NumbersOnly = True
-          RightButton.ImageIndex = 0
-          RightButton.Visible = True
+          RightButton.Enabled = False
           TabOrder = 0
           OnChange = btneditNumeroPedidoChange
           OnRightButtonClick = btneditNumeroPedidoRightButtonClick
         end
-        object DateTimePicker1: TDateTimePicker
+        object dateeditDataPedido: TDateTimePicker
           Left = 115
           Top = 59
           Width = 120
@@ -180,6 +186,45 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Date = 46001.000000000000000000
           Time = 0.935553182869625700
           TabOrder = 1
+          TabStop = False
+        end
+        object btnCancelarPedido: TBitBtn
+          AlignWithMargins = True
+          Left = 864
+          Top = 43
+          Width = 120
+          Height = 38
+          Margins.Left = 0
+          Margins.Top = 20
+          Margins.Right = 20
+          Margins.Bottom = 20
+          Action = actInserirItem
+          Align = alRight
+          Caption = '&Cancelar Pedido'
+          Images = imgListPrincipal
+          Layout = blGlyphRight
+          TabOrder = 2
+          ExplicitLeft = 3
+          ExplicitTop = 3
+          ExplicitHeight = 29
+        end
+        object btnCarregarPedido: TBitBtn
+          AlignWithMargins = True
+          Left = 734
+          Top = 43
+          Width = 120
+          Height = 38
+          Margins.Top = 20
+          Margins.Right = 10
+          Margins.Bottom = 20
+          Align = alRight
+          Caption = '&Carregar Pedido'
+          Images = imgListPrincipal
+          Layout = blGlyphRight
+          TabOrder = 3
+          OnClick = actInserirItemExecute
+          ExplicitLeft = 601
+          ExplicitTop = 45
         end
       end
     end
@@ -198,7 +243,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Width = 1004
         Height = 306
         Align = alClient
-        DataSource = dsPedidoVendaItem
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -251,7 +295,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 1
-        object BitBtn6: TBitBtn
+        object BitBtn3: TBitBtn
           AlignWithMargins = True
           Left = 3
           Top = 3
@@ -263,6 +307,8 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Images = imgListPrincipal
           Layout = blGlyphRight
           TabOrder = 0
+          ExplicitLeft = 11
+          ExplicitTop = 6
         end
       end
     end
@@ -346,8 +392,8 @@ object FrmPedidoVenda: TFrmPedidoVenda
   object imgListPrincipal: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 896
-    Top = 345
+    Left = 696
+    Top = 417
     Bitmap = {
       494C010102000800040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
@@ -497,35 +543,8 @@ object FrmPedidoVenda: TFrmPedidoVenda
       ImageIndex = 1
       OnExecute = actInserirItemExecute
     end
-  end
-  object QryPedidoVenda: TFDQuery
-    SQL.Strings = (
-      'select * from pedidos_venda')
-    Left = 48
-    Top = 474
-  end
-  object QryPedidoVendaItem: TFDQuery
-    SQL.Strings = (
-      'select * from pedidos_vendas_itens'
-      'where numero_pedido = :pnumPedido')
-    Left = 264
-    Top = 426
-    ParamData = <
-      item
-        Name = 'PNUMPEDIDO'
-        DataType = ftInteger
-        ParamType = ptInput
-        Value = Null
-      end>
-  end
-  object dsPedidoVenda: TDataSource
-    DataSet = QryPedidoVenda
-    Left = 48
-    Top = 544
-  end
-  object dsPedidoVendaItem: TDataSource
-    DataSet = QryPedidoVendaItem
-    Left = 264
-    Top = 528
+    object actListagemClientes: TAction
+      OnExecute = actListagemClientesExecute
+    end
   end
 end

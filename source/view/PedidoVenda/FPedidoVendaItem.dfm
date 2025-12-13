@@ -120,7 +120,9 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       RightButton.ImageIndex = 0
       RightButton.Visible = True
       TabOrder = 0
+      TextHint = 'Press. F8'
       OnChange = btneditCodigoChange
+      OnKeyDown = btneditCodigoKeyDown
       OnRightButtonClick = btneditCodigoRightButtonClick
     end
     object editDescricao: TEdit
@@ -128,6 +130,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 332
       Height = 29
+      Enabled = False
       TabOrder = 1
     end
     object editQuantidade: TEdit
@@ -135,6 +138,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 91
       Height = 29
+      NumbersOnly = True
       TabOrder = 2
     end
     object editValorUnitario: TEdit
@@ -155,8 +159,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
   object imgListPedidoVendaItem: TImageList
     ColorDepth = cd32Bit
     DrawingStyle = dsTransparent
-    Left = 48
-    Top = 160
+    Left = 176
+    Top = 176
     Bitmap = {
       494C010101000800040010001000FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
@@ -296,5 +300,12 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object actlItemVenda: TActionList
+    Left = 368
+    Top = 168
+    object actListagemProdutos: TAction
+      OnExecute = actListagemProdutosExecute
+    end
   end
 end

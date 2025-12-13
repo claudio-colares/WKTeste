@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
   FListagemProdutos, Vcl.Mask, Vcl.DBCtrls, FireDAC.Comp.Client,
-  ProdutosController;
+  ProdutosController, System.Actions, Vcl.ActnList;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -26,10 +26,14 @@ type
     editQuantidade: TEdit;
     editValorUnitario: TEdit;
     editValorTotal: TEdit;
+    actlItemVenda: TActionList;
+    actListagemProdutos: TAction;
     procedure FormShow(Sender: TObject);
     procedure btneditCodigoChange(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure actListagemProdutosExecute(Sender: TObject);
     procedure btneditCodigoRightButtonClick(Sender: TObject);
+    procedure btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     procedure DimencionarForm;
@@ -54,9 +58,22 @@ implementation
 uses FuncoesController, ProdutosModel;
 { TFrmPedidoVendaItem }
 
+procedure TFrmPedidoVendaItem.actListagemProdutosExecute(Sender: TObject);
+begin
+  try
+    FrmListagemProdutos          := TFrmListagemProdutos.Create(self, DBConexao);
+    FrmListagemProdutos.Position := poOwnerFormCenter;
+    FrmListagemProdutos.ShowModal;
+
+    editQuantidade.SetFocus;
+  finally
+    FrmListagemProdutos.Free;
+  end;
+end;
+
 procedure TFrmPedidoVendaItem.BitBtn1Click(Sender: TObject);
 begin
-  Self.Close;
+  self.Close;
 end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoChange(Sender: TObject);
@@ -64,31 +81,29 @@ begin
   ExibirBotaoPesquisa(btneditCodigo);
 end;
 
+procedure TFrmPedidoVendaItem.btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+ if key = VK_F8 then
+    actListagemProdutos.Execute;
+end;
+
 procedure TFrmPedidoVendaItem.btneditCodigoRightButtonClick(Sender: TObject);
 begin
-  try
-    FrmListagemProdutos          := TFrmListagemProdutos.Create(self,DBConexao);
-    FrmListagemProdutos.Position := poOwnerFormCenter;
-    FrmListagemProdutos.ShowModal;
-  finally
-    FrmListagemProdutos.Free;
-  end;
+  actListagemProdutos.Execute;
 end;
 
 constructor TFrmPedidoVendaItem.Create(AOwner: TComponent; AConnection: TFDConnection);
 begin
-
   inherited Create(AOwner);
   DimencionarForm;
-  DBConexao         := AConnection;
- // ClienteController := TClienteController.Create(DBConexao);
+  DBConexao := AConnection;
 end;
 
 procedure TFrmPedidoVendaItem.DimencionarForm;
 begin
-  Self.Position := poOwnerFormCenter;
-  Self.Width    := 800;
-  Self.Height   := 270;
+  self.Position := poOwnerFormCenter;
+  self.Width    := 800;
+  self.Height   := 270;
 end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
@@ -100,9 +115,10 @@ procedure TFrmPedidoVendaItem.LimparDadosItemVenda;
 begin
   btneditCodigo.Clear;
   editDescricao.Clear;
-  editQuantidade.Clear;
+ // editQuantidade.Text := '0.00' ;
   editValorUnitario.Clear;
   editValorTotal.Clear;
+
 end;
 
 procedure TFrmPedidoVendaItem.ObterDadosProduto(aID: Integer);

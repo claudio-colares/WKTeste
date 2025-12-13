@@ -24,6 +24,8 @@ type
     BitBtn2: TBitBtn;
     imgListCadastroBase: TImageList;
     procedure btnSelecionarClick(Sender: TObject);
+    procedure dbgrdCadastroBaseKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure dbgrdCadastroBaseDblClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,7 +41,18 @@ implementation
 
 procedure TFrmCadastroBase.btnSelecionarClick(Sender: TObject);
 begin
- Modalresult := mrOk;
+  Modalresult := mrOk;
+end;
+
+procedure TFrmCadastroBase.dbgrdCadastroBaseDblClick(Sender: TObject);
+begin
+  btnSelecionar.Click;
+end;
+
+procedure TFrmCadastroBase.dbgrdCadastroBaseKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    btnSelecionar.Click;
 end;
 
 end.

@@ -77,6 +77,8 @@ object FrmCadastroBase: TFrmCadastroBase
     TitleFont.Height = -16
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+    OnDblClick = dbgrdCadastroBaseDblClick
+    OnKeyDown = dbgrdCadastroBaseKeyDown
   end
   object pnlPesquisaCadastro: TPanel
     Left = 0
@@ -120,7 +122,6 @@ object FrmCadastroBase: TFrmCadastroBase
     Top = 224
   end
   object QryCadastroBase: TFDQuery
-    Connection = FrmPedidoVenda.DBConexao
     Left = 304
     Top = 296
   end

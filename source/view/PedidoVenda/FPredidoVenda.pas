@@ -30,24 +30,23 @@ type
     Label1: TLabel;
     btneditNumeroPedido: TButtonedEdit;
     Label2: TLabel;
-    DateTimePicker1: TDateTimePicker;
+    dateeditDataPedido: TDateTimePicker;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     pnlgrid: TPanel;
-    BitBtn6: TBitBtn;
     pnlBotoesItensPedido: TPanel;
     pnlTotalizador: TPanel;
     Edit4: TEdit;
     Label7: TLabel;
     actListPedidoVenda: TActionList;
     actInserirItem: TAction;
-    QryPedidoVenda: TFDQuery;
-    QryPedidoVendaItem: TFDQuery;
-    dsPedidoVenda: TDataSource;
-    dsPedidoVendaItem: TDataSource;
     editClienteNome: TEdit;
     editClienteCidade: TEdit;
     editClienteUF: TEdit;
+    actListagemClientes: TAction;
+    BitBtn3: TBitBtn;
+    btnCancelarPedido: TBitBtn;
+    btnCarregarPedido: TBitBtn;
 
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
@@ -56,13 +55,15 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
     procedure btneditNumeroPedidoRightButtonClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure btneditCodigoClienteExit(Sender: TObject);
+    procedure btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure actListagemClientesExecute(Sender: TObject);
 
   private
     { Private declarations }
     procedure DimencionarForm;
     procedure LimparDadosCliente;
+    procedure ExibirBotoes(aExibir: Boolean);
 
   var
   DBConexao : TFDConnection;
@@ -84,6 +85,17 @@ uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda
 
 { TFrmPedidoVenda }
 
+procedure TFrmPedidoVenda.actListagemClientesExecute(Sender: TObject);
+begin
+  try
+    FrmListagemCliente          := TFrmListagemCliente.Create(Self,DBConexao);
+    FrmListagemCliente.Position := poOwnerFormCenter;
+    FrmListagemCliente.ShowModal;
+  finally
+    FrmListagemCliente.Free;
+  end;
+end;
+
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   try
@@ -98,23 +110,37 @@ end;
 procedure TFrmPedidoVenda.btneditCodigoClienteChange(Sender: TObject);
 begin
   ExibirBotaoPesquisa(btneditCodigoCliente);
+
+  if btneditCodigoCliente.Text = '' then
+  begin
+    LimparDadosCliente;
+    ExibirBotoes(true);
+    dateeditDataPedido.Enabled := false;
+  end
+  else
+  begin
+    ExibirBotoes(false);
+    dateeditDataPedido.Enabled := true;
+  end;
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteExit(Sender: TObject);
 begin
  if btneditCodigoCliente.Text <> ''  then
-      ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0));
+      ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0))
+ else
+   LimparDadosCliente;
+end;
+
+procedure TFrmPedidoVenda.btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+ if key = VK_F8 then
+  actListagemClientes.Execute;
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
 begin
-  try
-    FrmListagemCliente          := TFrmListagemCliente.Create(Self,DBConexao);
-    FrmListagemCliente.Position := poOwnerFormCenter;
-    FrmListagemCliente.ShowModal;
-  finally
-    FrmListagemCliente.Free;
-  end;
+  actListagemClientes.Execute;
 end;
 
 procedure TFrmPedidoVenda.btneditNumeroPedidoChange(Sender: TObject);
@@ -133,11 +159,6 @@ begin
 //  end;
 end;
 
-procedure TFrmPedidoVenda.Button1Click(Sender: TObject);
-begin
-  ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0));
-end;
-
 procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
 begin
   DBConexao := TFDConnection.Create(nil);
@@ -154,12 +175,12 @@ end;
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
-  btneditNumeroPedido.SetFocus;
+ // btneditNumeroPedido.SetFocus;
 end;
 
 procedure TFrmPedidoVenda.LimparDadosCliente;
 begin
- btneditCodigoCliente.Clear;
+// btneditCodigoCliente.Clear;
  editClienteNome.Clear;
  editClienteCidade.Clear;
  editClienteUF.Clear;
@@ -196,6 +217,12 @@ begin
   Self.Position := poScreenCenter;
   Self.Width    := 1024;
   Self.Height   := 768;
+end;
+
+procedure TFrmPedidoVenda.ExibirBotoes(aExibir: Boolean);
+begin
+  btnCancelarPedido.Visible := aExibir;
+  btnCarregarPedido.Visible := aExibir;
 end;
 
 end.
