@@ -13,6 +13,9 @@ uses
   PedidoVendaController;
 
 type
+  TTipoPersistencia = (tpNovo, tpAlterar);
+
+type
   TFrmPedidoVenda = class(TForm)
     pnlTitulo: TPanel;
     lblTitulo: TLabel;
@@ -64,16 +67,21 @@ type
 
   private
     { Private declarations }
+
     procedure DimencionarForm;
     procedure LimparDadosCliente;
     procedure ExibirBotoes(aExibir: Boolean);
     procedure NovoPedidoVenda;
-    function GravarPedidoVenda : Boolean;
+
+    function TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
+    function GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
+    function ObterDadosPedidoVenda(aID: Integer): Boolean;
 
   var
-    DBConexao: TFDConnection;
-    BaseDados: TConectarBaseController;
-    aIDVenda : Integer;
+    DBConexao     : TFDConnection;
+    BaseDados     : TConectarBaseController;
+    aIDVenda      : Integer;
+    PersistirDados: TTipoPersistencia;
   public
     { Public declarations }
     procedure ObterDadosCliente(aID: Integer);
@@ -103,23 +111,33 @@ end;
 
 procedure TFrmPedidoVenda.btnGravarPedidoClick(Sender: TObject);
 begin
-  if GravarPedidoVenda then
+  if btneditCodigoCliente.Text = '' then
+    Exit;
+
+  if GravarPedidoVenda(TipoPersistenciaDados(aIDVenda)) then
   begin
-    NovoPedidoVenda;
     ShowMessage('Pedido salvo com sucesso!');
+    NovoPedidoVenda;
   end
   else
-    ShowMessage('Erro ao salvar o pedido!');
+    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!')
 end;
 
+function TFrmPedidoVenda.TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
+begin
+  if aNumPedido < 1 then
+    Result := tpNovo
+  else
+    Result := tpAlterar;
+end;
 
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
+  if btneditCodigoCliente.Text = '' then
+      exit;
   try
-    if btneditCodigoCliente.Text = '' then
-       exit;
-
-    GravarPedidoVenda;
+    GravarPedidoVenda(TipoPersistenciaDados(aIDVenda));
+    ObterDadosPedidoVenda(aIDVenda);
 
     FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
@@ -202,17 +220,17 @@ begin
   NovoPedidoVenda;
 end;
 
-function TFrmPedidoVenda.GravarPedidoVenda: Boolean;
+function TFrmPedidoVenda.GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
 var
   PedidoVenda          : TPedidoVendaModel;
   PedidoVendaController: TPedidoVendaController;
 begin
-  Result := False;
+  Result := false;
   try
-    PedidoVendaController     := TPedidoVendaController.Create(DBConexao);
+    PedidoVendaController := TPedidoVendaController.Create(DBConexao);
 
-    if aIDVenda < 1 then
-    aIDVenda                  := PedidoVendaController.GetNumeroPedidoVenda + 1;
+    if aTipoPersistencia = tpNovo then
+      aIDVenda := PedidoVendaController.GetNumeroPedidoVenda + 1;
 
     PedidoVenda               := TPedidoVendaModel.Create;
     PedidoVenda.NumeroPedido  := aIDVenda;
@@ -220,8 +238,13 @@ begin
     PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
     PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
 
-    if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
-      Result := True;
+    if aTipoPersistencia = tpNovo then
+      if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
+	Result := true;
+
+    if aTipoPersistencia = tpAlterar then
+      if PedidoVendaController.AlterarPedidoVenda(PedidoVenda) then
+	Result := true;
 
   finally
     FreeAndNil(PedidoVenda);
@@ -239,12 +262,13 @@ end;
 
 procedure TFrmPedidoVenda.NovoPedidoVenda;
 begin
- aIDVenda := 0;
- btneditNumeroPedido.Text := aIDVenda.ToString;
- dateeditDataPedido.Enabled := True;
- ExibirBotoes(True);
- LimparDadosCliente;
- btneditCodigoCliente.SetFocus;
+  aIDVenda := 0;
+  TipoPersistenciaDados(aIDVenda);
+  btneditNumeroPedido.Text   := aIDVenda.ToString;
+  dateeditDataPedido.Enabled := true;
+  ExibirBotoes(true);
+  LimparDadosCliente;
+  btneditCodigoCliente.SetFocus;
 end;
 
 procedure TFrmPedidoVenda.ObterDadosCliente(aID: Integer);
@@ -271,6 +295,39 @@ begin
   finally
     FreeAndNil(Cliente);
     FreeAndNil(ClienteController);
+  end;
+end;
+
+function TFrmPedidoVenda.ObterDadosPedidoVenda(aID: Integer): Boolean;
+var
+  PedidoVenda          : TPedidoVendaModel;
+  PedidoVendaController: TPedidoVendaController;
+begin
+  PedidoVendaController := TPedidoVendaController.Create(DBConexao);
+
+  PedidoVenda := TPedidoVendaModel.Create;
+  PedidoVenda := PedidoVendaController.ObterDadosPedidoVenda(aID);
+
+  try
+    if PedidoVenda = nil then
+    begin
+      ShowMessage('Pedido não encontrado.');
+      NovoPedidoVenda;
+      Exit;
+    end;
+
+    btneditNumeroPedido.Text  := PedidoVenda.NumeroPedido.ToString;
+    btneditCodigoCliente.Text := PedidoVenda.CodigoCliente.ToString;
+    dateeditDataPedido.Date   := PedidoVenda.DataEmissao;
+    editValorTotal.Text       := PedidoVenda.ValorTotal.ToString;
+
+    // --------------------------------------------------------------
+    // Impeplentar para trazer todos os dados do pedido
+    // --------------------------------------------------------------
+
+  finally
+    FreeAndNil(PedidoVenda);
+    FreeAndNil(PedidoVendaController);
   end;
 end;
 

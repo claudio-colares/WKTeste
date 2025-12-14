@@ -16,12 +16,19 @@ type
     procedure CarregarTabela(aQuery: TFDQuery);
     function ObterDadosPedidoVenda(aID: Integer): TPedidoVendaModel;
     function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+    function AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function GetNumeroPedidoVenda: Integer;
+    function Limpar : TPedidoVendaModel;
   end;
 
 implementation
 
 { TPedidoVendaController }
+
+function TPedidoVendaController.AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+begin
+  result := PedidoVendaDao.AlterarPedidoVenda(aPedidoVendaModel);
+end;
 
 procedure TPedidoVendaController.CarregarTabela(aQuery: TFDQuery);
 begin
@@ -47,6 +54,11 @@ end;
 function TPedidoVendaController.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel):Boolean;
 begin
   result := PedidoVendaDao.GravarPedidoVenda(aPedidoVendaModel);
+end;
+
+function TPedidoVendaController.Limpar: TPedidoVendaModel;
+begin
+ Result := PedidoVendaDao.Limpar;
 end;
 
 function TPedidoVendaController.ObterDadosPedidoVenda(aID: Integer): TPedidoVendaModel;

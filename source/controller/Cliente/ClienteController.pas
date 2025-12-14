@@ -15,6 +15,7 @@ type
 
     procedure CarregarTabela(Qry: TFDQuery);
     function ObterClientePorID(ID: Integer): TClienteModel;
+    function Limpar : TClienteModel;
   end;
 
 implementation
@@ -30,6 +31,11 @@ destructor TClienteController.Destroy;
 begin
   FClienteDAO.Free;
   inherited;
+end;
+
+function TClienteController.Limpar:TClienteModel;
+begin
+  Result := FClienteDAO.Limpar;
 end;
 
 procedure TClienteController.CarregarTabela(Qry: TFDQuery);

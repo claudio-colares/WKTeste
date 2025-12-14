@@ -380,6 +380,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Caption = 'Gravar Pedido'
       TabOrder = 1
       OnClick = btnGravarPedidoClick
+      ExplicitTop = 24
     end
   end
   object imgListPrincipal: TImageList

@@ -3,83 +3,46 @@ unit uPedidoVendaDao;
 interface
 
 uses
-  Data.DB, FireDAC.Comp.Client, PedidoVendaModel;
+  Data.DB, FireDAC.Comp.Client, PedidoVendaModel, ClienteController, ClienteModel;
 
 type
   TPedidoVendaDAO = class
   private
-    BDConexao: TFDConnection;
+    DBConexao: TFDConnection;
   public
     constructor Create(aConnection: TFDConnection);
 
     procedure CarregarTabela(aQuery: TFDQuery);
     function GetPedidoVendaByID(ID: Integer): TPedidoVendaModel;
     function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+    function AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function GetNumeroPedidoVenda: Integer;
+    function Limpar: TPedidoVendaModel;
   end;
 
 implementation
 
 { TPedidoVendaDAO }
 
-procedure TPedidoVendaDAO.CarregarTabela(aQuery: TFDQuery);
-begin
-  aQuery.Connection := BDConexao;
-  aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total FROM pedidos_venda';
-  aQuery.Open;
-end;
-
-constructor TPedidoVendaDAO.Create(aConnection: TFDConnection);
-begin
-  BDConexao := aConnection;
-end;
-
-function TPedidoVendaDAO.GetPedidoVendaByID(ID: Integer): TPedidoVendaModel;
+function TPedidoVendaDAO.AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
 var
-  aQuery     : TFDQuery;
-  PedidoVenda: TPedidoVendaModel;
-begin
-  PedidoVenda := TPedidoVendaModel.Create;
-  aQuery      := TFDQuery.Create(nil);
-  try
-    aQuery.Connection := BDConexao;
-    aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total ' +
-      ' FROM pedidos_vendas WHERE numero_pedido = :ID';
-    aQuery.ParamByName('ID').AsInteger := ID;
-    aQuery.Open;
-
-    if aQuery.IsEmpty then
-      Exit(nil);
-
-    PedidoVenda               := TPedidoVendaModel.Create;
-    PedidoVenda.NumeroPedido  := aQuery.FieldByName('numero_pedido').AsInteger;
-    PedidoVenda.DataEmissao   := aQuery.FieldByName('data_emissao').AsDateTime;
-    PedidoVenda.CodigoCliente := aQuery.FieldByName('codigo_cliente').AsInteger;
-    PedidoVenda.ValorTotal    := aQuery.FieldByName('valor_total').AsCurrency;
-
-    Result := PedidoVenda;
-  finally
-    aQuery.Free;
-  end;
-end;
-
-function TPedidoVendaDAO.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
-var
-  aQuery: TFDQuery;
-  strSQL: String;
-  aNumeroPedidoVenda : Integer;
+  aQuery                : TFDQuery;
+  strSQL                : String;
+  aNumeroPedidoVenda    : Integer;
   aNovoNumeroPedidoVenda: Integer;
 begin
   Result := False;
   // -------------------------------------------------------------------------
-  // Novo pedido
+  // Alterar pedido
   // -------------------------------------------------------------------------
   try
     aQuery            := TFDQuery.Create(nil);
-    aQuery.Connection := BDConexao;
-    strSQL            := 'INSERT INTO pedidos_venda ' +
-    			 '(numero_pedido, data_emissao, codigo_cliente, valor_total) ' +
-                         'VALUES (:numero_pedido, :data_emissao, :codigo_cliente, :valor_total)';
+    aQuery.Connection := DBConexao;
+    strSQL            := 'UPDATE pedidos_venda SET ' +
+                         '  data_emissao    = :data_emissao, ' +
+                         '  codigo_cliente  = :codigo_cliente, ' +
+                         '  valor_total     = :valor_total ' +
+                         'WHERE numero_pedido = :numero_pedido';
 
     aQuery.SQL.Add(strSQL);
     aQuery.ParamByName('numero_pedido').AsInteger  := aPedidoVendaModel.NumeroPedido;
@@ -92,17 +55,107 @@ begin
   finally
     aQuery.Free;
   end;
+end;
 
+procedure TPedidoVendaDAO.CarregarTabela(aQuery: TFDQuery);
+begin
+  aQuery.Connection := DBConexao;
+  aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total FROM pedidos_venda';
+  aQuery.Open;
+end;
+
+constructor TPedidoVendaDAO.Create(aConnection: TFDConnection);
+begin
+  DBConexao := aConnection;
+end;
+
+function TPedidoVendaDAO.GetPedidoVendaByID(ID: Integer): TPedidoVendaModel;
+var
+  aQuery     : TFDQuery;
+  PedidoVenda: TPedidoVendaModel;
+begin
+  aQuery := TFDQuery.Create(nil);
+  try
+    aQuery.Connection := DBConexao;
+    aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total ' +
+      ' FROM pedidos_venda WHERE numero_pedido = :ID';
+    aQuery.ParamByName('ID').AsInteger := ID;
+    aQuery.Open;
+
+    if aQuery.IsEmpty then
+      Exit(nil);
+
+    // PedidoVenda               := TPedidoVendaModel.Create;
+    PedidoVenda.NumeroPedido  := aQuery.FieldByName('numero_pedido').AsInteger;
+    PedidoVenda.DataEmissao   := aQuery.FieldByName('data_emissao').AsDateTime;
+    PedidoVenda.CodigoCliente := aQuery.FieldByName('codigo_cliente').AsInteger;
+    PedidoVenda.ValorTotal    := aQuery.FieldByName('valor_total').AsCurrency;
+
+    // --------------------------------------------------------------
+    // Falta Impeplentar para trazer todos os dados do pedido (Cliente e Itens)
+    // --------------------------------------------------------------
+
+    Result := PedidoVenda;
+  finally
+    aQuery.Free;
+    // PedidoVenda.Free;
+  end;
+end;
+
+function TPedidoVendaDAO.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+var
+  aQuery                : TFDQuery;
+  strSQL                : String;
+  aNumeroPedidoVenda    : Integer;
+  aNovoNumeroPedidoVenda: Integer;
+begin
+  Result := False;
+  // -------------------------------------------------------------------------
+  // Novo pedido
+  // -------------------------------------------------------------------------
+  try
+    aQuery            := TFDQuery.Create(nil);
+    aQuery.Connection := DBConexao;
+    strSQL            := 'INSERT INTO pedidos_venda ' + '(numero_pedido, data_emissao, codigo_cliente, valor_total) ' +
+      'VALUES (:numero_pedido, :data_emissao, :codigo_cliente, :valor_total)';
+
+    aQuery.SQL.Add(strSQL);
+    aQuery.ParamByName('numero_pedido').AsInteger  := aPedidoVendaModel.NumeroPedido;
+    aQuery.ParamByName('data_emissao').AsDateTime  := aPedidoVendaModel.DataEmissao;
+    aQuery.ParamByName('codigo_cliente').AsInteger := aPedidoVendaModel.CodigoCliente;
+    aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaModel.ValorTotal;
+    aQuery.ExecSQL;
+    aQuery.Connection.Commit;
+    Result := true;
+  finally
+    aQuery.Free;
+  end;
+end;
+
+function TPedidoVendaDAO.Limpar: TPedidoVendaModel;
+var
+  PedidoVenda: TPedidoVendaModel;
+begin
+  try
+    PedidoVenda               := TPedidoVendaModel.Create;
+    PedidoVenda.NumeroPedido  := 0;
+    PedidoVenda.DataEmissao   := 2000 - 01 - 01;
+    PedidoVenda.CodigoCliente := 0;
+    PedidoVenda.ValorTotal    := 0;
+    PedidoVenda.Cliente.Limpar;
+  finally
+    PedidoVenda.Free;
+  end;
 end;
 
 function TPedidoVendaDAO.GetNumeroPedidoVenda: Integer;
 var
- aQuery : TFDQuery;
+  aQuery: TFDQuery;
 begin
-  result := 0;
+  Result := 0;
   try
     aQuery            := TFDQuery.Create(nil);
-    aQuery.Connection := BDConexao;
+    aQuery.Connection := DBConexao;
     aQuery.SQL.Add('SELECT MAX(numero_pedido ) AS ultimo_id FROM pedidos_venda');
     aQuery.Open;
 

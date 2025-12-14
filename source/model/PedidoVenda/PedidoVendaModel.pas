@@ -2,12 +2,15 @@ unit PedidoVendaModel;
 
 interface
 
+uses ClienteController;
+
 type
   TPedidoVendaModel = class
   private
     FNumeroPedido : Integer;
     FDataEmissao  : TDateTime;
     FCodigoCliente: Integer;
+    FCliente      : TClienteController;
     FValorTotal   : Currency;
 
   public
@@ -15,6 +18,7 @@ type
     property DataEmissao : TDateTime read FDataEmissao write FDataEmissao;
     property NumeroPedido: Integer read FNumeroPedido write FNumeroPedido;
     property CodigoCliente: Integer read FCodigoCliente write FCodigoCliente;
+    property Cliente : TClienteController read FCliente write FCliente;
     property ValorTotal   : currency read FValorTotal write FValorTotal;
     procedure Limpar;
   end;
