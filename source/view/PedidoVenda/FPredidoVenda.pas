@@ -67,10 +67,13 @@ type
     procedure DimencionarForm;
     procedure LimparDadosCliente;
     procedure ExibirBotoes(aExibir: Boolean);
+    procedure NovoPedidoVenda;
+    function GravarPedidoVenda : Boolean;
 
   var
     DBConexao: TFDConnection;
     BaseDados: TConectarBaseController;
+    aIDVenda : Integer;
   public
     { Public declarations }
     procedure ObterDadosCliente(aID: Integer);
@@ -99,36 +102,25 @@ begin
 end;
 
 procedure TFrmPedidoVenda.btnGravarPedidoClick(Sender: TObject);
-var
-  PedidoVenda          : TPedidoVendaModel;
-  PedidoVendaController: TPedidoVendaController;
-  NovoNumeroPedido     : Integer;
 begin
-  try
-    PedidoVendaController     := TPedidoVendaController.Create(DBConexao);
-    NovoNumeroPedido          := PedidoVendaController.GetNumeroPedidoVenda + 1;
-    PedidoVenda               := TPedidoVendaModel.Create;
-    PedidoVenda.NumeroPedido  := NovoNumeroPedido;
-    PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
-    PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
-    PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
-
-    if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
-    begin
-      ShowMessage('Pedido salvo com sucesso!');
-    end
-    else
-      ShowMessage('Erro ao salvar o pedido!');
-
-  finally
-    FreeAndNil(PedidoVenda);
-    FreeAndNil(PedidoVendaController);
-  end;
+  if GravarPedidoVenda then
+  begin
+    NovoPedidoVenda;
+    ShowMessage('Pedido salvo com sucesso!');
+  end
+  else
+    ShowMessage('Erro ao salvar o pedido!');
 end;
+
 
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   try
+    if btneditCodigoCliente.Text = '' then
+       exit;
+
+    GravarPedidoVenda;
+
     FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
     FrmPedidoVendaItem.ShowModal;
@@ -143,9 +135,7 @@ begin
 
   if btneditCodigoCliente.Text = '' then
   begin
-    LimparDadosCliente;
-    ExibirBotoes(true);
-    dateeditDataPedido.Enabled := false;
+    NovoPedidoVenda;
   end
   else
   begin
@@ -202,19 +192,59 @@ begin
       _PATH_SISTEMA + _ARQUIVO_INI);
     Application.Terminate;
   end;
+
   // -------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
+  NovoPedidoVenda;
+end;
+
+function TFrmPedidoVenda.GravarPedidoVenda: Boolean;
+var
+  PedidoVenda          : TPedidoVendaModel;
+  PedidoVendaController: TPedidoVendaController;
+begin
+  Result := False;
+  try
+    PedidoVendaController     := TPedidoVendaController.Create(DBConexao);
+
+    if aIDVenda < 1 then
+    aIDVenda                  := PedidoVendaController.GetNumeroPedidoVenda + 1;
+
+    PedidoVenda               := TPedidoVendaModel.Create;
+    PedidoVenda.NumeroPedido  := aIDVenda;
+    PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
+    PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
+    PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
+
+    if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
+      Result := True;
+
+  finally
+    FreeAndNil(PedidoVenda);
+    FreeAndNil(PedidoVendaController);
+  end;
 end;
 
 procedure TFrmPedidoVenda.LimparDadosCliente;
 begin
+  btneditCodigoCliente.Text := '';
   editClienteNome.Clear;
   editClienteCidade.Clear;
   editClienteUF.Clear;
+end;
+
+procedure TFrmPedidoVenda.NovoPedidoVenda;
+begin
+ aIDVenda := 0;
+ btneditNumeroPedido.Text := aIDVenda.ToString;
+ dateeditDataPedido.Enabled := True;
+ ExibirBotoes(True);
+ LimparDadosCliente;
+ btneditCodigoCliente.SetFocus;
 end;
 
 procedure TFrmPedidoVenda.ObterDadosCliente(aID: Integer);

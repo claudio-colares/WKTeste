@@ -200,8 +200,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Margins.Bottom = 20
           Action = actInserirItem
           Align = alRight
-          Caption = '&Cancelar Pedido'
-          Images = imgListPrincipal
+          Caption = 'Cancelar'
           Layout = blGlyphRight
           TabOrder = 2
         end
@@ -215,7 +214,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Margins.Right = 10
           Margins.Bottom = 20
           Align = alRight
-          Caption = '&Carregar Pedido'
+          Caption = 'Carregar'
           Images = imgListPrincipal
           Layout = blGlyphRight
           TabOrder = 3
