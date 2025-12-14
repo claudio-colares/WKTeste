@@ -21,7 +21,8 @@ uses
   uClienteDao in '..\source\dao\uClienteDao.pas',
   uConectarBaseController in '..\source\controller\ClassesGlobal\uConectarBaseController.pas',
   uProdutoDao in '..\source\dao\uProdutoDao.pas',
-  uPedidoVendaItemDao in '..\source\dao\uPedidoVendaItemDao.pas';
+  uPedidoVendaItemDao in '..\source\dao\uPedidoVendaItemDao.pas',
+  uPedidoVendaDao in '..\source\dao\uPedidoVendaDao.pas';
 
 {$R *.res}
 

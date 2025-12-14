@@ -185,6 +185,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Height = 29
           Date = 46001.000000000000000000
           Time = 0.935553182869625700
+          Enabled = False
           TabOrder = 1
           TabStop = False
         end
@@ -338,7 +339,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Layout = tlCenter
         ExplicitHeight = 30
       end
-      object Edit4: TEdit
+      object editValorTotal: TEdit
         AlignWithMargins = True
         Left = 888
         Top = 4
@@ -377,7 +378,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Caption = 'Fechar (Esc)'
       TabOrder = 0
     end
-    object BitBtn2: TBitBtn
+    object btnGravarPedido: TBitBtn
       AlignWithMargins = True
       Left = 763
       Top = 25
@@ -387,6 +388,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alRight
       Caption = 'Gravar Pedido'
       TabOrder = 1
+      OnClick = btnGravarPedidoClick
     end
   end
   object imgListPrincipal: TImageList

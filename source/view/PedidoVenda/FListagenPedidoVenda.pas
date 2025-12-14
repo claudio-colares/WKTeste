@@ -36,13 +36,13 @@ end;
 procedure TFrmListagemPedidoVenda.FormShow(Sender: TObject);
 begin
   inherited;
-  try
-    PedidoVendaController := TPedidoVendaController.Create;
-    PedidoVendaController.CarregarTabela(QryCadastroBase);
-  except
-    on E: Exception do
-      ShowMessage('Erro ao carregar lista de pedidos: ' + E.Message);
-  end;
+//  try
+////    PedidoVendaController := TPedidoVendaController.Create();
+// //   PedidoVendaController.CarregarTabela(QryCadastroBase);
+//  except
+//    on E: Exception do
+//      ShowMessage('Erro ao carregar lista de pedidos: ' + E.Message);
+//  end;
 end;
 
 end.

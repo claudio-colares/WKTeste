@@ -9,7 +9,8 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async,
   FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
-  uConectarBaseController, uConstantesController, ClienteController;
+  uConectarBaseController, uConstantesController, ClienteController, uPedidoVendaDao, PedidoVendaModel,
+  PedidoVendaController;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -32,11 +33,11 @@ type
     Label2: TLabel;
     dateeditDataPedido: TDateTimePicker;
     BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
+    btnGravarPedido: TBitBtn;
     pnlgrid: TPanel;
     pnlBotoesItensPedido: TPanel;
     pnlTotalizador: TPanel;
-    Edit4: TEdit;
+    editValorTotal: TEdit;
     Label7: TLabel;
     actListPedidoVenda: TActionList;
     actInserirItem: TAction;
@@ -58,6 +59,7 @@ type
     procedure btneditCodigoClienteExit(Sender: TObject);
     procedure btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actListagemClientesExecute(Sender: TObject);
+    procedure btnGravarPedidoClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -66,16 +68,15 @@ type
     procedure ExibirBotoes(aExibir: Boolean);
 
   var
-  DBConexao : TFDConnection;
-  ClienteController   : TClienteController;
-  BaseDados           : TConectarBaseController;
+    DBConexao: TFDConnection;
+    BaseDados: TConectarBaseController;
   public
     { Public declarations }
     procedure ObterDadosCliente(aID: Integer);
   end;
 
 var
-  FrmPedidoVenda      : TFrmPedidoVenda;
+  FrmPedidoVenda: TFrmPedidoVenda;
 
 implementation
 
@@ -88,7 +89,7 @@ uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda
 procedure TFrmPedidoVenda.actListagemClientesExecute(Sender: TObject);
 begin
   try
-    FrmListagemCliente          := TFrmListagemCliente.Create(Self,DBConexao);
+    FrmListagemCliente          := TFrmListagemCliente.Create(Self, DBConexao);
     FrmListagemCliente.Position := poOwnerFormCenter;
     FrmListagemCliente.ShowModal;
   finally
@@ -96,10 +97,30 @@ begin
   end;
 end;
 
+procedure TFrmPedidoVenda.btnGravarPedidoClick(Sender: TObject);
+var
+  PedidoVenda          : TPedidoVendaModel;
+  PedidoVendaController: TPedidoVendaController;
+begin
+  try
+    PedidoVendaController := TPedidoVendaController.Create(DBConexao);
+    PedidoVenda.NumeroPedido  := 2;
+    PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
+    PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
+    PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
+
+    PedidoVendaController.GravarPedidoVenda(PedidoVenda);
+    ShowMessage('teste');
+  finally
+    FreeAndNil(PedidoVenda);
+    FreeAndNil(PedidoVendaController);
+  end;
+end;
+
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   try
-    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self,DBConexao);
+    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
     FrmPedidoVendaItem.ShowModal;
   finally
@@ -126,16 +147,16 @@ end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteExit(Sender: TObject);
 begin
- if btneditCodigoCliente.Text <> ''  then
-      ObterDadosCliente(strToIntDef(btneditCodigoCliente.Text,0))
- else
-   LimparDadosCliente;
+  if btneditCodigoCliente.Text <> '' then
+    ObterDadosCliente(StrToIntDef(btneditCodigoCliente.Text, 0))
+  else
+    LimparDadosCliente;
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
- if key = VK_F8 then
-  actListagemClientes.Execute;
+  if Key = VK_F8 then
+    actListagemClientes.Execute;
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
@@ -150,17 +171,20 @@ end;
 
 procedure TFrmPedidoVenda.btneditNumeroPedidoRightButtonClick(Sender: TObject);
 begin
-//   try
-//    FrmListagemPedidoVenda          :=  TFrmListagemPedidoVenda.Create(nil);
-//    FrmListagemPedidoVenda.Position := poOwnerFormCenter;
-//    FrmListagemPedidoVenda.ShowModal;
-//  finally
-//    FrmListagemPedidoVenda.Free;
-//  end;
+  // try
+  // FrmListagemPedidoVenda          :=  TFrmListagemPedidoVenda.Create(nil);
+  // FrmListagemPedidoVenda.Position := poOwnerFormCenter;
+  // FrmListagemPedidoVenda.ShowModal;
+  // finally
+  // FrmListagemPedidoVenda.Free;
+  // end;
 end;
 
 procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
 begin
+  // -------------------------------------------------------------------------
+  // CONEXAO COM O BANCO DE DADOS
+  // -------------------------------------------------------------------------
   DBConexao := TFDConnection.Create(nil);
   SetConstantes;
   if not BaseDados.Conectar(DBConexao) then
@@ -169,26 +193,25 @@ begin
       _PATH_SISTEMA + _ARQUIVO_INI);
     Application.Terminate;
   end;
+  // -------------------------------------------------------------------------
 end;
-
 
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
- // btneditNumeroPedido.SetFocus;
 end;
 
 procedure TFrmPedidoVenda.LimparDadosCliente;
 begin
-// btneditCodigoCliente.Clear;
- editClienteNome.Clear;
- editClienteCidade.Clear;
- editClienteUF.Clear;
+  editClienteNome.Clear;
+  editClienteCidade.Clear;
+  editClienteUF.Clear;
 end;
 
 procedure TFrmPedidoVenda.ObterDadosCliente(aID: Integer);
 var
-  Cliente: TClienteModel;
+  Cliente          : TClienteModel;
+  ClienteController: TClienteController;
 begin
   ClienteController := TClienteController.Create(DBConexao);
   Cliente           := ClienteController.ObterClientePorID(aID);
