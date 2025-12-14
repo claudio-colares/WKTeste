@@ -167,6 +167,10 @@
         <DCCReference Include="..\source\dao\uProdutoDao.pas"/>
         <DCCReference Include="..\source\dao\uPedidoVendaItemDao.pas"/>
         <DCCReference Include="..\source\dao\uPedidoVendaDao.pas"/>
+        <DCCReference Include="..\source\view\PedidoVenda\FCarregarPedidoVenda.pas">
+            <Form>FrmCarregarPedidoVenda</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -196,6 +200,18 @@
                 <DeployFile LocalName="bin\WKTeste.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>WKTeste.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="bin\WKTeste.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>WKTeste.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="bin\WKTeste.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>WKTeste.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

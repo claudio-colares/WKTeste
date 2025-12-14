@@ -188,37 +188,42 @@ object FrmPedidoVenda: TFrmPedidoVenda
           TabOrder = 1
           TabStop = False
         end
-        object btnCancelarPedido: TBitBtn
+        object PnlBotoesPedidoVenda: TPanel
           AlignWithMargins = True
-          Left = 864
-          Top = 43
-          Width = 120
-          Height = 38
-          Margins.Left = 0
-          Margins.Top = 20
-          Margins.Right = 20
-          Margins.Bottom = 20
-          Action = actInserirItem
+          Left = 504
+          Top = 33
+          Width = 497
+          Height = 53
+          Margins.Top = 10
+          Margins.Bottom = 15
           Align = alRight
-          Caption = 'Cancelar'
-          Layout = blGlyphRight
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
           TabOrder = 2
-        end
-        object btnCarregarPedido: TBitBtn
-          AlignWithMargins = True
-          Left = 734
-          Top = 43
-          Width = 120
-          Height = 38
-          Margins.Top = 20
-          Margins.Right = 10
-          Margins.Bottom = 20
-          Align = alRight
-          Caption = 'Carregar'
-          Images = imgListPrincipal
-          Layout = blGlyphRight
-          TabOrder = 3
-          OnClick = actInserirItemExecute
+          object btnCancelarPedido: TBitBtn
+            AlignWithMargins = True
+            Left = 344
+            Top = 3
+            Width = 150
+            Height = 47
+            Action = actCancelarPedidoVenda
+            Align = alRight
+            Caption = 'Cancelar Pedido'
+            Layout = blGlyphRight
+            TabOrder = 0
+          end
+          object btnCarregarPedido: TBitBtn
+            AlignWithMargins = True
+            Left = 188
+            Top = 3
+            Width = 150
+            Height = 47
+            Action = actCarregarPedidoVenda
+            Align = alRight
+            Caption = 'Carregar Pedido'
+            Layout = blGlyphRight
+            TabOrder = 1
+          end
         end
       end
     end
@@ -237,6 +242,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Width = 1004
         Height = 306
         Align = alClient
+        DataSource = dsPedidoVendaItens
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -16
@@ -253,29 +259,34 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Columns = <
           item
             Expanded = False
+            FieldName = 'codigo_produto'
             Title.Caption = 'Codigo'
             Visible = True
           end
           item
             Expanded = False
+            FieldName = 'nome_produto'
             Title.Caption = 'Descricao'
             Width = 500
             Visible = True
           end
           item
             Expanded = False
+            FieldName = 'quantidade'
             Title.Caption = 'Quantidade'
             Width = 100
             Visible = True
           end
           item
             Expanded = False
+            FieldName = 'valor_unitario'
             Title.Caption = 'Vlr. Unitario'
             Width = 100
             Visible = True
           end
           item
             Expanded = False
+            FieldName = 'valor_total'
             Title.Caption = 'Vlr. Total'
             Width = 100
             Visible = True
@@ -380,7 +391,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Caption = 'Gravar Pedido'
       TabOrder = 1
       OnClick = btnGravarPedidoClick
-      ExplicitTop = 24
     end
   end
   object imgListPrincipal: TImageList
@@ -540,11 +550,37 @@ object FrmPedidoVenda: TFrmPedidoVenda
     object actListagemClientes: TAction
       OnExecute = actListagemClientesExecute
     end
+    object actCarregarPedidoVenda: TAction
+      Category = 'BotoesPedidoVenda'
+      Caption = 'Carregar Pedido'
+      OnExecute = actCarregarPedidoVendaExecute
+    end
+    object actCancelarPedidoVenda: TAction
+      Category = 'BotoesPedidoVenda'
+      Caption = 'Cancelar Pedido'
+      OnExecute = actCancelarPedidoVendaExecute
+    end
+  end
+  object QryPedidoVendaItens: TFDQuery
+    SQL.Strings = (
+      'select * from pedidos_vendas_itens')
+    Left = 288
+    Top = 474
+  end
+  object dsPedidoVendaItens: TDataSource
+    DataSet = QryPedidoVendaItens
+    Left = 256
+    Top = 392
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
+      'Server=127.0.0.1'
+      'Password=masterkey'
+      'Database=db_wkteste'
+      'User_Name=root'
       'DriverID=MySQL')
-    Left = 208
-    Top = 442
+    LoginPrompt = False
+    Left = 88
+    Top = 394
   end
 end

@@ -120,6 +120,7 @@ begin
       'VALUES (:numero_pedido, :data_emissao, :codigo_cliente, :valor_total)';
 
     aQuery.SQL.Add(strSQL);
+
     aQuery.ParamByName('numero_pedido').AsInteger  := aPedidoVendaModel.NumeroPedido;
     aQuery.ParamByName('data_emissao').AsDateTime  := aPedidoVendaModel.DataEmissao;
     aQuery.ParamByName('codigo_cliente').AsInteger := aPedidoVendaModel.CodigoCliente;

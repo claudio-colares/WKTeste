@@ -22,7 +22,8 @@ uses
   uConectarBaseController in '..\source\controller\ClassesGlobal\uConectarBaseController.pas',
   uProdutoDao in '..\source\dao\uProdutoDao.pas',
   uPedidoVendaItemDao in '..\source\dao\uPedidoVendaItemDao.pas',
-  uPedidoVendaDao in '..\source\dao\uPedidoVendaDao.pas';
+  uPedidoVendaDao in '..\source\dao\uPedidoVendaDao.pas',
+  FCarregarPedidoVenda in '..\source\view\PedidoVenda\FCarregarPedidoVenda.pas' {FrmCarregarPedidoVenda};
 
 {$R *.res}
 

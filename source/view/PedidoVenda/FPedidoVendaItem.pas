@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
   FListagemProdutos, Vcl.Mask, Vcl.DBCtrls, FireDAC.Comp.Client,
-  ProdutosController, System.Actions, Vcl.ActnList;
+  ProdutosController, System.Actions, Vcl.ActnList, uConstantesController, FPredidoVenda;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -34,18 +34,22 @@ type
     procedure actListagemProdutosExecute(Sender: TObject);
     procedure btneditCodigoRightButtonClick(Sender: TObject);
     procedure btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     procedure DimencionarForm;
     procedure LimparDadosItemVenda;
+    function InserirItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
 
   var
     DBConexao        : TFDConnection;
     ProdutoController: TProdutoController;
+    aNumeroPedido    : Integer;
   public
     { Public declarations }
     constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
     procedure ObterDadosProduto(aID: Integer);
+    procedure GetNumeroPedidoVenda(nPedido: Integer);
   end;
 
 var
@@ -55,7 +59,7 @@ implementation
 
 {$R *.dfm}
 
-uses FuncoesController, ProdutosModel;
+uses FuncoesController, ProdutosModel, PedidoVendaItemModel, PedidoVendaItemController;
 { TFrmPedidoVendaItem }
 
 procedure TFrmPedidoVendaItem.actListagemProdutosExecute(Sender: TObject);
@@ -73,7 +77,16 @@ end;
 
 procedure TFrmPedidoVendaItem.BitBtn1Click(Sender: TObject);
 begin
-  self.Close;
+  if InserirItemPedidoVenda(aNumeroPedido, tpNovo) = true then
+  begin
+    FrmPedidoVenda.ObterItensPedidoVenda(aNumeroPedido);
+    LimparDadosItemVenda;
+    btneditCodigo.SetFocus;
+  end
+  else
+  begin
+    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possivél gravar o item no banco de dados.');
+  end;
 end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoChange(Sender: TObject);
@@ -83,7 +96,7 @@ end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
- if key = VK_F8 then
+  if Key = VK_F8 then
     actListagemProdutos.Execute;
 end;
 
@@ -106,16 +119,58 @@ begin
   self.Height   := 270;
 end;
 
+procedure TFrmPedidoVendaItem.FormCreate(Sender: TObject);
+begin
+  aNumeroPedido := 0;
+end;
+
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
+
   btneditCodigo.SetFocus;
+end;
+
+procedure TFrmPedidoVendaItem.GetNumeroPedidoVenda(nPedido: Integer);
+begin
+  aNumeroPedido := nPedido;
+end;
+
+function TFrmPedidoVendaItem.InserirItemPedidoVenda(aNumeroPedido: Integer;
+  aTipoPersistencia: TTipoPersistencia): Boolean;
+var
+  PedidoVendaItem          : TPedidoVendaItemModel;
+  PedidoVendaItemController: TPedidoVendaItemController;
+begin
+  Result := false;
+  try
+    PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
+
+    PedidoVendaItem               := TPedidoVendaItemModel.Create;
+    PedidoVendaItem.NumeroPedido  := aNumeroPedido;
+    PedidoVendaItem.CodigoProduto := strToIntDef(btneditCodigo.Text, 0);
+    PedidoVendaItem.Quantidade    := StrToFloatDef(editQuantidade.Text, 0);
+    PedidoVendaItem.ValorUnitario := StrToFloatDef(editValorUnitario.Text, 0);
+    PedidoVendaItem.ValorTotal    := StrToFloatDef(editValorTotal.Text, 0);
+
+    if aTipoPersistencia = tpNovo then
+      if PedidoVendaItemController.NovoItemPedidoVenda(PedidoVendaItem) then
+	Result := true;
+    //
+    // if aTipoPersistencia = tpAlterar then
+    // if PedidoVendaController.AlterarPedidoVenda(PedidoVenda) then
+    // Result := true;
+
+  finally
+    FreeAndNil(PedidoVendaItem);
+    FreeAndNil(PedidoVendaItemController);
+  end;
 end;
 
 procedure TFrmPedidoVendaItem.LimparDadosItemVenda;
 begin
   btneditCodigo.Clear;
   editDescricao.Clear;
- // editQuantidade.Text := '0.00' ;
+
   editValorUnitario.Clear;
   editValorTotal.Clear;
 

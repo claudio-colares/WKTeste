@@ -15,11 +15,24 @@ type
 
     procedure CarregarTabela(aQuery: TFDQuery);
     function  ObterDadosItem(aID: Integer): TPedidoVendaItemModel;
+    function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
+    procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
   end;
 
 implementation
 
 { TPedidoVendaItemController }
+
+function TPedidoVendaItemController.NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
+begin
+ //Result := NovoItemPedidoVenda(aPedidoVendaItemModel);
+  result := PedidoVendaItemDao.NovoItemPedidoVenda(aPedidoVendaItemModel);
+end;
+
+procedure TPedidoVendaItemController.CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
+begin
+  PedidoVendaItemDao.CarregarItensPedidoVenda(nPedido,aQuery);
+end;
 
 procedure TPedidoVendaItemController.CarregarTabela(aQuery: TFDQuery);
 begin

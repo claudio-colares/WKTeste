@@ -10,10 +10,7 @@ uses
   FireDAC.DApt, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Mask, Vcl.DBCtrls, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
   uConectarBaseController, uConstantesController, ClienteController, uPedidoVendaDao, PedidoVendaModel,
-  PedidoVendaController;
-
-type
-  TTipoPersistencia = (tpNovo, tpAlterar);
+  PedidoVendaController, FCarregarPedidoVenda, PedidoVendaItemController, PedidoVendaItemModel;
 
 type
   TFrmPedidoVenda = class(TForm)
@@ -49,8 +46,13 @@ type
     editClienteUF: TEdit;
     actListagemClientes: TAction;
     BitBtn3: TBitBtn;
+    PnlBotoesPedidoVenda: TPanel;
     btnCancelarPedido: TBitBtn;
     btnCarregarPedido: TBitBtn;
+    actCarregarPedidoVenda: TAction;
+    actCancelarPedidoVenda: TAction;
+    QryPedidoVendaItens: TFDQuery;
+    dsPedidoVendaItens: TDataSource;
     FDConnection1: TFDConnection;
 
     procedure FormShow(Sender: TObject);
@@ -64,6 +66,8 @@ type
     procedure btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actListagemClientesExecute(Sender: TObject);
     procedure btnGravarPedidoClick(Sender: TObject);
+    procedure actCarregarPedidoVendaExecute(Sender: TObject);
+    procedure actCancelarPedidoVendaExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -72,19 +76,22 @@ type
     procedure LimparDadosCliente;
     procedure ExibirBotoes(aExibir: Boolean);
     procedure NovoPedidoVenda;
+    procedure TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
 
     function TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
     function GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
-    function ObterDadosPedidoVenda(aID: Integer): Boolean;
+    procedure GarregarPedidoVenda(aTipo: TTipoPersistencia);
 
   var
-    DBConexao     : TFDConnection;
-    BaseDados     : TConectarBaseController;
-    aIDVenda      : Integer;
-    PersistirDados: TTipoPersistencia;
+    DBConexao         : TFDConnection;
+    BaseDados         : TConectarBaseController;
+    aIDVenda          : Integer;
+    PersistirDados    : TTipoPersistencia;
   public
     { Public declarations }
     procedure ObterDadosCliente(aID: Integer);
+    function ObterDadosPedidoVenda(aID: Integer): Boolean;
+    procedure ObterItensPedidoVenda(nPedido: Integer);
   end;
 
 var
@@ -123,6 +130,17 @@ begin
     ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!')
 end;
 
+procedure TFrmPedidoVenda.TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
+begin
+  try
+    FrmCarregarPedidoVenda          := TFrmCarregarPedidoVenda.Create(Self, DBConexao, aTipo);
+    FrmCarregarPedidoVenda.Position := poOwnerFormCenter;
+    FrmCarregarPedidoVenda.ShowModal;
+  finally
+    FrmPedidoVendaItem.Free;
+  end;
+end;
+
 function TFrmPedidoVenda.TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
 begin
   if aNumPedido < 1 then
@@ -131,16 +149,27 @@ begin
     Result := tpAlterar;
 end;
 
+procedure TFrmPedidoVenda.actCancelarPedidoVendaExecute(Sender: TObject);
+begin
+  TelaObterNumPedidoVenda(tpCancelar);
+end;
+
+procedure TFrmPedidoVenda.actCarregarPedidoVendaExecute(Sender: TObject);
+begin
+  TelaObterNumPedidoVenda(tpCarregar);
+end;
+
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   if btneditCodigoCliente.Text = '' then
-      exit;
+    Exit;
   try
     GravarPedidoVenda(TipoPersistenciaDados(aIDVenda));
     ObterDadosPedidoVenda(aIDVenda);
 
     FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
+    FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
     FrmPedidoVendaItem.ShowModal;
   finally
     FrmPedidoVendaItem.Free;
@@ -197,6 +226,7 @@ begin
   // end;
 end;
 
+
 procedure TFrmPedidoVenda.FormCreate(Sender: TObject);
 begin
   // -------------------------------------------------------------------------
@@ -210,7 +240,6 @@ begin
       _PATH_SISTEMA + _ARQUIVO_INI);
     Application.Terminate;
   end;
-
   // -------------------------------------------------------------------------
 end;
 
@@ -218,6 +247,11 @@ procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
   NovoPedidoVenda;
+end;
+
+procedure TFrmPedidoVenda.GarregarPedidoVenda(aTipo: TTipoPersistencia);
+begin
+  //
 end;
 
 function TFrmPedidoVenda.GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
@@ -303,6 +337,7 @@ var
   PedidoVenda          : TPedidoVendaModel;
   PedidoVendaController: TPedidoVendaController;
 begin
+
   PedidoVendaController := TPedidoVendaController.Create(DBConexao);
 
   PedidoVenda := TPedidoVendaModel.Create;
@@ -312,6 +347,7 @@ begin
     if PedidoVenda = nil then
     begin
       ShowMessage('Pedido não encontrado.');
+      Result := false;
       NovoPedidoVenda;
       Exit;
     end;
@@ -324,10 +360,30 @@ begin
     // --------------------------------------------------------------
     // Impeplentar para trazer todos os dados do pedido
     // --------------------------------------------------------------
+    ObterItensPedidoVenda(PedidoVenda.NumeroPedido);
+    Result := true;
 
   finally
     FreeAndNil(PedidoVenda);
     FreeAndNil(PedidoVendaController);
+  end;
+end;
+
+procedure TFrmPedidoVenda.ObterItensPedidoVenda(nPedido: Integer);
+var
+  PedidoVendaItem          : TPedidoVendaItemModel;
+  PedidoVendaItemController: TPedidoVendaItemController;
+begin
+
+  PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
+
+  PedidoVendaItem := TPedidoVendaItemModel.Create;
+  try
+    PedidoVendaItemController.CarregarItensPedidoVenda(nPedido, QryPedidoVendaItens);
+
+  finally
+    FreeAndNil(PedidoVendaItem);
+    FreeAndNil(PedidoVendaItemController);
   end;
 end;
 
@@ -340,8 +396,7 @@ end;
 
 procedure TFrmPedidoVenda.ExibirBotoes(aExibir: Boolean);
 begin
-  btnCancelarPedido.Visible := aExibir;
-  btnCarregarPedido.Visible := aExibir;
+  PnlBotoesPedidoVenda.Visible := aExibir;
 end;
 
 end.

@@ -4,6 +4,10 @@ interface
 
 uses  Vcl.Graphics,  System.SysUtils, Vcl.Forms,  Winapi.Windows, Winapi.IpTypes,
       System.UITypes,  System.Classes, FireDAC.Comp.Client;
+
+type
+ TTipoPersistencia = (tpNovo, tpAlterar, tpCancelar, tpCarregar);
+
 var
   _PATH_SISTEMA  : String;
 Const

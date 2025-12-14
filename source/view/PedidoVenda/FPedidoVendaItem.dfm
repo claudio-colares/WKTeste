@@ -11,6 +11,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
   Font.Name = 'Segoe UI'
   Font.Style = []
   Scaled = False
+  OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
