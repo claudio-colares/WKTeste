@@ -14,7 +14,8 @@ type
 
     procedure CarregarTabela(aQuery: TFDQuery);
     function GetPedidoVendaByID(ID: Integer): TPedidoVendaModel;
-    procedure GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel);
+    function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+    function GetNumeroPedidoVenda: Integer;
   end;
 
 implementation
@@ -62,11 +63,14 @@ begin
   end;
 end;
 
-procedure TPedidoVendaDAO.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel);
+function TPedidoVendaDAO.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
 var
   aQuery: TFDQuery;
   strSQL: String;
+  aNumeroPedidoVenda : Integer;
+  aNovoNumeroPedidoVenda: Integer;
 begin
+  Result := False;
   // -------------------------------------------------------------------------
   // Novo pedido
   // -------------------------------------------------------------------------
@@ -74,7 +78,7 @@ begin
     aQuery            := TFDQuery.Create(nil);
     aQuery.Connection := BDConexao;
     strSQL            := 'INSERT INTO pedidos_venda ' +
-                         '(numero_pedido, data_emissao, codigo_cliente, valor_total) ' +
+    			 '(numero_pedido, data_emissao, codigo_cliente, valor_total) ' +
                          'VALUES (:numero_pedido, :data_emissao, :codigo_cliente, :valor_total)';
 
     aQuery.SQL.Add(strSQL);
@@ -84,9 +88,29 @@ begin
     aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaModel.ValorTotal;
     aQuery.ExecSQL;
     aQuery.Connection.Commit;
+    Result := true;
+  finally
+    aQuery.Free;
+  end;
+
+end;
+
+function TPedidoVendaDAO.GetNumeroPedidoVenda: Integer;
+var
+ aQuery : TFDQuery;
+begin
+  result := 0;
+  try
+    aQuery            := TFDQuery.Create(nil);
+    aQuery.Connection := BDConexao;
+    aQuery.SQL.Add('SELECT MAX(numero_pedido ) AS ultimo_id FROM pedidos_venda');
+    aQuery.Open;
+
+    Result := aQuery.FieldByName('ultimo_id').AsInteger;
   finally
     aQuery.Free;
   end;
 end;
+
 // -------------------------------------------------------------------------
 end.

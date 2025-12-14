@@ -48,6 +48,7 @@ type
     BitBtn3: TBitBtn;
     btnCancelarPedido: TBitBtn;
     btnCarregarPedido: TBitBtn;
+    FDConnection1: TFDConnection;
 
     procedure FormShow(Sender: TObject);
     procedure btneditNumeroPedidoChange(Sender: TObject);
@@ -101,16 +102,24 @@ procedure TFrmPedidoVenda.btnGravarPedidoClick(Sender: TObject);
 var
   PedidoVenda          : TPedidoVendaModel;
   PedidoVendaController: TPedidoVendaController;
+  NovoNumeroPedido     : Integer;
 begin
   try
-    PedidoVendaController := TPedidoVendaController.Create(DBConexao);
-    PedidoVenda.NumeroPedido  := 2;
+    PedidoVendaController     := TPedidoVendaController.Create(DBConexao);
+    NovoNumeroPedido          := PedidoVendaController.GetNumeroPedidoVenda + 1;
+    PedidoVenda               := TPedidoVendaModel.Create;
+    PedidoVenda.NumeroPedido  := NovoNumeroPedido;
     PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
     PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
     PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
 
-    PedidoVendaController.GravarPedidoVenda(PedidoVenda);
-    ShowMessage('teste');
+    if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
+    begin
+      ShowMessage('Pedido salvo com sucesso!');
+    end
+    else
+      ShowMessage('Erro ao salvar o pedido!');
+
   finally
     FreeAndNil(PedidoVenda);
     FreeAndNil(PedidoVendaController);

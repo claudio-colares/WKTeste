@@ -15,7 +15,8 @@ type
 
     procedure CarregarTabela(aQuery: TFDQuery);
     function ObterDadosPedidoVenda(aID: Integer): TPedidoVendaModel;
-    procedure GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel);
+    function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
+    function GetNumeroPedidoVenda: Integer;
   end;
 
 implementation
@@ -38,9 +39,14 @@ begin
   inherited;
 end;
 
-procedure TPedidoVendaController.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel);
+function TPedidoVendaController.GetNumeroPedidoVenda: Integer;
 begin
-  PedidoVendaDao.GravarPedidoVenda(aPedidoVendaModel);
+ Result := PedidoVendaDao.GetNumeroPedidoVenda;
+end;
+
+function TPedidoVendaController.GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel):Boolean;
+begin
+  result := PedidoVendaDao.GravarPedidoVenda(aPedidoVendaModel);
 end;
 
 function TPedidoVendaController.ObterDadosPedidoVenda(aID: Integer): TPedidoVendaModel;

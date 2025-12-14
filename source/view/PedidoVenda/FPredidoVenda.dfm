@@ -149,7 +149,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Align = alClient
         Caption = 'Dados do Pedido'
         TabOrder = 1
-        ExplicitLeft = 2
         object Label1: TLabel
           Left = 9
           Top = 35
@@ -205,9 +204,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Images = imgListPrincipal
           Layout = blGlyphRight
           TabOrder = 2
-          ExplicitLeft = 3
-          ExplicitTop = 3
-          ExplicitHeight = 29
         end
         object btnCarregarPedido: TBitBtn
           AlignWithMargins = True
@@ -224,8 +220,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Layout = blGlyphRight
           TabOrder = 3
           OnClick = actInserirItemExecute
-          ExplicitLeft = 601
-          ExplicitTop = 45
         end
       end
     end
@@ -308,8 +302,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
           Images = imgListPrincipal
           Layout = blGlyphRight
           TabOrder = 0
-          ExplicitLeft = 11
-          ExplicitTop = 6
         end
       end
     end
@@ -548,5 +540,11 @@ object FrmPedidoVenda: TFrmPedidoVenda
     object actListagemClientes: TAction
       OnExecute = actListagemClientesExecute
     end
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'DriverID=MySQL')
+    Left = 208
+    Top = 442
   end
 end

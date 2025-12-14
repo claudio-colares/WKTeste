@@ -131,6 +131,7 @@ begin
   aFDConnection.Params.Values['Port']      := Porta.ToString;
   aFDConnection.Params.Values['Compress']  := 'True';
   aFDConnection.Params.Values['DriverID']  := 'MySQL';
+  aFDConnection.Params.Values['VendorLib'] := 'libmariadb.dll';
 end;
 
 procedure TConectarBaseController.GetDriverLinkMySQL(var aDriverLink: TFDPhysMySQLDriverLink);
