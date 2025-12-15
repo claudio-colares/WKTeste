@@ -13,7 +13,7 @@ type
     constructor Create(aConnection: TFDConnection);
 
     procedure CarregarTabela(aQuery: TFDQuery);
-    function GetPedidoVendaItemByID(aID: Integer;nPedido: Integer): TPedidoVendaItemModel;
+    function GetPedidoVendaItemByID(nCodigo: Integer; nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
@@ -142,42 +142,49 @@ begin
   DBConexao := aConnection;
 end;
 
-function TPedidoVendaItemDAO.GetPedidoVendaItemByID(aID: Integer;nPedido: Integer): TPedidoVendaItemModel;
+function TPedidoVendaItemDAO.GetPedidoVendaItemByID(nCodigo: Integer;nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
 var
   aQuery         : TFDQuery;
   PedidoVendaItem: TPedidoVendaItemModel;
   strSQL         : String;
 begin
-  PedidoVendaItem.Limpar;
   aQuery := TFDQuery.Create(nil);
   try
     strSQL :=
-      'SELECT codigo,              '+
-      ' numero_pedido,             '+
-      ' codigo_produto,            '+
-      ' quantidade,                '+
-      ' valor_unitario,            '+
-      ' valor_total                '+
-      'FROM pedidos_vendas_itens   '+
-      'WHERE codigo_produto = :aID '+
-      'AND numero_pedido = :NumPedido';
+     'SELECT                      '+
+     ' i.codigo,                  '+
+     ' i.numero_pedido,           '+
+     ' i.codigo_produto,          '+
+     ' p.descricao as descricao,  '+
+     ' i.quantidade,              '+
+     ' i.valor_unitario,          '+
+     ' i.valor_total              '+
+     'FROM pedidos_vendas_itens i '+
+     'INNER JOIN produtos p       '+
+     'ON p.codigo           = :codigo_produto '+
+     'WHERE i.numero_pedido = :numero_pedido  '+
+     'AND i.codigo          = :codigo ';
+
+
 
     aQuery.Connection := DBConexao;
     aQuery.SQL.Text   := strSQL;
-    aQuery.ParamByName('aID').AsInteger := aID;
-    aQuery.ParamByName('NumPedido').AsInteger := nPedido;
+    aQuery.ParamByName('codigo').AsInteger := nCodigo;
+    aQuery.ParamByName('codigo_produto').AsInteger := nProduto;
+    aQuery.ParamByName('numero_pedido').AsInteger := nPedido;
     aQuery.Open;
 
     if aQuery.IsEmpty then
       Exit(nil);
-
-    PedidoVendaItem               := TPedidoVendaItemModel.Create;
-    PedidoVendaItem.Codigo        := aQuery.FieldByName('codigo').AsInteger;
-    PedidoVendaItem.NumeroPedido  := aQuery.FieldByName('numero_pedido').AsInteger;
-    PedidoVendaItem.CodigoProduto := aQuery.FieldByName('codigo_produto').AsInteger;
-    PedidoVendaItem.Quantidade    := aQuery.FieldByName('quantidade').AsFloat;
-    PedidoVendaItem.ValorUnitario := aQuery.FieldByName('valor_unitario').AsCurrency;
-    PedidoVendaItem.ValorTotal    := aQuery.FieldByName('valor_total').AsCurrency;
+   { TODO : analisar o retorno do cvodigo do produto }
+    PedidoVendaItem                  := TPedidoVendaItemModel.Create;
+    PedidoVendaItem.Codigo           := aQuery.FieldByName('codigo').AsInteger;
+    PedidoVendaItem.NumeroPedido     := aQuery.FieldByName('numero_pedido').AsInteger;
+    PedidoVendaItem.CodigoProduto    := aQuery.FieldByName('codigo_produto').AsInteger;
+    PedidoVendaItem.DescricaoProduto := aQuery.FieldByName('descricao').AsString;
+    PedidoVendaItem.Quantidade       := aQuery.FieldByName('quantidade').AsFloat;
+    PedidoVendaItem.ValorUnitario    := aQuery.FieldByName('valor_unitario').AsCurrency;
+    PedidoVendaItem.ValorTotal       := aQuery.FieldByName('valor_total').AsCurrency;
 
     Result := PedidoVendaItem;
   finally

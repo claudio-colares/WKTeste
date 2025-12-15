@@ -579,15 +579,4 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Left = 256
     Top = 392
   end
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'Server=127.0.0.1'
-      'Password=masterkey'
-      'Database=db_wkteste'
-      'User_Name=root'
-      'DriverID=MySQL')
-    LoginPrompt = False
-    Left = 88
-    Top = 394
-  end
 end

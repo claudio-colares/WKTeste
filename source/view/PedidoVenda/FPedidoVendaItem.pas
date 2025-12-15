@@ -54,7 +54,7 @@ type
     constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
     procedure ObterDadosProduto(aID: Integer);
     procedure GetNumeroPedidoVenda(nPedido: Integer);
-    procedure ObterDadosItem(nPedido: Integer; nCodigoProduto: Integer);
+    procedure ObterDadosItem(nCodigo: Integer; nProduto: Integer;nPedido:Integer);
   end;
 
 var
@@ -210,7 +210,7 @@ begin
   editValorTotal.Text    := '0,00';
 end;
 
-procedure TFrmPedidoVendaItem.ObterDadosItem(nPedido, nCodigoProduto: Integer);
+procedure TFrmPedidoVendaItem.ObterDadosItem(nCodigo: Integer; nProduto: Integer;nPedido:Integer);
 var
   PedidoVendaItem          : TPedidoVendaItemModel;
   PedidoVendaItemController: TPedidoVendaItemController;
@@ -218,11 +218,11 @@ begin
   // ---------------------------------------------------------------------------
   // PREENCHE OS CAMPOS NA TELA COM OS DADOS DO ITEM INFORMADO NO PEDIDO DE VENDA ATUAL.
   // ---------------------------------------------------------------------------
-  if (nPedido < 1) or (nCodigoProduto < 1) then
+  if (nPedido < 1) or (nProduto < 1) then
     exit;
 
   PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
-  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigoProduto, nPedido);
+  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigo,nProduto, nPedido);
 
   try
     if PedidoVendaItem = nil then
@@ -234,7 +234,8 @@ begin
     end;
 
 
-    btneditCodigo.Text     := PedidoVendaItem.Codigo.ToString;
+    btneditCodigo.Text     := PedidoVendaItem.CodigoProduto.ToString;
+    editDescricao.Text     := PedidoVendaItem.DescricaoProduto;
     editQuantidade.Text    := PedidoVendaItem.Quantidade.ToString;
     editValorUnitario.Text := PedidoVendaItem.ValorUnitario.ToString;
     CalcularValorTotalItem(PedidoVendaItem.ValorUnitario, PedidoVendaItem.Quantidade);

@@ -77,7 +77,6 @@ type
     actCancelarPedidoVenda: TAction;
     QryPedidoVendaItens: TFDQuery;
     dsPedidoVendaItens: TDataSource;
-    FDConnection1: TFDConnection;
     actAlterarItem: TAction;
 
     procedure FormShow(Sender: TObject);
@@ -202,14 +201,19 @@ begin
 end;
 
 procedure TFrmPedidoVenda.actAlterarItemExecute(Sender: TObject);
+var
+ nCodigo  : Integer;
+ nProduto : Integer;
 begin
   // ---------------------------------------------------------------------------
   // EDIÇÃO DO ITEM DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
+  nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger;
+  nProduto := QryPedidoVendaItens.FieldByName('codigo_produto').AsInteger;
 
   FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
   FrmPedidoVendaItem.Position := poOwnerFormCenter;
-  FrmPedidoVendaItem.ObterDadosItem(aIDVenda,QryPedidoVendaItens.FieldByName('codigo_produto').AsInteger);
+  FrmPedidoVendaItem.ObterDadosItem(nCodigo,nProduto,aIDVenda);
   FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
   FrmPedidoVendaItem.ShowModal;
   // ---------------------------------------------------------------------------

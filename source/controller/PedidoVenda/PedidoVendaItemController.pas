@@ -14,7 +14,7 @@ type
     destructor Destroy; override;
 
     procedure CarregarTabela(aQuery: TFDQuery);
-    function  GetPedidoVendaItemByID(aID: Integer; nPedido:Integer): TPedidoVendaItemModel;
+    function  GetPedidoVendaItemByID(nCodigo:Integer; nProduto: Integer; nPedido:Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
@@ -55,9 +55,9 @@ begin
   inherited;
 end;
 
-function TPedidoVendaItemController.GetPedidoVendaItemByID(aID: Integer;nPedido:Integer) : TPedidoVendaItemModel;
+function TPedidoVendaItemController.GetPedidoVendaItemByID(nCodigo: Integer; nProduto: Integer;nPedido:Integer) : TPedidoVendaItemModel;
 begin
-  result := PedidoVendaItemDao.GetPedidoVendaItemByID(aID,nPedido);
+  result := PedidoVendaItemDao.GetPedidoVendaItemByID(nCodigo,nProduto,nPedido);
 end;
 
 end.
