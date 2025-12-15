@@ -52,7 +52,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    object BitBtn1: TBitBtn
+    object btnConfirmar: TBitBtn
       Tag = 5
       AlignWithMargins = True
       Left = 661
@@ -60,9 +60,9 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Width = 120
       Height = 35
       Align = alRight
-      Caption = 'Confirmar (F2)'
+      Caption = '&Confirmar'
       TabOrder = 0
-      OnClick = BitBtn1Click
+      OnClick = btnConfirmarClick
     end
   end
   object GroupBox1: TGroupBox
@@ -123,6 +123,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       TabOrder = 0
       TextHint = 'Press. F8'
       OnChange = btneditCodigoChange
+      OnExit = btneditCodigoExit
       OnKeyDown = btneditCodigoKeyDown
       OnRightButtonClick = btneditCodigoRightButtonClick
     end
@@ -141,6 +142,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Height = 29
       NumbersOnly = True
       TabOrder = 2
+      OnExit = editQuantidadeExit
     end
     object editValorUnitario: TEdit
       Left = 558
@@ -154,6 +156,7 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Top = 62
       Width = 99
       Height = 29
+      Enabled = False
       TabOrder = 4
     end
   end
@@ -307,6 +310,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
     Top = 168
     object actListagemProdutos: TAction
       OnExecute = actListagemProdutosExecute
+    end
+    object actFechar: TAction
     end
   end
 end

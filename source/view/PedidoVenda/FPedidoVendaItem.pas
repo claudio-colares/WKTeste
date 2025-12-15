@@ -20,7 +20,7 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label1: TLabel;
-    BitBtn1: TBitBtn;
+    btnConfirmar: TBitBtn;
     imgListPedidoVendaItem: TImageList;
     editDescricao: TEdit;
     editQuantidade: TEdit;
@@ -28,18 +28,22 @@ type
     editValorTotal: TEdit;
     actlItemVenda: TActionList;
     actListagemProdutos: TAction;
+    actFechar: TAction;
     procedure FormShow(Sender: TObject);
     procedure btneditCodigoChange(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
     procedure actListagemProdutosExecute(Sender: TObject);
     procedure btneditCodigoRightButtonClick(Sender: TObject);
     procedure btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure editQuantidadeExit(Sender: TObject);
+    procedure btneditCodigoExit(Sender: TObject);
   private
     { Private declarations }
     procedure DimencionarForm;
     procedure LimparDadosItemVenda;
     function InserirItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
+    function CalcularValorTotalItem(vlrUnitario: Currency; nQuantidade: Float32): Currency;
 
   var
     DBConexao        : TFDConnection;
@@ -50,6 +54,7 @@ type
     constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
     procedure ObterDadosProduto(aID: Integer);
     procedure GetNumeroPedidoVenda(nPedido: Integer);
+    procedure ObterDadosItem(nPedido: Integer; nCodigoProduto: Integer);
   end;
 
 var
@@ -75,7 +80,7 @@ begin
   end;
 end;
 
-procedure TFrmPedidoVendaItem.BitBtn1Click(Sender: TObject);
+procedure TFrmPedidoVendaItem.btnConfirmarClick(Sender: TObject);
 begin
   if InserirItemPedidoVenda(aNumeroPedido, tpNovo) = true then
   begin
@@ -94,6 +99,11 @@ begin
   ExibirBotaoPesquisa(btneditCodigo);
 end;
 
+procedure TFrmPedidoVendaItem.btneditCodigoExit(Sender: TObject);
+begin
+  ObterDadosProduto(StrToIntDef(btneditCodigo.Text, 0));
+end;
+
 procedure TFrmPedidoVendaItem.btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_F8 then
@@ -103,6 +113,12 @@ end;
 procedure TFrmPedidoVendaItem.btneditCodigoRightButtonClick(Sender: TObject);
 begin
   actListagemProdutos.Execute;
+end;
+
+function TFrmPedidoVendaItem.CalcularValorTotalItem(vlrUnitario: Currency; nQuantidade: Float32): Currency;
+begin
+  Result := 0;
+  Result := (vlrUnitario * nQuantidade);
 end;
 
 constructor TFrmPedidoVendaItem.Create(AOwner: TComponent; AConnection: TFDConnection);
@@ -119,6 +135,12 @@ begin
   self.Height   := 270;
 end;
 
+procedure TFrmPedidoVendaItem.editQuantidadeExit(Sender: TObject);
+begin
+  editValorTotal.Text := CalcularValorTotalItem(StrToFloatDef(editValorUnitario.Text, 0),
+    StrToFloatDef(editQuantidade.Text, 0)).ToString;
+end;
+
 procedure TFrmPedidoVendaItem.FormCreate(Sender: TObject);
 begin
   aNumeroPedido := 0;
@@ -126,7 +148,7 @@ end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
-
+  LimparDadosItemVenda;
   btneditCodigo.SetFocus;
 end;
 
@@ -147,7 +169,7 @@ begin
 
     PedidoVendaItem               := TPedidoVendaItemModel.Create;
     PedidoVendaItem.NumeroPedido  := aNumeroPedido;
-    PedidoVendaItem.CodigoProduto := strToIntDef(btneditCodigo.Text, 0);
+    PedidoVendaItem.CodigoProduto := StrToIntDef(btneditCodigo.Text, 0);
     PedidoVendaItem.Quantidade    := StrToFloatDef(editQuantidade.Text, 0);
     PedidoVendaItem.ValorUnitario := StrToFloatDef(editValorUnitario.Text, 0);
     PedidoVendaItem.ValorTotal    := StrToFloatDef(editValorTotal.Text, 0);
@@ -155,11 +177,11 @@ begin
     if aTipoPersistencia = tpNovo then
       if PedidoVendaItemController.NovoItemPedidoVenda(PedidoVendaItem) then
 	Result := true;
-    //
-    // if aTipoPersistencia = tpAlterar then
-    // if PedidoVendaController.AlterarPedidoVenda(PedidoVenda) then
-    // Result := true;
 
+    if aTipoPersistencia = tpAlterar then
+      if PedidoVendaItemController.AlterarItemPedidoVenda(PedidoVendaItem) then
+	Result := true;
+    LimparDadosItemVenda;
   finally
     FreeAndNil(PedidoVendaItem);
     FreeAndNil(PedidoVendaItemController);
@@ -170,15 +192,20 @@ procedure TFrmPedidoVendaItem.LimparDadosItemVenda;
 begin
   btneditCodigo.Clear;
   editDescricao.Clear;
+  editQuantidade.Text    := '1';
+  editValorUnitario.Text := '0,00';
+  editValorTotal.Text    := '0,00';
+end;
 
-  editValorUnitario.Clear;
-  editValorTotal.Clear;
+procedure TFrmPedidoVendaItem.ObterDadosItem(nPedido, nCodigoProduto: Integer);
+begin
 
 end;
 
 procedure TFrmPedidoVendaItem.ObterDadosProduto(aID: Integer);
 var
-  Produto: TProdutoModel;
+  Produto          : TProdutoModel;
+  ProdutoController: TProdutoController;
 begin
   ProdutoController := TProdutoController.Create(DBConexao);
   Produto           := ProdutoController.ObterDadosProduto(aID);
@@ -192,10 +219,11 @@ begin
       Exit;
     end;
 
-    btneditCodigo.Text := Produto.Codigo.ToString;
-    editDescricao.Text := Produto.Descricao;
-
+    btneditCodigo.Text     := Produto.Codigo.ToString;
+    editDescricao.Text     := Produto.Descricao;
+    editQuantidade.Text    := '1';
     editValorUnitario.Text := Produto.PrecoVenda.ToString;
+    CalcularValorTotalItem(StrToFloatDef(editQuantidade.Text, 0), StrToFloatDef(editQuantidade.Text, 0));
 
   finally
     FreeAndNil(Produto);

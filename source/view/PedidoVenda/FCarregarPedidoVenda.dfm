@@ -54,7 +54,6 @@ object FrmCarregarPedidoVenda: TFrmCarregarPedidoVenda
     Align = alClient
     Caption = 'Informe o Numero do Pedido'
     TabOrder = 1
-    ExplicitHeight = 93
     object btneditNumeroPedido: TButtonedEdit
       AlignWithMargins = True
       Left = 22
@@ -76,10 +75,7 @@ object FrmCarregarPedidoVenda: TFrmCarregarPedidoVenda
       ParentFont = False
       TabOrder = 0
       OnKeyDown = btneditNumeroPedidoKeyDown
-      ExplicitLeft = 7
-      ExplicitTop = 28
-      ExplicitWidth = 254
-      ExplicitHeight = 57
+      ExplicitHeight = 38
     end
   end
   object Panel1: TPanel
@@ -90,7 +86,6 @@ object FrmCarregarPedidoVenda: TFrmCarregarPedidoVenda
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 185
     object btnSelecionar: TBitBtn
       AlignWithMargins = True
       Left = 202

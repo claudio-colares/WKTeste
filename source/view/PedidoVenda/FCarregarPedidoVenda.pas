@@ -50,7 +50,7 @@ begin
 
   if FrmPedidoVenda.ObterDadosPedidoVenda(StrToIntDef(btneditNumeroPedido.Text, 0)) then
   begin
-    ShowMessage('Pedido [' + btneditNumeroPedido.Text + '] carregado com sucesso!');
+   // ShowMessage('Pedido [' + btneditNumeroPedido.Text + '] carregado com sucesso!');
     Self.Close;
   end
   else

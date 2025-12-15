@@ -175,7 +175,6 @@ object FrmPedidoVenda: TFrmPedidoVenda
           RightButton.Enabled = False
           TabOrder = 0
           OnChange = btneditNumeroPedidoChange
-          OnRightButtonClick = btneditNumeroPedidoRightButtonClick
         end
         object dateeditDataPedido: TDateTimePicker
           Left = 115
@@ -249,6 +248,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         Font.Name = 'Segoe UI'
         Font.Style = []
         ImeName = 'dbGrdItens'
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
         ParentFont = False
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -256,6 +256,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         TitleFont.Height = -16
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = []
+        OnDblClick = dbgrdItensDblClick
         Columns = <
           item
             Expanded = False
@@ -379,6 +380,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alRight
       Caption = 'Fechar (Esc)'
       TabOrder = 0
+      OnClick = BitBtn1Click
     end
     object btnGravarPedido: TBitBtn
       AlignWithMargins = True
@@ -559,6 +561,10 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Category = 'BotoesPedidoVenda'
       Caption = 'Cancelar Pedido'
       OnExecute = actCancelarPedidoVendaExecute
+    end
+    object actAlterarItem: TAction
+      Caption = 'actAlterarItem'
+      OnExecute = actAlterarItemExecute
     end
   end
   object QryPedidoVendaItens: TFDQuery

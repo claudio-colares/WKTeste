@@ -38,13 +38,14 @@ begin
   try
     aQuery            := TFDQuery.Create(nil);
     aQuery.Connection := DBConexao;
-    strSQL            := 'UPDATE pedidos_venda SET ' +
-                         '  data_emissao    = :data_emissao, ' +
-                         '  codigo_cliente  = :codigo_cliente, ' +
-                         '  valor_total     = :valor_total ' +
-                         'WHERE numero_pedido = :numero_pedido';
-
+    strSQL :=
+     'UPDATE pedidos_venda SET              '+
+     '  data_emissao    = :data_emissao,    '+
+     '  codigo_cliente  = :codigo_cliente,  '+
+     '  valor_total     = :valor_total      '+
+     'WHERE numero_pedido = :numero_pedido';
     aQuery.SQL.Add(strSQL);
+
     aQuery.ParamByName('numero_pedido').AsInteger  := aPedidoVendaModel.NumeroPedido;
     aQuery.ParamByName('data_emissao').AsDateTime  := aPedidoVendaModel.DataEmissao;
     aQuery.ParamByName('codigo_cliente').AsInteger := aPedidoVendaModel.CodigoCliente;
@@ -60,7 +61,12 @@ end;
 procedure TPedidoVendaDAO.CarregarTabela(aQuery: TFDQuery);
 begin
   aQuery.Connection := DBConexao;
-  aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total FROM pedidos_venda';
+  aQuery.SQL.Text   :=
+  'SELECT numero_pedido, '+
+  ' data_emissao,        '+
+  ' codigo_cliente,      '+
+  ' valor_total          '+
+  'FROM pedidos_venda';
   aQuery.Open;
 end;
 
@@ -77,28 +83,27 @@ begin
   aQuery := TFDQuery.Create(nil);
   try
     aQuery.Connection := DBConexao;
-    aQuery.SQL.Text   := 'SELECT numero_pedido, data_emissao, codigo_cliente,valor_total ' +
-      ' FROM pedidos_venda WHERE numero_pedido = :ID';
+    aQuery.SQL.Text   :=
+    'SELECT numero_pedido, '+
+    ' data_emissao,        '+
+    ' codigo_cliente,      '+
+    ' valor_total          '+
+    'FROM pedidos_venda    '+
+    'WHERE numero_pedido = :ID';
     aQuery.ParamByName('ID').AsInteger := ID;
     aQuery.Open;
 
     if aQuery.IsEmpty then
       Exit(nil);
 
-    // PedidoVenda               := TPedidoVendaModel.Create;
     PedidoVenda.NumeroPedido  := aQuery.FieldByName('numero_pedido').AsInteger;
     PedidoVenda.DataEmissao   := aQuery.FieldByName('data_emissao').AsDateTime;
     PedidoVenda.CodigoCliente := aQuery.FieldByName('codigo_cliente').AsInteger;
     PedidoVenda.ValorTotal    := aQuery.FieldByName('valor_total').AsCurrency;
 
-    // --------------------------------------------------------------
-    // Falta Impeplentar para trazer todos os dados do pedido (Cliente e Itens)
-    // --------------------------------------------------------------
-
     Result := PedidoVenda;
   finally
     aQuery.Free;
-    // PedidoVenda.Free;
   end;
 end;
 
