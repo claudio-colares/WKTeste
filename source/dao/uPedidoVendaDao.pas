@@ -17,7 +17,7 @@ type
     function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function GetNumeroPedidoVenda: Integer;
-    function Limpar: TPedidoVendaModel;
+  //  function Limpar: TPedidoVendaModel;
   end;
 
 implementation
@@ -82,6 +82,7 @@ var
 begin
   aQuery := TFDQuery.Create(nil);
   try
+    PedidoVenda := TPedidoVendaModel.Create;
     aQuery.Connection := DBConexao;
     aQuery.SQL.Text   :=
     'SELECT numero_pedido, '+
@@ -138,21 +139,20 @@ begin
   end;
 end;
 
-function TPedidoVendaDAO.Limpar: TPedidoVendaModel;
-var
-  PedidoVenda: TPedidoVendaModel;
-begin
-  try
-    PedidoVenda               := TPedidoVendaModel.Create;
-    PedidoVenda.NumeroPedido  := 0;
-    PedidoVenda.DataEmissao   := 2000 - 01 - 01;
-    PedidoVenda.CodigoCliente := 0;
-    PedidoVenda.ValorTotal    := 0;
-    PedidoVenda.Cliente.Limpar;
-  finally
-    PedidoVenda.Free;
-  end;
-end;
+//function TPedidoVendaDAO.Limpar: TPedidoVendaModel;
+//var
+//  PedidoVenda: TPedidoVendaModel;
+//begin
+//  try
+//    PedidoVenda               := TPedidoVendaModel.Create;
+//    PedidoVenda.NumeroPedido  := 0;
+//    PedidoVenda.DataEmissao   := 2000 - 01 - 01;
+//    PedidoVenda.CodigoCliente := 0;
+//    PedidoVenda.ValorTotal    := 0;
+//  finally
+//    PedidoVenda.Free;
+//  end;
+//end;
 
 function TPedidoVendaDAO.GetNumeroPedidoVenda: Integer;
 var

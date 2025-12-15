@@ -26,8 +26,8 @@ object FrmCarregarPedidoVenda: TFrmCarregarPedidoVenda
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 298
-      Height = 34
+      Width = 6
+      Height = 30
       Align = alClient
       Alignment = taCenter
       Font.Charset = DEFAULT_CHARSET
@@ -37,8 +37,6 @@ object FrmCarregarPedidoVenda: TFrmCarregarPedidoVenda
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
-      ExplicitWidth = 6
-      ExplicitHeight = 30
     end
   end
   object GroupBox1: TGroupBox

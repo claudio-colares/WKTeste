@@ -18,7 +18,7 @@ type
     function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function GetNumeroPedidoVenda: Integer;
-    function Limpar : TPedidoVendaModel;
+   // function Limpar : TPedidoVendaModel;
   end;
 
 implementation
@@ -55,11 +55,11 @@ function TPedidoVendaController.GravarPedidoVenda(aPedidoVendaModel: TPedidoVend
 begin
   result := PedidoVendaDao.GravarPedidoVenda(aPedidoVendaModel);
 end;
-
-function TPedidoVendaController.Limpar: TPedidoVendaModel;
-begin
- Result := PedidoVendaDao.Limpar;
-end;
+//
+//function TPedidoVendaController.Limpar: TPedidoVendaModel;
+//begin
+// Result := PedidoVendaDao.Limpar;
+//end;
 
 function TPedidoVendaController.ObterDadosPedidoVenda(aID: Integer): TPedidoVendaModel;
 begin

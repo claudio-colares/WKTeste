@@ -129,7 +129,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\source\view\PedidoVenda\FPredidoVenda.pas">
+        <DCCReference Include="..\source\view\PedidoVenda\FPedidoVenda.pas">
             <Form>FrmPedidoVenda</Form>
         </DCCReference>
         <DCCReference Include="..\source\view\PedidoVenda\FPedidoVendaItem.pas">

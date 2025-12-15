@@ -10,6 +10,7 @@ object FrmCadastroBase: TFrmCadastroBase
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
     Left = 0
@@ -25,8 +26,8 @@ object FrmCadastroBase: TFrmCadastroBase
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 618
-      Height = 34
+      Width = 169
+      Height = 30
       Align = alClient
       Alignment = taCenter
       Caption = 'CADASTRO BASE'
@@ -37,8 +38,6 @@ object FrmCadastroBase: TFrmCadastroBase
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
-      ExplicitWidth = 169
-      ExplicitHeight = 30
     end
   end
   object pnlBotoes: TPanel
@@ -62,57 +61,42 @@ object FrmCadastroBase: TFrmCadastroBase
       OnClick = btnSelecionarClick
     end
   end
-  object dbgrdCadastroBase: TDBGrid
-    AlignWithMargins = True
-    Left = 3
-    Top = 108
-    Width = 618
-    Height = 289
-    Align = alClient
-    DataSource = dsCadastroBase
-    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
-    TabOrder = 2
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -16
-    TitleFont.Name = 'Segoe UI'
-    TitleFont.Style = []
-    OnDblClick = dbgrdCadastroBaseDblClick
-    OnKeyDown = dbgrdCadastroBaseKeyDown
-  end
   object pnlPesquisaCadastro: TPanel
     Left = 0
     Top = 40
     Width = 624
-    Height = 65
-    Align = alTop
+    Height = 360
+    Align = alClient
     BevelOuter = bvNone
-    TabOrder = 3
+    TabOrder = 2
+    ExplicitHeight = 65
     object grpboxPesquisaCadastro: TGroupBox
       AlignWithMargins = True
       Left = 3
       Top = 3
       Width = 618
-      Height = 59
+      Height = 354
       Align = alClient
       Caption = 'Pesquisar Cadastro'
       TabOrder = 0
-      object editPesquisa: TEdit
-        Left = 16
-        Top = 24
-        Width = 433
-        Height = 29
-        TabOrder = 0
-      end
-      object BitBtn2: TBitBtn
-        Left = 463
+      ExplicitHeight = 62
+      object dbgrdCadastroBase: TDBGrid
+        AlignWithMargins = True
+        Left = 5
         Top = 26
-        Width = 114
-        Height = 25
-        Caption = 'Pesquisar'
-        ImageIndex = 0
-        Images = imgListCadastroBase
-        TabOrder = 1
+        Width = 608
+        Height = 323
+        Align = alClient
+        DataSource = dsCadastroBase
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -16
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = []
+        OnDblClick = dbgrdCadastroBaseDblClick
+        OnKeyDown = dbgrdCadastroBaseKeyDown
       end
     end
   end

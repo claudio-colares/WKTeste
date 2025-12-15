@@ -3,7 +3,7 @@ unit FuncoesController;
 interface
 
 uses System.SysUtils, System.Classes, vcl.ComStrs, vcl.ExtCtrls, vcl.Buttons, vcl.Controls, uConstantesController,
-  Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param, FPredidoVenda;
+  Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Param, FPedidoVenda;
 
 procedure ExibirBotaoPesquisa(ButtonedEdit: TButtonedEdit);
 procedure SetConstantes;

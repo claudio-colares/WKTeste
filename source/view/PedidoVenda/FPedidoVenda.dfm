@@ -13,6 +13,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
   KeyPreview = True
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 21
   object pnlTitulo: TPanel
@@ -370,7 +371,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    object BitBtn1: TBitBtn
+    object btnFechar: TBitBtn
       AlignWithMargins = True
       Left = 889
       Top = 25
@@ -380,7 +381,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Align = alRight
       Caption = 'Fechar (Esc)'
       TabOrder = 0
-      OnClick = BitBtn1Click
+      OnClick = btnFecharClick
     end
     object btnGravarPedido: TBitBtn
       AlignWithMargins = True

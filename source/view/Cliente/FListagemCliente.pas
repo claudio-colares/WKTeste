@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses FPredidoVenda;
+uses FPedidoVenda;
 
 procedure TFrmListagemCliente.btnSelecionarClick(Sender: TObject);
 begin

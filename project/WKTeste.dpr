@@ -2,7 +2,7 @@ program WKTeste;
 
 uses
   Vcl.Forms,
-  FPredidoVenda in '..\source\view\PedidoVenda\FPredidoVenda.pas' {FrmPedidoVenda},
+  FPedidoVenda in '..\source\view\PedidoVenda\FPedidoVenda.pas' {FrmPedidoVenda},
   FPedidoVendaItem in '..\source\view\PedidoVenda\FPedidoVendaItem.pas' {FrmPedidoVendaItem},
   FuncoesController in '..\source\controller\classesGlobal\FuncoesController.pas',
   PedidoVendaController in '..\source\controller\PedidoVenda\PedidoVendaController.pas',

@@ -34,7 +34,7 @@ implementation
 
 {$R *.dfm}
 
-uses FPredidoVenda;
+uses FPedidoVenda;
 { TFrmCarregarPedidoVenda }
 
 procedure TFrmCarregarPedidoVenda.btneditNumeroPedidoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -49,10 +49,7 @@ begin
     exit;
 
   if FrmPedidoVenda.ObterDadosPedidoVenda(StrToIntDef(btneditNumeroPedido.Text, 0)) then
-  begin
-   // ShowMessage('Pedido [' + btneditNumeroPedido.Text + '] carregado com sucesso!');
-    Self.Close;
-  end
+    Self.Close
   else
   begin
     btneditNumeroPedido.SetFocus;

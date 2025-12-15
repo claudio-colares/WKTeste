@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList, Vcl.ImgList,
   FListagemProdutos, Vcl.Mask, Vcl.DBCtrls, FireDAC.Comp.Client,
-  ProdutosController, System.Actions, Vcl.ActnList, uConstantesController, FPredidoVenda;
+  ProdutosController, System.Actions, Vcl.ActnList, uConstantesController, FPedidoVenda;
 
 type
   TFrmPedidoVendaItem = class(TForm)
@@ -41,8 +41,8 @@ type
   private
     { Private declarations }
     procedure DimencionarForm;
-    procedure LimparDadosItemVenda;
-    function InserirItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
+    procedure LimparTelaItemVenda;
+    function GravarItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
     function CalcularValorTotalItem(vlrUnitario: Currency; nQuantidade: Float32): Currency;
 
   var
@@ -69,6 +69,9 @@ uses FuncoesController, ProdutosModel, PedidoVendaItemModel, PedidoVendaItemCont
 
 procedure TFrmPedidoVendaItem.actListagemProdutosExecute(Sender: TObject);
 begin
+  // ---------------------------------------------------------------------------
+  // ABRE A TELA DE LISTAGEM DE PRODUTOS.
+  // ---------------------------------------------------------------------------
   try
     FrmListagemProdutos          := TFrmListagemProdutos.Create(self, DBConexao);
     FrmListagemProdutos.Position := poOwnerFormCenter;
@@ -78,20 +81,25 @@ begin
   finally
     FrmListagemProdutos.Free;
   end;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVendaItem.btnConfirmarClick(Sender: TObject);
 begin
-  if InserirItemPedidoVenda(aNumeroPedido, tpNovo) = true then
+  // ---------------------------------------------------------------------------
+  // GRAVAÇÃO (EDICAO OU NOVO REGISTRO) DO ITEM NO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
+  if GravarItemPedidoVenda(aNumeroPedido, tpNovo) = true then
   begin
     FrmPedidoVenda.ObterItensPedidoVenda(aNumeroPedido);
-    LimparDadosItemVenda;
+    LimparTelaItemVenda;
     btneditCodigo.SetFocus;
   end
   else
   begin
     ShowMessage('ERRO!!' + sLineBreak + 'Não foi possivél gravar o item no banco de dados.');
   end;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoChange(Sender: TObject);
@@ -148,7 +156,7 @@ end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
-  LimparDadosItemVenda;
+  //LimparTelaItemVenda;
   btneditCodigo.SetFocus;
 end;
 
@@ -157,12 +165,15 @@ begin
   aNumeroPedido := nPedido;
 end;
 
-function TFrmPedidoVendaItem.InserirItemPedidoVenda(aNumeroPedido: Integer;
+function TFrmPedidoVendaItem.GravarItemPedidoVenda(aNumeroPedido: Integer;
   aTipoPersistencia: TTipoPersistencia): Boolean;
 var
   PedidoVendaItem          : TPedidoVendaItemModel;
   PedidoVendaItemController: TPedidoVendaItemController;
 begin
+  // ---------------------------------------------------------------------------
+  // GRAVA OS DADOS DO ITEM INFORMADO NO PEDIDO DE VENDA ATUAL.
+  // ---------------------------------------------------------------------------
   Result := false;
   try
     PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
@@ -181,14 +192,16 @@ begin
     if aTipoPersistencia = tpAlterar then
       if PedidoVendaItemController.AlterarItemPedidoVenda(PedidoVendaItem) then
 	Result := true;
-    LimparDadosItemVenda;
+
+    LimparTelaItemVenda;
   finally
     FreeAndNil(PedidoVendaItem);
     FreeAndNil(PedidoVendaItemController);
   end;
+  // ---------------------------------------------------------------------------
 end;
 
-procedure TFrmPedidoVendaItem.LimparDadosItemVenda;
+procedure TFrmPedidoVendaItem.LimparTelaItemVenda;
 begin
   btneditCodigo.Clear;
   editDescricao.Clear;
@@ -198,8 +211,39 @@ begin
 end;
 
 procedure TFrmPedidoVendaItem.ObterDadosItem(nPedido, nCodigoProduto: Integer);
+var
+  PedidoVendaItem          : TPedidoVendaItemModel;
+  PedidoVendaItemController: TPedidoVendaItemController;
 begin
+  // ---------------------------------------------------------------------------
+  // PREENCHE OS CAMPOS NA TELA COM OS DADOS DO ITEM INFORMADO NO PEDIDO DE VENDA ATUAL.
+  // ---------------------------------------------------------------------------
+  if (nPedido < 1) or (nCodigoProduto < 1) then
+    exit;
 
+  PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
+  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigoProduto, nPedido);
+
+  try
+    if PedidoVendaItem = nil then
+    begin
+      ShowMessage('Item não encontrado.');
+      LimparTelaItemVenda;
+      btneditCodigo.SetFocus;
+      exit;
+    end;
+
+
+    btneditCodigo.Text     := PedidoVendaItem.Codigo.ToString;
+    editQuantidade.Text    := PedidoVendaItem.Quantidade.ToString;
+    editValorUnitario.Text := PedidoVendaItem.ValorUnitario.ToString;
+    CalcularValorTotalItem(PedidoVendaItem.ValorUnitario, PedidoVendaItem.Quantidade);
+
+  finally
+    FreeAndNil(PedidoVendaItem);
+    FreeAndNil(PedidoVendaItemController);
+  end;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVendaItem.ObterDadosProduto(aID: Integer);
@@ -214,16 +258,16 @@ begin
     if Produto = nil then
     begin
       ShowMessage('Produto não encontrado.');
-      LimparDadosItemVenda;
+      LimparTelaItemVenda;
       btneditCodigo.SetFocus;
-      Exit;
+      exit;
     end;
 
     btneditCodigo.Text     := Produto.Codigo.ToString;
     editDescricao.Text     := Produto.Descricao;
     editQuantidade.Text    := '1';
     editValorUnitario.Text := Produto.PrecoVenda.ToString;
-    CalcularValorTotalItem(StrToFloatDef(editQuantidade.Text, 0), StrToFloatDef(editQuantidade.Text, 0));
+    CalcularValorTotalItem(Produto.PrecoVenda, 1);
 
   finally
     FreeAndNil(Produto);

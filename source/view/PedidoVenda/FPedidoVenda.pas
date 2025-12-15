@@ -1,4 +1,28 @@
-unit FPredidoVenda;
+//-----------------------------------------------------------------------------
+// Projeto: wkTeste
+// Unit: FPredidoVenda
+//
+// Autor: Claudio Colares
+// Data: 15/12/2025
+//
+// Descrição:
+// Unit responsável pela tela de Pedido de Venda do sistema, realizando o controle de criação,
+// edição, carregamento e cancelamento de pedidos. Atua como interface entre o usuário e as regras de negócio,
+// integrando-se aos Controllers e Models.
+//
+// Principais funções:
+// Gerenciamento da interface do Pedido de Venda.
+// Persistência e carregamento dos dados do pedido e seus itens.
+// Integração com módulos de Cliente, Pedido de Venda e Itens.
+// Comunicação com banco de dados MySQL via FireDAC.
+//
+// Ambiente:
+// IDE: Delphi 12
+// Banco de Dados: MySQL
+//-----------------------------------------------------------------------------
+
+
+unit FPedidoVenda;
 
 interface
 
@@ -32,7 +56,7 @@ type
     btneditNumeroPedido: TButtonedEdit;
     Label2: TLabel;
     dateeditDataPedido: TDateTimePicker;
-    BitBtn1: TBitBtn;
+    btnFechar: TBitBtn;
     btnGravarPedido: TBitBtn;
     pnlgrid: TPanel;
     pnlBotoesItensPedido: TPanel;
@@ -68,9 +92,10 @@ type
     procedure btnGravarPedidoClick(Sender: TObject);
     procedure actCarregarPedidoVendaExecute(Sender: TObject);
     procedure actCancelarPedidoVendaExecute(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
     procedure actAlterarItemExecute(Sender: TObject);
     procedure dbgrdItensDblClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
     { Private declarations }
@@ -79,6 +104,7 @@ type
     procedure LimparDadosCliente;
     procedure ExibirBotoes(aExibir: Boolean);
     procedure NovoPedidoVenda;
+    procedure LimparDadosPedidoVenda;
     procedure TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
     procedure LimparGrid;
 
@@ -123,13 +149,16 @@ begin
   // ---------------------------------------------------------------------------
 end;
 
-procedure TFrmPedidoVenda.BitBtn1Click(Sender: TObject);
+procedure TFrmPedidoVenda.btnFecharClick(Sender: TObject);
 begin
   Application.Terminate;
 end;
 
 procedure TFrmPedidoVenda.btnGravarPedidoClick(Sender: TObject);
 begin
+  // ---------------------------------------------------------------------------
+  // GRAVAR OS DADOS NO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
   if btneditCodigoCliente.Text = '' then
     Exit;
 
@@ -139,13 +168,13 @@ begin
     NovoPedidoVenda;
   end
   else
-    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!')
-
+    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!');
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.dbgrdItensDblClick(Sender: TObject);
 begin
- actAlterarItem.Execute;
+  actAlterarItem.Execute;
 end;
 
 procedure TFrmPedidoVenda.TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
@@ -153,31 +182,37 @@ begin
   // ---------------------------------------------------------------------------
   // EXIBI A TELA PARA O USUARIO INSERIR O NUMERO DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
-  try
     FrmCarregarPedidoVenda          := TFrmCarregarPedidoVenda.Create(Self, DBConexao, aTipo);
     FrmCarregarPedidoVenda.Position := poOwnerFormCenter;
     FrmCarregarPedidoVenda.ShowModal;
-  finally
-    FrmPedidoVendaItem.Free;
-  end;
+    ObterDadosPedidoVenda(aIDVenda);
   // ---------------------------------------------------------------------------
 end;
 
 function TFrmPedidoVenda.TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
 begin
+  // ---------------------------------------------------------------------------
+  // CLASSIFICA O TIPO DE ALTERAÇÃO DO PEDIDO DE VENDA (NOVO OU EDIÇÃO)
+  // ---------------------------------------------------------------------------
   if aNumPedido < 1 then
     Result := tpNovo
   else
     Result := tpAlterar;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.actAlterarItemExecute(Sender: TObject);
 begin
-  ShowMessage(QryPedidoVendaItens.FieldByName('codigo_produto').AsString);
+  // ---------------------------------------------------------------------------
+  // EDIÇÃO DO ITEM DO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
+
   FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
   FrmPedidoVendaItem.Position := poOwnerFormCenter;
+  FrmPedidoVendaItem.ObterDadosItem(aIDVenda,QryPedidoVendaItens.FieldByName('codigo_produto').AsInteger);
   FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
   FrmPedidoVendaItem.ShowModal;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.actCancelarPedidoVendaExecute(Sender: TObject);
@@ -270,6 +305,11 @@ begin
   // -------------------------------------------------------------------------
 end;
 
+procedure TFrmPedidoVenda.FormDestroy(Sender: TObject);
+begin
+ FreeAndNil(DBConexao);
+end;
+
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
 begin
   DimencionarForm;
@@ -324,6 +364,20 @@ begin
   // ---------------------------------------------------------------------------
 end;
 
+procedure TFrmPedidoVenda.LimparDadosPedidoVenda;
+begin
+  // ---------------------------------------------------------------------------
+  // lIMPA OS DADOS DO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
+  btneditNumeroPedido.Text   := '0';
+  dateeditDataPedido.Enabled := true;
+  dateeditDataPedido.Date    := now;
+  btneditCodigoCliente.SetFocus;
+  LimparDadosCliente;
+  LimparGrid;
+  // ---------------------------------------------------------------------------
+end;
+
 procedure TFrmPedidoVenda.LimparGrid;
 begin
   // ---------------------------------------------------------------------------
@@ -340,12 +394,8 @@ begin
   // ---------------------------------------------------------------------------
   aIDVenda := 0;
   TipoPersistenciaDados(aIDVenda);
-  btneditNumeroPedido.Text   := aIDVenda.ToString;
-  dateeditDataPedido.Enabled := true;
-  LimparGrid;
+  LimparDadosPedidoVenda;
   ExibirBotoes(true);
-  LimparDadosCliente;
-  btneditCodigoCliente.SetFocus;
   // ---------------------------------------------------------------------------
 end;
 
@@ -389,8 +439,6 @@ begin
   // CARREGA OS DADOS DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   PedidoVendaController := TPedidoVendaController.Create(DBConexao);
-
-  PedidoVenda := TPedidoVendaModel.Create;
   PedidoVenda := PedidoVendaController.ObterDadosPedidoVenda(aID);
 
   try
@@ -414,7 +462,7 @@ begin
     // --------------------------------------------------------------
 
     // ---------------------------------------------------------------------------
-    // IMPORTACAO DOS DADOS DO CLIENTE PARA O CABEÇALHO DO PEIDIDO DE VENDA
+    // IMPORTACAO DOS DADOS DO CLIENTE PARA O CABEÇALHO DO PEDIDO DE VENDA
     ObterDadosCliente(PedidoVenda.CodigoCliente);
     // --------------------------------------------------------------
 
@@ -432,6 +480,9 @@ var
   PedidoVendaItem          : TPedidoVendaItemModel;
   PedidoVendaItemController: TPedidoVendaItemController;
 begin
+  // ---------------------------------------------------------------------------
+  // CARREGA OS DADOS ITENS DO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
 
   PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
 
@@ -443,6 +494,7 @@ begin
     FreeAndNil(PedidoVendaItem);
     FreeAndNil(PedidoVendaItemController);
   end;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;

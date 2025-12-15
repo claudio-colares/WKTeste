@@ -13,7 +13,7 @@ type
     constructor Create(aConnection: TFDConnection);
 
     procedure CarregarTabela(aQuery: TFDQuery);
-    function GetPedidoVendaItemByID(ID: Integer): TPedidoVendaItemModel;
+    function GetPedidoVendaItemByID(aID: Integer;nPedido: Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
@@ -142,26 +142,30 @@ begin
   DBConexao := aConnection;
 end;
 
-function TPedidoVendaItemDAO.GetPedidoVendaItemByID(ID: Integer): TPedidoVendaItemModel;
+function TPedidoVendaItemDAO.GetPedidoVendaItemByID(aID: Integer;nPedido: Integer): TPedidoVendaItemModel;
 var
   aQuery         : TFDQuery;
   PedidoVendaItem: TPedidoVendaItemModel;
+  strSQL         : String;
 begin
-
+  PedidoVendaItem.Limpar;
   aQuery := TFDQuery.Create(nil);
   try
-    aQuery.Connection := DBConexao;
-    aQuery.SQL.Text   :=
-    'SELECT codigo,            '+
-    ' numero_pedido,           '+
-    ' codigo_produto,          '+
-    ' quantidade,              '+
-    ' valor_unitario,          '+
-    ' valor_total              '+
-    'FROM pedidos_vendas_itens '+
-    'WHERE codigo = :ID';
+    strSQL :=
+      'SELECT codigo,              '+
+      ' numero_pedido,             '+
+      ' codigo_produto,            '+
+      ' quantidade,                '+
+      ' valor_unitario,            '+
+      ' valor_total                '+
+      'FROM pedidos_vendas_itens   '+
+      'WHERE codigo_produto = :aID '+
+      'AND numero_pedido = :NumPedido';
 
-    aQuery.ParamByName('ID').AsInteger := ID;
+    aQuery.Connection := DBConexao;
+    aQuery.SQL.Text   := strSQL;
+    aQuery.ParamByName('aID').AsInteger := aID;
+    aQuery.ParamByName('NumPedido').AsInteger := nPedido;
     aQuery.Open;
 
     if aQuery.IsEmpty then
