@@ -28,8 +28,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 160
-      Height = 30
+      Width = 778
+      Height = 34
       Align = alClient
       Alignment = taCenter
       Caption = 'ITEM DE VENDA'
@@ -40,6 +40,8 @@ object FrmPedidoVendaItem: TFrmPedidoVendaItem
       Font.Style = [fsBold]
       ParentFont = False
       Layout = tlCenter
+      ExplicitWidth = 160
+      ExplicitHeight = 30
     end
   end
   object pnlBotoes: TPanel

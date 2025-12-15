@@ -9,52 +9,57 @@ uses
   ProdutosController, System.Actions, Vcl.ActnList, uConstantesController, FPedidoVenda;
 
 type
+  TTipoPersistenciaItem = (tpiNovo, tpiAlterar);
+
+type
   TFrmPedidoVendaItem = class(TForm)
-    pnlTitulo: TPanel;
-    lblTitulo: TLabel;
-    pnlBotoes: TPanel;
-    GroupBox1: TGroupBox;
-    btneditCodigo: TButtonedEdit;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label1: TLabel;
-    btnConfirmar: TBitBtn;
-    imgListPedidoVendaItem: TImageList;
-    editDescricao: TEdit;
-    editQuantidade: TEdit;
-    editValorUnitario: TEdit;
-    editValorTotal: TEdit;
-    actlItemVenda: TActionList;
-    actListagemProdutos: TAction;
-    actFechar: TAction;
-    procedure FormShow(Sender: TObject);
-    procedure btneditCodigoChange(Sender: TObject);
-    procedure btnConfirmarClick(Sender: TObject);
-    procedure actListagemProdutosExecute(Sender: TObject);
-    procedure btneditCodigoRightButtonClick(Sender: TObject);
-    procedure btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormCreate(Sender: TObject);
-    procedure editQuantidadeExit(Sender: TObject);
-    procedure btneditCodigoExit(Sender: TObject);
+	pnlTitulo: TPanel;
+	lblTitulo: TLabel;
+	pnlBotoes: TPanel;
+	GroupBox1: TGroupBox;
+	btneditCodigo: TButtonedEdit;
+	Label3: TLabel;
+	Label4: TLabel;
+	Label5: TLabel;
+	Label6: TLabel;
+	Label1: TLabel;
+	btnConfirmar: TBitBtn;
+	imgListPedidoVendaItem: TImageList;
+	editDescricao: TEdit;
+	editQuantidade: TEdit;
+	editValorUnitario: TEdit;
+	editValorTotal: TEdit;
+	actlItemVenda: TActionList;
+	actListagemProdutos: TAction;
+	actFechar: TAction;
+	procedure FormShow(Sender: TObject);
+	procedure btneditCodigoChange(Sender: TObject);
+	procedure btnConfirmarClick(Sender: TObject);
+	procedure actListagemProdutosExecute(Sender: TObject);
+	procedure btneditCodigoRightButtonClick(Sender: TObject);
+	procedure btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+	procedure FormCreate(Sender: TObject);
+	procedure editQuantidadeExit(Sender: TObject);
+	procedure btneditCodigoExit(Sender: TObject);
   private
-    { Private declarations }
-    procedure DimencionarForm;
-    procedure LimparTelaItemVenda;
-    function GravarItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
-    function CalcularValorTotalItem(vlrUnitario: Currency; nQuantidade: Float32): Currency;
+	{ Private declarations }
+	procedure DimencionarForm;
+	procedure LimparTelaItemVenda;
+	function GravarItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
+	procedure CalcularValorTotalItem;
 
   var
-    DBConexao        : TFDConnection;
-    ProdutoController: TProdutoController;
-    aNumeroPedido    : Integer;
+	DBConexao        : TFDConnection;
+	ProdutoController: TProdutoController;
+	aNumeroPedido    : Integer;
+	FTipoPersistencia: TTipoPersistenciaItem;
   public
-    { Public declarations }
-    constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
-    procedure ObterDadosProduto(aID: Integer);
-    procedure GetNumeroPedidoVenda(nPedido: Integer);
-    procedure ObterDadosItem(nCodigo: Integer; nProduto: Integer;nPedido:Integer);
+	{ Public declarations }
+	constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
+	procedure ObterDadosProduto(aID: Integer);
+	procedure GetNumeroPedidoVenda(nPedido: Integer);
+	procedure ObterDadosItem(nCodigo: Integer; nProduto: Integer; nPedido: Integer);
+	procedure SetTipoPersistenciaItem(aTipoPersistenciaItem: TTipoPersistenciaItem);
   end;
 
 var
@@ -73,13 +78,13 @@ begin
   // ABRE A TELA DE LISTAGEM DE PRODUTOS.
   // ---------------------------------------------------------------------------
   try
-    FrmListagemProdutos          := TFrmListagemProdutos.Create(self, DBConexao);
-    FrmListagemProdutos.Position := poOwnerFormCenter;
-    FrmListagemProdutos.ShowModal;
+	FrmListagemProdutos          := TFrmListagemProdutos.Create(self, DBConexao);
+	FrmListagemProdutos.Position := poOwnerFormCenter;
+	FrmListagemProdutos.ShowModal;
 
-    editQuantidade.SetFocus;
+	editQuantidade.SetFocus;
   finally
-    FrmListagemProdutos.Free;
+	FrmListagemProdutos.Free;
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -91,13 +96,13 @@ begin
   // ---------------------------------------------------------------------------
   if GravarItemPedidoVenda(aNumeroPedido, tpNovo) = true then
   begin
-    FrmPedidoVenda.ObterItensPedidoVenda(aNumeroPedido);
-    LimparTelaItemVenda;
-    btneditCodigo.SetFocus;
+	FrmPedidoVenda.ObterItensPedidoVenda(aNumeroPedido);
+	LimparTelaItemVenda;
+	btneditCodigo.SetFocus;
   end
   else
   begin
-    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possivél gravar o item no banco de dados.');
+	ShowMessage('ERRO!!' + sLineBreak + 'Não foi possivél gravar o item no banco de dados.');
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -115,18 +120,24 @@ end;
 procedure TFrmPedidoVendaItem.btneditCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_F8 then
-    actListagemProdutos.Execute;
+	actListagemProdutos.Execute;
 end;
 
 procedure TFrmPedidoVendaItem.btneditCodigoRightButtonClick(Sender: TObject);
 begin
   actListagemProdutos.Execute;
+  CalcularValorTotalItem;
 end;
 
-function TFrmPedidoVendaItem.CalcularValorTotalItem(vlrUnitario: Currency; nQuantidade: Float32): Currency;
+procedure TFrmPedidoVendaItem.CalcularValorTotalItem;
+var
+  fQuantidade: Float32;
+  vlrUnitario: Currency;
 begin
-  Result := 0;
-  Result := (vlrUnitario * nQuantidade);
+  fQuantidade := StrToFloatDef(editQuantidade.Text, 0);
+  vlrUnitario := StrToFloatDef(editValorUnitario.Text, 0);
+
+  editValorTotal.Text := (vlrUnitario * fQuantidade).ToString;
 end;
 
 constructor TFrmPedidoVendaItem.Create(AOwner: TComponent; AConnection: TFDConnection);
@@ -145,8 +156,7 @@ end;
 
 procedure TFrmPedidoVendaItem.editQuantidadeExit(Sender: TObject);
 begin
-  editValorTotal.Text := CalcularValorTotalItem(StrToFloatDef(editValorUnitario.Text, 0),
-    StrToFloatDef(editQuantidade.Text, 0)).ToString;
+  CalcularValorTotalItem;
 end;
 
 procedure TFrmPedidoVendaItem.FormCreate(Sender: TObject);
@@ -156,7 +166,7 @@ end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
-  //LimparTelaItemVenda;
+  // LimparTelaItemVenda;
   btneditCodigo.SetFocus;
 end;
 
@@ -176,27 +186,27 @@ begin
   // ---------------------------------------------------------------------------
   Result := false;
   try
-    PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
+	PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
 
-    PedidoVendaItem               := TPedidoVendaItemModel.Create;
-    PedidoVendaItem.NumeroPedido  := aNumeroPedido;
-    PedidoVendaItem.CodigoProduto := StrToIntDef(btneditCodigo.Text, 0);
-    PedidoVendaItem.Quantidade    := StrToFloatDef(editQuantidade.Text, 0);
-    PedidoVendaItem.ValorUnitario := StrToFloatDef(editValorUnitario.Text, 0);
-    PedidoVendaItem.ValorTotal    := StrToFloatDef(editValorTotal.Text, 0);
+	PedidoVendaItem               := TPedidoVendaItemModel.Create;
+	PedidoVendaItem.NumeroPedido  := aNumeroPedido;
+	PedidoVendaItem.CodigoProduto := StrToIntDef(btneditCodigo.Text, 0);
+	PedidoVendaItem.Quantidade    := StrToFloatDef(editQuantidade.Text, 0);
+	PedidoVendaItem.ValorUnitario := StrToFloatDef(editValorUnitario.Text, 0);
+	PedidoVendaItem.ValorTotal    := StrToFloatDef(editValorTotal.Text, 0);
 
-    if aTipoPersistencia = tpNovo then
-      if PedidoVendaItemController.NovoItemPedidoVenda(PedidoVendaItem) then
-	Result := true;
+	if aTipoPersistencia = tpNovo then
+	  if PedidoVendaItemController.NovoItemPedidoVenda(PedidoVendaItem) then
+		Result := true;
 
-    if aTipoPersistencia = tpAlterar then
-      if PedidoVendaItemController.AlterarItemPedidoVenda(PedidoVendaItem) then
-	Result := true;
+	if aTipoPersistencia = tpAlterar then
+	  if PedidoVendaItemController.AlterarItemPedidoVenda(PedidoVendaItem) then
+		Result := true;
 
-    LimparTelaItemVenda;
+	LimparTelaItemVenda;
   finally
-    FreeAndNil(PedidoVendaItem);
-    FreeAndNil(PedidoVendaItemController);
+	FreeAndNil(PedidoVendaItem);
+	FreeAndNil(PedidoVendaItemController);
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -210,7 +220,7 @@ begin
   editValorTotal.Text    := '0,00';
 end;
 
-procedure TFrmPedidoVendaItem.ObterDadosItem(nCodigo: Integer; nProduto: Integer;nPedido:Integer);
+procedure TFrmPedidoVendaItem.ObterDadosItem(nCodigo: Integer; nProduto: Integer; nPedido: Integer);
 var
   PedidoVendaItem          : TPedidoVendaItemModel;
   PedidoVendaItemController: TPedidoVendaItemController;
@@ -219,30 +229,29 @@ begin
   // PREENCHE OS CAMPOS NA TELA COM OS DADOS DO ITEM INFORMADO NO PEDIDO DE VENDA ATUAL.
   // ---------------------------------------------------------------------------
   if (nPedido < 1) or (nProduto < 1) then
-    exit;
+	exit;
 
   PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
-  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigo,nProduto, nPedido);
+  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigo, nProduto, nPedido);
 
   try
-    if PedidoVendaItem = nil then
-    begin
-      ShowMessage('Item não encontrado.');
-      LimparTelaItemVenda;
-      btneditCodigo.SetFocus;
-      exit;
-    end;
+	if PedidoVendaItem = nil then
+	begin
+	  ShowMessage('Item não encontrado.');
+	  LimparTelaItemVenda;
+	  btneditCodigo.SetFocus;
+	  exit;
+	end;
 
-
-    btneditCodigo.Text     := PedidoVendaItem.CodigoProduto.ToString;
-    editDescricao.Text     := PedidoVendaItem.DescricaoProduto;
-    editQuantidade.Text    := PedidoVendaItem.Quantidade.ToString;
-    editValorUnitario.Text := PedidoVendaItem.ValorUnitario.ToString;
-    CalcularValorTotalItem(PedidoVendaItem.ValorUnitario, PedidoVendaItem.Quantidade);
+	btneditCodigo.Text     := PedidoVendaItem.CodigoProduto.ToString;
+	editDescricao.Text     := PedidoVendaItem.DescricaoProduto;
+	editQuantidade.Text    := PedidoVendaItem.Quantidade.ToString;
+	editValorUnitario.Text := PedidoVendaItem.ValorUnitario.ToString;
+	CalcularValorTotalItem;
 
   finally
-    FreeAndNil(PedidoVendaItem);
-    FreeAndNil(PedidoVendaItemController);
+	FreeAndNil(PedidoVendaItem);
+	FreeAndNil(PedidoVendaItemController);
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -256,24 +265,30 @@ begin
   Produto           := ProdutoController.ObterDadosProduto(aID);
 
   try
-    if Produto = nil then
-    begin
-      ShowMessage('Produto não encontrado.');
-      LimparTelaItemVenda;
-      btneditCodigo.SetFocus;
-      exit;
-    end;
+	if Produto = nil then
+	begin
+	  ShowMessage('Produto não encontrado.');
+	  LimparTelaItemVenda;
+	  btneditCodigo.SetFocus;
+	  exit;
+	end;
 
-    btneditCodigo.Text     := Produto.Codigo.ToString;
-    editDescricao.Text     := Produto.Descricao;
-    editQuantidade.Text    := '1';
-    editValorUnitario.Text := Produto.PrecoVenda.ToString;
-    CalcularValorTotalItem(Produto.PrecoVenda, 1);
+	btneditCodigo.Text := Produto.Codigo.ToString;
+	editDescricao.Text := Produto.Descricao;
+	if FTipoPersistencia = tpiNovo then
+	  editQuantidade.Text  := '1';
+	editValorUnitario.Text := Produto.PrecoVenda.ToString;
+	CalcularValorTotalItem;
 
   finally
-    FreeAndNil(Produto);
-    FreeAndNil(ProdutoController);
+	FreeAndNil(Produto);
+	FreeAndNil(ProdutoController);
   end;
+end;
+
+procedure TFrmPedidoVendaItem.SetTipoPersistenciaItem(aTipoPersistenciaItem: TTipoPersistenciaItem);
+begin
+  FTipoPersistencia := aTipoPersistenciaItem;
 end;
 
 end.

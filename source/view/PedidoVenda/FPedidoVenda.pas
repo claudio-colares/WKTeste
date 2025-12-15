@@ -173,6 +173,8 @@ end;
 
 procedure TFrmPedidoVenda.dbgrdItensDblClick(Sender: TObject);
 begin
+  if btneditCodigoCliente.Text = '' then
+	Exit;
   actAlterarItem.Execute;
 end;
 
@@ -213,8 +215,10 @@ begin
 
   FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
   FrmPedidoVendaItem.Position := poOwnerFormCenter;
+
   FrmPedidoVendaItem.ObterDadosItem(nCodigo,nProduto,aIDVenda);
   FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
+  FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiAlterar);
   FrmPedidoVendaItem.ShowModal;
   // ---------------------------------------------------------------------------
 end;
@@ -242,7 +246,9 @@ begin
 
     FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
     FrmPedidoVendaItem.Position := poOwnerFormCenter;
+
     FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
+    FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiNovo);
     FrmPedidoVendaItem.ShowModal;
   finally
     FrmPedidoVendaItem.Free;
