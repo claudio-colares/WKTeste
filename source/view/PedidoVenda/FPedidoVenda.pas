@@ -218,6 +218,7 @@ begin
 
   FrmPedidoVendaItem.ObterDadosItem(nCodigo,nProduto,aIDVenda);
   FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
+  FrmPedidoVendaItem.GetNumeroPedidoVendaItem(nCodigo);
   FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiAlterar);
   FrmPedidoVendaItem.ShowModal;
   // ---------------------------------------------------------------------------

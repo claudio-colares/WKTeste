@@ -45,19 +45,21 @@ type
 	{ Private declarations }
 	procedure DimencionarForm;
 	procedure LimparTelaItemVenda;
-	function GravarItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistencia): Boolean;
+	function GravarItemPedidoVenda(aNumeroPedido: Integer; aTipoPersistencia: TTipoPersistenciaItem): Boolean;
 	procedure CalcularValorTotalItem;
 
   var
 	DBConexao        : TFDConnection;
 	ProdutoController: TProdutoController;
 	aNumeroPedido    : Integer;
+    aNumeroItem      : Integer;
 	FTipoPersistencia: TTipoPersistenciaItem;
   public
 	{ Public declarations }
 	constructor Create(AOwner: TComponent; AConnection: TFDConnection); reintroduce;
 	procedure ObterDadosProduto(aID: Integer);
 	procedure GetNumeroPedidoVenda(nPedido: Integer);
+    procedure GetNumeroPedidoVendaItem(nItem: Integer);
 	procedure ObterDadosItem(nCodigo: Integer; nProduto: Integer; nPedido: Integer);
 	procedure SetTipoPersistenciaItem(aTipoPersistenciaItem: TTipoPersistenciaItem);
   end;
@@ -94,7 +96,7 @@ begin
   // ---------------------------------------------------------------------------
   // GRAVAÇÃO (EDICAO OU NOVO REGISTRO) DO ITEM NO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
-  if GravarItemPedidoVenda(aNumeroPedido, tpNovo) = true then
+  if GravarItemPedidoVenda(aNumeroPedido, FTipoPersistencia) = true then
   begin
 	FrmPedidoVenda.ObterItensPedidoVenda(aNumeroPedido);
 	LimparTelaItemVenda;
@@ -166,7 +168,8 @@ end;
 
 procedure TFrmPedidoVendaItem.FormShow(Sender: TObject);
 begin
-  // LimparTelaItemVenda;
+  if FTipoPersistencia = tpiNovo then
+     LimparTelaItemVenda;
   btneditCodigo.SetFocus;
 end;
 
@@ -175,8 +178,13 @@ begin
   aNumeroPedido := nPedido;
 end;
 
+procedure TFrmPedidoVendaItem.GetNumeroPedidoVendaItem(nItem: Integer);
+begin
+  aNumeroItem := nItem;
+end;
+
 function TFrmPedidoVendaItem.GravarItemPedidoVenda(aNumeroPedido: Integer;
-  aTipoPersistencia: TTipoPersistencia): Boolean;
+  aTipoPersistencia: TTipoPersistenciaItem): Boolean;
 var
   PedidoVendaItem          : TPedidoVendaItemModel;
   PedidoVendaItemController: TPedidoVendaItemController;
@@ -189,17 +197,18 @@ begin
 	PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
 
 	PedidoVendaItem               := TPedidoVendaItemModel.Create;
+    PedidoVendaItem.Codigo        := aNumeroItem;
 	PedidoVendaItem.NumeroPedido  := aNumeroPedido;
 	PedidoVendaItem.CodigoProduto := StrToIntDef(btneditCodigo.Text, 0);
 	PedidoVendaItem.Quantidade    := StrToFloatDef(editQuantidade.Text, 0);
 	PedidoVendaItem.ValorUnitario := StrToFloatDef(editValorUnitario.Text, 0);
 	PedidoVendaItem.ValorTotal    := StrToFloatDef(editValorTotal.Text, 0);
 
-	if aTipoPersistencia = tpNovo then
+	if aTipoPersistencia = tpiNovo then
 	  if PedidoVendaItemController.NovoItemPedidoVenda(PedidoVendaItem) then
 		Result := true;
 
-	if aTipoPersistencia = tpAlterar then
+	if aTipoPersistencia = tpiAlterar then
 	  if PedidoVendaItemController.AlterarItemPedidoVenda(PedidoVendaItem) then
 		Result := true;
 
@@ -217,7 +226,7 @@ begin
   editDescricao.Clear;
   editQuantidade.Text    := '1';
   editValorUnitario.Text := '0,00';
-  editValorTotal.Text    := '0,00';
+  CalcularValorTotalItem;
 end;
 
 procedure TFrmPedidoVendaItem.ObterDadosItem(nCodigo: Integer; nProduto: Integer; nPedido: Integer);

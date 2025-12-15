@@ -78,37 +78,34 @@ end;
 
 function TPedidoVendaItemDAO.AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
 var
-  aQuery                : TFDQuery;
-  strSQL                : String;
-  aNumeroPedidoVenda    : Integer;
+  aQuery: TFDQuery;
 begin
   Result := False;
-  // -------------------------------------------------------------------------
-  // Alterar item pedido de venda
-  // -------------------------------------------------------------------------
-  try
-    aQuery            := TFDQuery.Create(nil);
-    aQuery.Connection := DBConexao;
-    strSQL :=
-     'UPDATE pedidos_venda SET              '+
-     '  data_emissao    = :data_emissao,    '+
-     '  codigo_cliente  = :codigo_cliente,  '+
-     '  valor_total     = :valor_total      '+
-     'WHERE numero_pedido = :numero_pedido';
-    aQuery.SQL.Add(strSQL);
 
-    aQuery.ParamByName('numero_pedido').AsInteger   := aPedidoVendaItemModel.NumeroPedido;
-    aQuery.ParamByName('codigo_produto').AsInteger  := aPedidoVendaItemModel.CodigoProduto;
-    aQuery.ParamByName('quantidade').AsFloat        := aPedidoVendaItemModel.Quantidade;
-    aQuery.ParamByName('valor_unitario').AsCurrency := aPedidoVendaItemModel.ValorUnitario;
-    aQuery.ParamByName('valor_total').AsCurrency    := aPedidoVendaItemModel.ValorTotal;
+  aQuery := TFDQuery.Create(nil);
+  try
+    aQuery.Connection := DBConexao;
+    aQuery.SQL.Text :=
+      'UPDATE pedidos_vendas_itens SET        '+
+      '  codigo_produto = :codigo_produto,    '+
+      '  quantidade     = :quantidade,        '+
+      '  valor_unitario = :valor_unitario,    '+
+      '  valor_total    = :valor_total        '+
+      'WHERE codigo = :codigo';
+
+    aQuery.ParamByName('codigo').AsInteger         := aPedidoVendaItemModel.Codigo;
+    aQuery.ParamByName('codigo_produto').AsInteger := aPedidoVendaItemModel.CodigoProduto;
+    aQuery.ParamByName('quantidade').AsFloat       := aPedidoVendaItemModel.Quantidade;
+    aQuery.ParamByName('valor_unitario').AsCurrency:= aPedidoVendaItemModel.ValorUnitario;
+    aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaItemModel.ValorTotal;
+
     aQuery.ExecSQL;
     aQuery.Connection.Commit;
-    Result := true;
+
+    Result := True;
   finally
     aQuery.Free;
   end;
-  // -------------------------------------------------------------------------
 end;
 
 procedure TPedidoVendaItemDAO.CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
@@ -176,7 +173,7 @@ begin
 
     if aQuery.IsEmpty then
       Exit(nil);
-   { TODO : analisar o retorno do cvodigo do produto }
+
     PedidoVendaItem                  := TPedidoVendaItemModel.Create;
     PedidoVendaItem.Codigo           := aQuery.FieldByName('codigo').AsInteger;
     PedidoVendaItem.NumeroPedido     := aQuery.FieldByName('numero_pedido').AsInteger;
