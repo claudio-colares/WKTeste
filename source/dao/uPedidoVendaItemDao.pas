@@ -156,8 +156,8 @@ begin
     'WHERE codigo = :pCodigo';
 	aQuery.ParamByName('pCodigo').AsInteger := nCodigo;
 	aQuery.ExecSQL;
-
-  Finally
+    Result := True;
+  except
 	Result := False;
   End;
 

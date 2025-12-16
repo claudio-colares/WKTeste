@@ -52,7 +52,8 @@ end;
 
 function TPedidoVendaItemController.DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
 begin
- result := DeletarItemPedidoVenda(nCodigo);
+    // result := TPedidoVendaItemDao.DeletarItemPedidoVenda(nCodigo);
+ result := PedidoVendaItemDao.DeletarItemPedidoVenda(nCodigo);
 end;
 
 destructor TPedidoVendaItemController.Destroy;
