@@ -51,7 +51,6 @@ begin
     aQuery.ParamByName('codigo_cliente').AsInteger := aPedidoVendaModel.CodigoCliente;
     aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaModel.ValorTotal;
     aQuery.ExecSQL;
-    aQuery.Connection.Commit;
     Result := true;
   finally
     aQuery.Free;
@@ -85,12 +84,13 @@ begin
   try
 	Try
 	  aQuery.Connection  := DBConexao;
-	  aQuery.SQL.Text    := 'DELETE FROM pedidos_venda ' + 'WHERE numero_pedido = :pCodigo';
+	  aQuery.SQL.Text    := 'DELETE FROM pedidos_venda ' +
+      					    'WHERE numero_pedido = :pCodigo';
 	  aQuery.ParamByName('pCodigo').AsInteger := nCodigo;
 	  aQuery.ExecSQL;
 	  Result := true;
 	except
-	  Result := False;
+	  Raise;
 	End;
   finally
     aQuery.Free;
@@ -154,7 +154,6 @@ begin
     aQuery.ParamByName('codigo_cliente').AsInteger := aPedidoVendaModel.CodigoCliente;
     aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaModel.ValorTotal;
     aQuery.ExecSQL;
-    aQuery.Connection.Commit;
     Result := true;
   finally
     aQuery.Free;
