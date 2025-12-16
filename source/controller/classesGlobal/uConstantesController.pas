@@ -30,7 +30,7 @@ Const
   _DB_PORTA           = 3306;
   _DB_USUARIO         = 'root';
   _DB_SENHA           = 'masterkey';
-  _DB_VENDORLIB       = 'libmariadb.dll';
+  _DB_VENDORLIB       = 'libmysql.dll';
   _DB_DRIVER          = 'MYSQL';
 
 implementation

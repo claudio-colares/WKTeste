@@ -208,7 +208,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
             Height = 47
             Action = actCancelarPedidoVenda
             Align = alRight
-            Caption = 'Cancelar Pedido'
+            Caption = '&Cancelar'
             Layout = blGlyphRight
             TabOrder = 0
           end
@@ -220,7 +220,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
             Height = 47
             Action = actCarregarPedidoVenda
             Align = alRight
-            Caption = 'Carregar Pedido'
+            Caption = '&Carregar'
             Layout = blGlyphRight
             TabOrder = 1
           end
@@ -547,6 +547,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
     Left = 504
     Top = 368
     object actInserirItem: TAction
+      Category = 'BotoesPedidoVendaItem'
       Caption = '&Inserir Item'
       ImageIndex = 1
       OnExecute = actInserirItemExecute
@@ -556,19 +557,20 @@ object FrmPedidoVenda: TFrmPedidoVenda
     end
     object actCarregarPedidoVenda: TAction
       Category = 'BotoesPedidoVenda'
-      Caption = 'Carregar Pedido'
+      Caption = '&Carregar'
       OnExecute = actCarregarPedidoVendaExecute
     end
     object actCancelarPedidoVenda: TAction
       Category = 'BotoesPedidoVenda'
-      Caption = 'Cancelar Pedido'
+      Caption = '&Cancelar'
       OnExecute = actCancelarPedidoVendaExecute
     end
     object actAlterarItem: TAction
-      Caption = 'actAlterarItem'
+      Category = 'BotoesPedidoVendaItem'
       OnExecute = actAlterarItemExecute
     end
     object actExcluirItem: TAction
+      Category = 'BotoesPedidoVendaItem'
       OnExecute = actExcluirItemExecute
     end
   end
