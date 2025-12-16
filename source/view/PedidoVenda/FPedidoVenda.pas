@@ -123,6 +123,7 @@ type
 	function ObterDadosPedidoVenda(aID: Integer): Boolean;
 	procedure ObterItensPedidoVenda(nPedido: Integer);
 	procedure ExcluirItemPedidoVenda(nCodigo: Integer);
+    procedure ExcluirPedidoVenda(nCodigo: Integer);
   end;
 
 var
@@ -199,7 +200,6 @@ begin
   FrmCarregarPedidoVenda          := TFrmCarregarPedidoVenda.Create(Self, DBConexao, aTipo);
   FrmCarregarPedidoVenda.Position := poOwnerFormCenter;
   FrmCarregarPedidoVenda.ShowModal;
-  ObterDadosPedidoVenda(aIDVenda);
   // ---------------------------------------------------------------------------
 end;
 
@@ -251,11 +251,15 @@ procedure TFrmPedidoVenda.actExcluirItemExecute(Sender: TObject);
 var
 nCodigo: Integer;
 begin
+  // ---------------------------------------------------------------------------
+  // EXCLUSAO DO PEDIDO DE VENDA
+  // ---------------------------------------------------------------------------
 nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger ;
   if MessageDlg('Deseja realmente excluir este item?', mtWarning, [mbYes, mbNo], 0) = mrYes then
   begin
 	ExcluirItemPedidoVenda(nCodigo);
   end;
+  // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
@@ -546,6 +550,24 @@ begin
 
   finally
 	FreeAndNil(PedidoVendaItemController);
+  end;
+end;
+
+procedure TFrmPedidoVenda.ExcluirPedidoVenda(nCodigo: Integer);
+var
+  PedidoVendaController: TPedidoVendaController;
+begin
+  PedidoVendaController := TPedidoVendaController.Create(DBConexao);
+  try
+	if PedidoVendaController.DeletarPedidoVenda(nCodigo) then
+    begin
+        ShowMessage('Pedido excluído com successo!');
+	  	NovoPedidoVenda;
+    end
+    else
+       Exit;
+  finally
+	FreeAndNil(PedidoVendaController);
   end;
 end;
 

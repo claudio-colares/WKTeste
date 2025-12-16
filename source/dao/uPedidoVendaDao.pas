@@ -17,7 +17,7 @@ type
     function GravarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function AlterarPedidoVenda(aPedidoVendaModel: TPedidoVendaModel): Boolean;
     function GetNumeroPedidoVenda: Integer;
-  //  function Limpar: TPedidoVendaModel;
+    function DeletarPedidoVenda(nCodigo: Integer): Boolean;
   end;
 
 implementation
@@ -73,6 +73,28 @@ end;
 constructor TPedidoVendaDAO.Create(aConnection: TFDConnection);
 begin
   DBConexao := aConnection;
+end;
+
+function TPedidoVendaDAO.DeletarPedidoVenda(nCodigo: Integer): Boolean;
+var
+  strSQL: String;
+  aQuery: TFDQuery;
+begin
+  Result := False;
+  aQuery := TFDQuery.Create(nil);
+  try
+	Try
+	  aQuery.Connection  := DBConexao;
+	  aQuery.SQL.Text    := 'DELETE FROM pedidos_venda ' + 'WHERE numero_pedido = :pCodigo';
+	  aQuery.ParamByName('pCodigo').AsInteger := nCodigo;
+	  aQuery.ExecSQL;
+	  Result := true;
+	except
+	  Result := False;
+	End;
+  finally
+    aQuery.Free;
+  end;
 end;
 
 function TPedidoVendaDAO.GetPedidoVendaByID(ID: Integer): TPedidoVendaModel;
@@ -138,21 +160,6 @@ begin
     aQuery.Free;
   end;
 end;
-
-//function TPedidoVendaDAO.Limpar: TPedidoVendaModel;
-//var
-//  PedidoVenda: TPedidoVendaModel;
-//begin
-//  try
-//    PedidoVenda               := TPedidoVendaModel.Create;
-//    PedidoVenda.NumeroPedido  := 0;
-//    PedidoVenda.DataEmissao   := 2000 - 01 - 01;
-//    PedidoVenda.CodigoCliente := 0;
-//    PedidoVenda.ValorTotal    := 0;
-//  finally
-//    PedidoVenda.Free;
-//  end;
-//end;
 
 function TPedidoVendaDAO.GetNumeroPedidoVenda: Integer;
 var
