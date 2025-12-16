@@ -6,9 +6,11 @@ inherited FrmListagemPedidoVenda: TFrmListagemPedidoVenda
   inherited pnlTitulo: TPanel
     StyleElements = [seFont, seClient, seBorder]
     inherited lblTitulo: TLabel
+      Width = 618
+      Height = 34
       Caption = 'LISTAGEM DE PEDIDOS'
       StyleElements = [seFont, seClient, seBorder]
-      ExplicitWidth = 229
+      ExplicitWidth = 618
     end
   end
   inherited pnlBotoes: TPanel

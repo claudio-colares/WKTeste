@@ -120,7 +120,7 @@ type
   public
 	{ Public declarations }
 	procedure ObterDadosCliente(aID: Integer);
-	function ObterDadosPedidoVenda(aID: Integer): Boolean;
+	function  ObterDadosPedidoVenda(aID: Integer): Boolean;
 	procedure ObterItensPedidoVenda(nPedido: Integer);
 	procedure ExcluirItemPedidoVenda(nCodigo: Integer);
     procedure ExcluirPedidoVenda(nCodigo: Integer);
