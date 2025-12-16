@@ -17,6 +17,7 @@ type
     function  GetPedidoVendaItemByID(nCodigo:Integer; nProduto: Integer; nPedido:Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
+    function DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
   end;
 
@@ -47,6 +48,11 @@ end;
 constructor TPedidoVendaItemController.Create(aConnection: TFDConnection);
 begin
  PedidoVendaItemDao := TPedidoVendaItemDao.Create(aConnection);
+end;
+
+function TPedidoVendaItemController.DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
+begin
+ result := DeletarItemPedidoVenda(nCodigo);
 end;
 
 destructor TPedidoVendaItemController.Destroy;

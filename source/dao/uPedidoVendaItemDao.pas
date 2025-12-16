@@ -15,8 +15,10 @@ type
     procedure CarregarTabela(aQuery: TFDQuery);
     function GetPedidoVendaItemByID(nCodigo: Integer; nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
+    function DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
+
   end;
 
 implementation
@@ -139,6 +141,28 @@ begin
   DBConexao := aConnection;
 end;
 
+function TPedidoVendaItemDAO.DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
+var
+  strSQL: String;
+  aQuery: TFDQuery;
+begin
+  Result := False;
+  aQuery := TFDQuery.Create(nil);
+  Try
+	aQuery.Connection := DBConexao;
+
+	aQuery.SQL.Text :=
+    'DELETE FROM pedidos_vendas_itens ' +
+    'WHERE codigo = :pCodigo';
+	aQuery.ParamByName('pCodigo').AsInteger := nCodigo;
+	aQuery.ExecSQL;
+
+  Finally
+	Result := False;
+  End;
+
+end;
+
 function TPedidoVendaItemDAO.GetPedidoVendaItemByID(nCodigo: Integer;nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
 var
   aQuery         : TFDQuery;
@@ -161,8 +185,6 @@ begin
      'ON p.codigo           = :codigo_produto '+
      'WHERE i.numero_pedido = :numero_pedido  '+
      'AND i.codigo          = :codigo ';
-
-
 
     aQuery.Connection := DBConexao;
     aQuery.SQL.Text   := strSQL;

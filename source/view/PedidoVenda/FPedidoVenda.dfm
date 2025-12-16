@@ -258,6 +258,7 @@ object FrmPedidoVenda: TFrmPedidoVenda
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = []
         OnDblClick = dbgrdItensDblClick
+        OnKeyDown = dbgrdItensKeyDown
         Columns = <
           item
             Expanded = False
@@ -566,6 +567,9 @@ object FrmPedidoVenda: TFrmPedidoVenda
     object actAlterarItem: TAction
       Caption = 'actAlterarItem'
       OnExecute = actAlterarItemExecute
+    end
+    object actExcluirItem: TAction
+      OnExecute = actExcluirItemExecute
     end
   end
   object QryPedidoVendaItens: TFDQuery

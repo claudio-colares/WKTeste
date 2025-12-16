@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Projeto: wkTeste
 // Unit: FPredidoVenda
 //
@@ -19,8 +19,7 @@
 // Ambiente:
 // IDE: Delphi 12
 // Banco de Dados: MySQL
-//-----------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
 
 unit FPedidoVenda;
 
@@ -38,88 +37,92 @@ uses
 
 type
   TFrmPedidoVenda = class(TForm)
-    pnlTitulo: TPanel;
-    lblTitulo: TLabel;
-    pnlPrincipal: TPanel;
-    pnlBotoes: TPanel;
-    pnlCabecalhoPedido: TPanel;
-    dbgrdItens: TDBGrid;
-    imgListPrincipal: TImageList;
-    GroupBox1: TGroupBox;
-    Label3: TLabel;
-    btneditCodigoCliente: TButtonedEdit;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    grpBoxDadosDoPedido: TGroupBox;
-    Label1: TLabel;
-    btneditNumeroPedido: TButtonedEdit;
-    Label2: TLabel;
-    dateeditDataPedido: TDateTimePicker;
-    btnFechar: TBitBtn;
-    btnGravarPedido: TBitBtn;
-    pnlgrid: TPanel;
-    pnlBotoesItensPedido: TPanel;
-    pnlTotalizador: TPanel;
-    editValorTotal: TEdit;
-    Label7: TLabel;
-    actListPedidoVenda: TActionList;
-    actInserirItem: TAction;
-    editClienteNome: TEdit;
-    editClienteCidade: TEdit;
-    editClienteUF: TEdit;
-    actListagemClientes: TAction;
-    BitBtn3: TBitBtn;
-    PnlBotoesPedidoVenda: TPanel;
-    btnCancelarPedido: TBitBtn;
-    btnCarregarPedido: TBitBtn;
-    actCarregarPedidoVenda: TAction;
-    actCancelarPedidoVenda: TAction;
-    QryPedidoVendaItens: TFDQuery;
-    dsPedidoVendaItens: TDataSource;
-    actAlterarItem: TAction;
+	pnlTitulo: TPanel;
+	lblTitulo: TLabel;
+	pnlPrincipal: TPanel;
+	pnlBotoes: TPanel;
+	pnlCabecalhoPedido: TPanel;
+	dbgrdItens: TDBGrid;
+	imgListPrincipal: TImageList;
+	GroupBox1: TGroupBox;
+	Label3: TLabel;
+	btneditCodigoCliente: TButtonedEdit;
+	Label4: TLabel;
+	Label5: TLabel;
+	Label6: TLabel;
+	grpBoxDadosDoPedido: TGroupBox;
+	Label1: TLabel;
+	btneditNumeroPedido: TButtonedEdit;
+	Label2: TLabel;
+	dateeditDataPedido: TDateTimePicker;
+	btnFechar: TBitBtn;
+	btnGravarPedido: TBitBtn;
+	pnlgrid: TPanel;
+	pnlBotoesItensPedido: TPanel;
+	pnlTotalizador: TPanel;
+	editValorTotal: TEdit;
+	Label7: TLabel;
+	actListPedidoVenda: TActionList;
+	actInserirItem: TAction;
+	editClienteNome: TEdit;
+	editClienteCidade: TEdit;
+	editClienteUF: TEdit;
+	actListagemClientes: TAction;
+	BitBtn3: TBitBtn;
+	PnlBotoesPedidoVenda: TPanel;
+	btnCancelarPedido: TBitBtn;
+	btnCarregarPedido: TBitBtn;
+	actCarregarPedidoVenda: TAction;
+	actCancelarPedidoVenda: TAction;
+	QryPedidoVendaItens: TFDQuery;
+	dsPedidoVendaItens: TDataSource;
+	actAlterarItem: TAction;
+	actExcluirItem: TAction;
 
-    procedure FormShow(Sender: TObject);
-    procedure btneditNumeroPedidoChange(Sender: TObject);
-    procedure btneditCodigoClienteChange(Sender: TObject);
-    procedure actInserirItemExecute(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
-    procedure btneditCodigoClienteExit(Sender: TObject);
-    procedure btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure actListagemClientesExecute(Sender: TObject);
-    procedure btnGravarPedidoClick(Sender: TObject);
-    procedure actCarregarPedidoVendaExecute(Sender: TObject);
-    procedure actCancelarPedidoVendaExecute(Sender: TObject);
-    procedure btnFecharClick(Sender: TObject);
-    procedure actAlterarItemExecute(Sender: TObject);
-    procedure dbgrdItensDblClick(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
+	procedure FormShow(Sender: TObject);
+	procedure btneditNumeroPedidoChange(Sender: TObject);
+	procedure btneditCodigoClienteChange(Sender: TObject);
+	procedure actInserirItemExecute(Sender: TObject);
+	procedure FormCreate(Sender: TObject);
+	procedure btneditCodigoClienteRightButtonClick(Sender: TObject);
+	procedure btneditCodigoClienteExit(Sender: TObject);
+	procedure btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+	procedure actListagemClientesExecute(Sender: TObject);
+	procedure btnGravarPedidoClick(Sender: TObject);
+	procedure actCarregarPedidoVendaExecute(Sender: TObject);
+	procedure actCancelarPedidoVendaExecute(Sender: TObject);
+	procedure btnFecharClick(Sender: TObject);
+	procedure actAlterarItemExecute(Sender: TObject);
+	procedure dbgrdItensDblClick(Sender: TObject);
+	procedure FormDestroy(Sender: TObject);
+	procedure dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+	procedure actExcluirItemExecute(Sender: TObject);
 
   private
-    { Private declarations }
+	{ Private declarations }
 
-    procedure DimencionarForm;
-    procedure LimparDadosCliente;
-    procedure ExibirBotoes(aExibir: Boolean);
-    procedure NovoPedidoVenda;
-    procedure LimparDadosPedidoVenda;
-    procedure TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
-    procedure LimparGrid;
+	procedure DimencionarForm;
+	procedure LimparDadosCliente;
+	procedure ExibirBotoes(aExibir: Boolean);
+	procedure NovoPedidoVenda;
+	procedure LimparDadosPedidoVenda;
+	procedure TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
+	procedure LimparGrid;
 
-    function TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
-    function GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
+	function TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
+	function GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
 
   var
-    DBConexao     : TFDConnection;
-    BaseDados     : TConectarBaseController;
-    aIDVenda      : Integer;
-    PersistirDados: TTipoPersistencia;
+	DBConexao     : TFDConnection;
+	BaseDados     : TConectarBaseController;
+	aIDVenda      : Integer;
+	PersistirDados: TTipoPersistencia;
   public
-    { Public declarations }
-    procedure ObterDadosCliente(aID: Integer);
-    function ObterDadosPedidoVenda(aID: Integer): Boolean;
-    procedure ObterItensPedidoVenda(nPedido: Integer);
+	{ Public declarations }
+	procedure ObterDadosCliente(aID: Integer);
+	function ObterDadosPedidoVenda(aID: Integer): Boolean;
+	procedure ObterItensPedidoVenda(nPedido: Integer);
+	procedure ExcluirItemPedidoVenda(nCodigo: Integer);
   end;
 
 var
@@ -139,11 +142,11 @@ begin
   // EXIBIR LISTAGEM DO CADASTRO DE CLIENTES
   // ---------------------------------------------------------------------------
   try
-    FrmListagemCliente          := TFrmListagemCliente.Create(Self, DBConexao);
-    FrmListagemCliente.Position := poOwnerFormCenter;
-    FrmListagemCliente.ShowModal;
+	FrmListagemCliente          := TFrmListagemCliente.Create(Self, DBConexao);
+	FrmListagemCliente.Position := poOwnerFormCenter;
+	FrmListagemCliente.ShowModal;
   finally
-    FrmListagemCliente.Free;
+	FrmListagemCliente.Free;
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -159,15 +162,15 @@ begin
   // GRAVAR OS DADOS NO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   if btneditCodigoCliente.Text = '' then
-    Exit;
+	Exit;
 
   if GravarPedidoVenda(TipoPersistenciaDados(aIDVenda)) then
   begin
-    ShowMessage('Pedido salvo com sucesso!');
-    NovoPedidoVenda;
+	ShowMessage('Pedido salvo com sucesso!');
+	NovoPedidoVenda;
   end
   else
-    ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!');
+	ShowMessage('ERRO!!' + sLineBreak + 'Não foi possível salvar o pedido!');
   // ---------------------------------------------------------------------------
 end;
 
@@ -178,15 +181,25 @@ begin
   actAlterarItem.Execute;
 end;
 
+procedure TFrmPedidoVenda.dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if btneditCodigoCliente.Text = '' then
+    exit;
+  if key = VK_RETURN then
+  	actAlterarItem.Execute;
+  if key = VK_DELETE then;
+    actExcluirItem.Execute;
+end;
+
 procedure TFrmPedidoVenda.TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
 begin
   // ---------------------------------------------------------------------------
   // EXIBI A TELA PARA O USUARIO INSERIR O NUMERO DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
-    FrmCarregarPedidoVenda          := TFrmCarregarPedidoVenda.Create(Self, DBConexao, aTipo);
-    FrmCarregarPedidoVenda.Position := poOwnerFormCenter;
-    FrmCarregarPedidoVenda.ShowModal;
-    ObterDadosPedidoVenda(aIDVenda);
+  FrmCarregarPedidoVenda          := TFrmCarregarPedidoVenda.Create(Self, DBConexao, aTipo);
+  FrmCarregarPedidoVenda.Position := poOwnerFormCenter;
+  FrmCarregarPedidoVenda.ShowModal;
+  ObterDadosPedidoVenda(aIDVenda);
   // ---------------------------------------------------------------------------
 end;
 
@@ -196,27 +209,27 @@ begin
   // CLASSIFICA O TIPO DE ALTERAÇÃO DO PEDIDO DE VENDA (NOVO OU EDIÇÃO)
   // ---------------------------------------------------------------------------
   if aNumPedido < 1 then
-    Result := tpNovo
+	Result := tpNovo
   else
-    Result := tpAlterar;
+	Result := tpAlterar;
   // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.actAlterarItemExecute(Sender: TObject);
 var
- nCodigo  : Integer;
- nProduto : Integer;
+  nCodigo : Integer;
+  nProduto: Integer;
 begin
   // ---------------------------------------------------------------------------
   // EDIÇÃO DO ITEM DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
-  nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger;
+  nCodigo  := QryPedidoVendaItens.FieldByName('codigo').AsInteger;
   nProduto := QryPedidoVendaItens.FieldByName('codigo_produto').AsInteger;
 
   FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
   FrmPedidoVendaItem.Position := poOwnerFormCenter;
 
-  FrmPedidoVendaItem.ObterDadosItem(nCodigo,nProduto,aIDVenda);
+  FrmPedidoVendaItem.ObterDadosItem(nCodigo, nProduto, aIDVenda);
   FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
   FrmPedidoVendaItem.GetNumeroPedidoVendaItem(nCodigo);
   FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiAlterar);
@@ -234,25 +247,36 @@ begin
   TelaObterNumPedidoVenda(tpCarregar);
 end;
 
+procedure TFrmPedidoVenda.actExcluirItemExecute(Sender: TObject);
+var
+nCodigo: Integer;
+begin
+nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger ;
+  if MessageDlg('Deseja realmente excluir este item?', mtWarning, [mbYes, mbNo], 0) = mrYes then
+  begin
+	ExcluirItemPedidoVenda(nCodigo);
+  end;
+end;
+
 procedure TFrmPedidoVenda.actInserirItemExecute(Sender: TObject);
 begin
   // ---------------------------------------------------------------------------
   // EXIBE A TELA PARA INSERSÃO DO ITEM NO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   if btneditCodigoCliente.Text = '' then
-    Exit;
+	Exit;
   try
-    GravarPedidoVenda(TipoPersistenciaDados(aIDVenda));
-    ObterDadosPedidoVenda(aIDVenda);
+	GravarPedidoVenda(TipoPersistenciaDados(aIDVenda));
+	ObterDadosPedidoVenda(aIDVenda);
 
-    FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
-    FrmPedidoVendaItem.Position := poOwnerFormCenter;
+	FrmPedidoVendaItem          := TFrmPedidoVendaItem.Create(Self, DBConexao);
+	FrmPedidoVendaItem.Position := poOwnerFormCenter;
 
-    FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
-    FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiNovo);
-    FrmPedidoVendaItem.ShowModal;
+	FrmPedidoVendaItem.GetNumeroPedidoVenda(aIDVenda);
+	FrmPedidoVendaItem.SetTipoPersistenciaItem(tpiNovo);
+	FrmPedidoVendaItem.ShowModal;
   finally
-    FrmPedidoVendaItem.Free;
+	FrmPedidoVendaItem.Free;
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -263,12 +287,12 @@ begin
 
   if btneditCodigoCliente.Text = '' then
   begin
-    NovoPedidoVenda;
+	NovoPedidoVenda;
   end
   else
   begin
-    ExibirBotoes(false);
-    dateeditDataPedido.Enabled := true;
+	ExibirBotoes(false);
+	dateeditDataPedido.Enabled := true;
   end;
 end;
 
@@ -278,16 +302,16 @@ begin
   // PREENCHE OS DADOS DO CLIENTE NA TELA DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   if btneditCodigoCliente.Text <> '' then
-    ObterDadosCliente(StrToIntDef(btneditCodigoCliente.Text, 0))
+	ObterDadosCliente(StrToIntDef(btneditCodigoCliente.Text, 0))
   else
-    LimparDadosCliente;
+	LimparDadosCliente;
   // ---------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_F8 then
-    actListagemClientes.Execute;
+	actListagemClientes.Execute;
 end;
 
 procedure TFrmPedidoVenda.btneditCodigoClienteRightButtonClick(Sender: TObject);
@@ -309,16 +333,16 @@ begin
   SetConstantes;
   if not BaseDados.Conectar(DBConexao) then
   begin
-    ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak + 'Análise o arquivo de configuração.' + sLineBreak +
-      _PATH_SISTEMA + _ARQUIVO_INI);
-    Application.Terminate;
+	ShowMessage('FALHA NA CONEXÃO!' + sLineBreak + sLineBreak + 'Análise o arquivo de configuração.' + sLineBreak +
+	  _PATH_SISTEMA + _ARQUIVO_INI);
+	Application.Terminate;
   end;
   // -------------------------------------------------------------------------
 end;
 
 procedure TFrmPedidoVenda.FormDestroy(Sender: TObject);
 begin
- FreeAndNil(DBConexao);
+  FreeAndNil(DBConexao);
 end;
 
 procedure TFrmPedidoVenda.FormShow(Sender: TObject);
@@ -337,28 +361,28 @@ begin
   // ---------------------------------------------------------------------------
   Result := false;
   try
-    PedidoVendaController := TPedidoVendaController.Create(DBConexao);
+	PedidoVendaController := TPedidoVendaController.Create(DBConexao);
 
-    if aTipoPersistencia = tpNovo then
-      aIDVenda := PedidoVendaController.GetNumeroPedidoVenda + 1;
+	if aTipoPersistencia = tpNovo then
+	  aIDVenda := PedidoVendaController.GetNumeroPedidoVenda + 1;
 
-    PedidoVenda               := TPedidoVendaModel.Create;
-    PedidoVenda.NumeroPedido  := aIDVenda;
-    PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
-    PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
-    PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
+	PedidoVenda               := TPedidoVendaModel.Create;
+	PedidoVenda.NumeroPedido  := aIDVenda;
+	PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
+	PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
+	PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
 
-    if aTipoPersistencia = tpNovo then
-      if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
-	Result := true;
+	if aTipoPersistencia = tpNovo then
+	  if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
+		Result := true;
 
-    if aTipoPersistencia = tpAlterar then
-      if PedidoVendaController.AlterarPedidoVenda(PedidoVenda) then
-	Result := true;
+	if aTipoPersistencia = tpAlterar then
+	  if PedidoVendaController.AlterarPedidoVenda(PedidoVenda) then
+		Result := true;
 
   finally
-    FreeAndNil(PedidoVenda);
-    FreeAndNil(PedidoVendaController);
+	FreeAndNil(PedidoVenda);
+	FreeAndNil(PedidoVendaController);
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -421,22 +445,22 @@ begin
   ClienteController := TClienteController.Create(DBConexao);
   Cliente           := ClienteController.ObterClientePorID(aID);
   try
-    if Cliente = nil then
-    begin
-      ShowMessage('Cliente não encontrado.');
-      LimparDadosCliente;
-      btneditCodigoCliente.SetFocus;
-      Exit;
-    end;
+	if Cliente = nil then
+	begin
+	  ShowMessage('Cliente não encontrado.');
+	  LimparDadosCliente;
+	  btneditCodigoCliente.SetFocus;
+	  Exit;
+	end;
 
-    btneditCodigoCliente.Text := Cliente.Codigo.ToString;
-    editClienteNome.Text      := Cliente.Nome;
-    editClienteCidade.Text    := Cliente.Cidade;
-    editClienteUF.Text        := Cliente.UF;
+	btneditCodigoCliente.Text := Cliente.Codigo.ToString;
+	editClienteNome.Text      := Cliente.Nome;
+	editClienteCidade.Text    := Cliente.Cidade;
+	editClienteUF.Text        := Cliente.UF;
 
   finally
-    FreeAndNil(Cliente);
-    FreeAndNil(ClienteController);
+	FreeAndNil(Cliente);
+	FreeAndNil(ClienteController);
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -450,38 +474,38 @@ begin
   // CARREGA OS DADOS DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   PedidoVendaController := TPedidoVendaController.Create(DBConexao);
-  PedidoVenda := PedidoVendaController.ObterDadosPedidoVenda(aID);
+  PedidoVenda           := PedidoVendaController.ObterDadosPedidoVenda(aID);
 
   try
-    if PedidoVenda = nil then
-    begin
-      ShowMessage('Pedido não encontrado.');
-      Result := false;
-      NovoPedidoVenda;
-      Exit;
-    end;
+	if PedidoVenda = nil then
+	begin
+	  ShowMessage('Pedido não encontrado.');
+	  Result := false;
+	  NovoPedidoVenda;
+	  Exit;
+	end;
 
-    btneditNumeroPedido.Text  := PedidoVenda.NumeroPedido.ToString;
-    btneditCodigoCliente.Text := PedidoVenda.CodigoCliente.ToString;
-    dateeditDataPedido.Date   := PedidoVenda.DataEmissao;
-    editValorTotal.Text       := PedidoVenda.ValorTotal.ToString;
+	btneditNumeroPedido.Text  := PedidoVenda.NumeroPedido.ToString;
+	btneditCodigoCliente.Text := PedidoVenda.CodigoCliente.ToString;
+	dateeditDataPedido.Date   := PedidoVenda.DataEmissao;
+	editValorTotal.Text       := PedidoVenda.ValorTotal.ToString;
 
-    // --------------------------------------------------------------
-    // IMPORTACAO DOS ITENS DO PEDIDO DE VENDA
-    aIDVenda := PedidoVenda.NumeroPedido;
-    ObterItensPedidoVenda(aID);
-    // --------------------------------------------------------------
+	// --------------------------------------------------------------
+	// IMPORTACAO DOS ITENS DO PEDIDO DE VENDA
+	aIDVenda := PedidoVenda.NumeroPedido;
+	ObterItensPedidoVenda(aID);
+	// --------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------
-    // IMPORTACAO DOS DADOS DO CLIENTE PARA O CABEÇALHO DO PEDIDO DE VENDA
-    ObterDadosCliente(PedidoVenda.CodigoCliente);
-    // --------------------------------------------------------------
+	// ---------------------------------------------------------------------------
+	// IMPORTACAO DOS DADOS DO CLIENTE PARA O CABEÇALHO DO PEDIDO DE VENDA
+	ObterDadosCliente(PedidoVenda.CodigoCliente);
+	// --------------------------------------------------------------
 
-    Result := true;
+	Result := true;
 
   finally
-    FreeAndNil(PedidoVenda);
-    FreeAndNil(PedidoVendaController);
+	FreeAndNil(PedidoVenda);
+	FreeAndNil(PedidoVendaController);
   end;
   // ---------------------------------------------------------------------------
 end;
@@ -499,13 +523,30 @@ begin
 
   PedidoVendaItem := TPedidoVendaItemModel.Create;
   try
-    PedidoVendaItemController.CarregarItensPedidoVenda(nPedido, QryPedidoVendaItens);
+	PedidoVendaItemController.CarregarItensPedidoVenda(nPedido, QryPedidoVendaItens);
 
   finally
-    FreeAndNil(PedidoVendaItem);
-    FreeAndNil(PedidoVendaItemController);
+	FreeAndNil(PedidoVendaItem);
+	FreeAndNil(PedidoVendaItemController);
   end;
   // ---------------------------------------------------------------------------
+end;
+
+procedure TFrmPedidoVenda.ExcluirItemPedidoVenda(nCodigo: Integer);
+var
+  PedidoVendaItemController: TPedidoVendaItemController;
+begin
+  PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
+  try
+
+	if PedidoVendaItemController.DeletarItemPedidoVenda(nCodigo) then
+	  	ObterDadosPedidoVenda(aIDVenda)
+    else
+       Exit;
+
+  finally
+	FreeAndNil(PedidoVendaItemController);
+  end;
 end;
 
 procedure TFrmPedidoVenda.DimencionarForm;
