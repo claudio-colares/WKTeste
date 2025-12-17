@@ -159,7 +159,6 @@ end;
 procedure TFrmPedidoVenda.AtualizarTotalPedido;
 begin
   editValorTotal.Text := FormatarMoeda(TotalizarItens(dbgrdItens.DataSource.DataSet));
-
 end;
 
 procedure TFrmPedidoVenda.btnFecharClick(Sender: TObject);
@@ -196,10 +195,12 @@ procedure TFrmPedidoVenda.dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shif
 begin
   if btneditCodigoCliente.Text = '' then
 	Exit;
+
   if Key = VK_RETURN then
 	actAlterarItem.Execute;
-  if Key = VK_DELETE then;
-  actExcluirItem.Execute;
+
+  if Key = VK_DELETE then
+    actExcluirItem.Execute;
 end;
 
 procedure TFrmPedidoVenda.TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
