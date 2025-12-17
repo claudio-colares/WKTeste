@@ -1,79 +1,116 @@
-## 🧱 Arquitetura Utilizada
+---
 
-O projeto segue uma separação clara de responsabilidades:
+# 🧾 Teste Técnico Delphi (Pedidos de Venda)
+
+Este projeto foi desenvolvido como parte de um **teste técnico para vaga de Desenvolvedor Delphi**, com o objetivo de demonstrar conhecimentos em **POO, MVC, Clean Code, SQL e FireDAC**, seguindo os requisitos.
+
+O sistema consiste em uma **tela de pedidos de venda**, permitindo a seleção de cliente, inclusão/edição/exclusão de produtos, totalização do pedido e gravação dos dados no banco de dados MySQL.
+
+---
+
+## 🎯 Objetivos do Projeto
+
+* Demonstrar domínio da linguagem **Delphi**
+* Aplicar conceitos de **Orientação a Objetos**
+* Separar responsabilidades utilizando **MVC**
+* Utilizar **FireDAC** para acesso ao banco de dados
+* Trabalhar com **SQL explícito** (SELECT, INSERT, UPDATE, DELETE)
+* Implementar **transações** para garantir integridade dos dados
+* Organizar o projeto de forma clara e legível
+
+---
+
+## 🧱 Arquitetura
+
+O projeto foi estruturado seguindo uma abordagem **MVC simplificada**, com separação clara entre:
+
+* **View (Forms)**
+  Responsáveis pela interação com o usuário e exibição dos dados.
+
+* **Controller**
+  Responsáveis por orquestrar o fluxo da aplicação, validações básicas e controle de transações.
+
+* **DAO (Data Access Object)**
+  Responsáveis exclusivamente pelo acesso ao banco de dados via FireDAC e SQL explícito.
 
 * **Model**
+  Classes que representam as entidades do domínio (Cliente, Produto, Pedido e Itens do Pedido).
 
-  * Representa as entidades de domínio (`PedidoVenda`, `PedidoVendaItem`, etc.)
-  * Contém apenas dados e comportamentos básicos
-* **DAO (Data Access Object)**
-
-  * Responsável exclusivamente pelo acesso ao banco de dados
-  * Centraliza SQL, persistência e leitura
-* **Controller**
-
-  * Orquestra as operações
-  * Aplica regras de negócio
-  * Gerencia transações
-* **View (Forms)**
-
-  * Atua como *Passive View*
-  * Não contém SQL
-  * Não conhece regras de negócio
-  * Apenas exibe dados e dispara ações
-
-Essa abordagem reduz acoplamento e facilita testes, manutenção e futuras alterações.
+Essa separação facilita a leitura, manutenção e evolução do código.
 
 ---
 
-## 🗄️ Acesso a Dados e DBGrid
+## 🗄️ Banco de Dados
 
-Os componentes visuais (`DBGrid`, `TFDQuery`) **não acessam diretamente o banco de dados**.
+* **MySQL**
+* Estrutura composta por:
 
-* O `TFDQuery` é utilizado **apenas como dataset em memória**
-* O SQL e a conexão com o banco ficam **exclusivamente no DAO**
-* O Controller decide **quando e como** os dados são carregados
+  * `clientes`
+  * `produtos`
+  * `pedidos_venda`
+  * `pedidos_venda_itens`
+* Uso de:
 
-Essa decisão evita SQL na View e mantém o formulário completamente desacoplado da camada de persistência.
-
----
-
-## 🔄 Controle de Transações
-
-O controle de transações foi centralizado no **Controller**, garantindo consistência entre operações relacionadas.
-
-* `AutoCommit` desativado
-* Transações explícitas (`StartTransaction`, `Commit`, `Rollback`)
-* Cada operação crítica (inclusão, alteração e exclusão) é executada dentro de um bloco transacional
-
-Exemplo conceitual:
-
-* Início da transação no Controller
-* Execução da operação no DAO
-* Commit em caso de sucesso
-* Rollback em caso de erro
-
-Isso garante integridade dos dados e segue boas práticas para sistemas corporativos.
+  * **Chaves primárias e estrangeiras**
+  * **Índices**
+  * **Relacionamentos**
+* Script/DUMP do banco disponível no diretório raiz do projeto
 
 ---
 
-## 🛠️ Considerações de Implementação
+## 🧩 Funcionalidades Implementadas
 
-A estratégia adotada foi priorizar a entrega de uma aplicação funcional, com a tela operante desde o início, para então refatorar e adequar a arquitetura às exigências do teste.
+* Seleção de cliente (cadastro pré-existente)
+* Inclusão de produtos no pedido informando:
 
-Por conta do tempo disponível, não foi utilizada uma TList para gerenciar os itens do pedido no Model, mantendo o controle diretamente via dataset.
-Essa refatoração é viável e relativamente simples, mas foi postergada para não comprometer o prazo de entrega.
+  * Código do produto
+  * Quantidade
+  * Valor unitário
+* Grid de itens do pedido com:
+
+  * Código
+  * Descrição
+  * Quantidade
+  * Valor unitário
+  * Valor total
+* Edição de itens via navegação no grid
+* Exclusão de itens com confirmação
+* Permite produtos repetidos no pedido
+* Totalização automática do pedido
+* Gravação do pedido e seus itens em tabelas separadas
+* Uso de **transações** para garantir consistência dos dados
+* Carregamento e exclusão de pedidos já gravados
 
 ---
 
-## 🎯 Considerações Finais
+## 🔧 Tecnologias Utilizadas
 
-As decisões tomadas priorizaram:
+* **Delphi**
+* **FireDAC**
+* **MySQL**
+* SQL nativo (sem ORMs ou componentes de terceiros)
+* Arquivo `.ini` para configuração dinâmica de conexão com o banco
 
-* Código limpo e organizado
-* Baixo acoplamento
-* Clareza de responsabilidades
-* Facilidade de manutenção e evolução
+---
 
-O projeto foi estruturado pensando em um **cenário real de sistemas Delphi corporativos**, onde legibilidade e arquitetura são tão importantes quanto o funcionamento imediato.
+## 📌 Observações
+
+Este projeto foi desenvolvido dentro de um **prazo limitado**, priorizando:
+
+* Funcionamento
+* Clareza de código
+* Organização
+* Boas práticas
+
+Alguns pontos podem ser refinados em uma evolução futura, como desacoplamento adicional entre camadas e melhorias pontuais de validação, sem impactar o funcionamento geral do sistema.
+
+---
+
+## 👨‍💻 Autor
+
+**Claudio Colares**
+Desenvolvedor Delphi
+GitHub: [https://github.com/claudio-colares](https://github.com/claudio-colares)
+
+---
 
