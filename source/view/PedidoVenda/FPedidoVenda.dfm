@@ -383,6 +383,8 @@ object FrmPedidoVenda: TFrmPedidoVenda
       Caption = 'Fechar (Esc)'
       TabOrder = 0
       OnClick = btnFecharClick
+      ExplicitLeft = 891
+      ExplicitTop = 24
     end
     object btnGravarPedido: TBitBtn
       AlignWithMargins = True

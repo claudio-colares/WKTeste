@@ -158,7 +158,8 @@ end;
 
 procedure TFrmPedidoVenda.AtualizarTotalPedido;
 begin
-  editValorTotal.Text := TotalizarItens(dbgrdItens.DataSource.DataSet).ToString;
+  editValorTotal.Text := FormatarMoeda(TotalizarItens(dbgrdItens.DataSource.DataSet));
+
 end;
 
 procedure TFrmPedidoVenda.btnFecharClick(Sender: TObject);
@@ -418,7 +419,7 @@ begin
 	PedidoVenda.NumeroPedido  := aIDVenda;
 	PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
 	PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
-	PedidoVenda.ValorTotal    := StrToFloat(FormatarMoeda(vlrTotal));
+	PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal .Text, 0);
 
 	if aTipoPersistencia = tpNovo then
 	  if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
@@ -574,7 +575,6 @@ begin
   try
 	PedidoVendaItemController.CarregarItensPedidoVenda(nPedido, QryPedidoVendaItens);
     AtualizarTotalPedido;
-
   finally
 	FreeAndNil(PedidoVendaItem);
 	FreeAndNil(PedidoVendaItemController);
