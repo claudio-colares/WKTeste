@@ -57,7 +57,7 @@ Isso garante integridade dos dados e segue boas práticas para sistemas corporat
 
 ---
 
-🛠️ Considerações de Implementação
+## 🛠️ Considerações de Implementação
 
 A estratégia adotada foi priorizar a entrega de uma aplicação funcional, com a tela operante desde o início, para então refatorar e adequar a arquitetura às exigências do teste.
 
