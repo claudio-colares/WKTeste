@@ -136,7 +136,7 @@
             <Form>FrmPedidoVendaItem</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\source\controller\classesGlobal\FuncoesController.pas"/>
+        <DCCReference Include="..\source\controller\classesGlobal\uFuncoesController.pas"/>
         <DCCReference Include="..\source\controller\PedidoVenda\PedidoVendaController.pas"/>
         <DCCReference Include="..\source\controller\PedidoVenda\PedidoVendaItemController.pas"/>
         <DCCReference Include="..\source\controller\Produtos\ProdutosController.pas"/>

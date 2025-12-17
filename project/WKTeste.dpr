@@ -4,7 +4,7 @@ uses
   Vcl.Forms,
   FPedidoVenda in '..\source\view\PedidoVenda\FPedidoVenda.pas' {FrmPedidoVenda},
   FPedidoVendaItem in '..\source\view\PedidoVenda\FPedidoVendaItem.pas' {FrmPedidoVendaItem},
-  FuncoesController in '..\source\controller\classesGlobal\FuncoesController.pas',
+  uFuncoesController in '..\source\controller\classesGlobal\uFuncoesController.pas',
   PedidoVendaController in '..\source\controller\PedidoVenda\PedidoVendaController.pas',
   PedidoVendaItemController in '..\source\controller\PedidoVenda\PedidoVendaItemController.pas',
   ProdutosController in '..\source\controller\Produtos\ProdutosController.pas',

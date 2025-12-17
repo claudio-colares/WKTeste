@@ -1,4 +1,4 @@
-unit FuncoesController;
+unit uFuncoesController;
 
 interface
 
@@ -9,6 +9,8 @@ procedure ExibirBotaoPesquisa(ButtonedEdit: TButtonedEdit);
 procedure SetConstantes;
 procedure QueryCriar(var aQuery: TFDQuery; aConexao: TFDConnection = nil);
 procedure QueryLiberar(var aQuery: TFDQuery);
+function FormatarMoeda(const AValor: Currency): string;
+
 
 implementation
 
@@ -47,6 +49,14 @@ begin
 
   aQuery.Close;
   FreeAndNil(aQuery);
+end;
+
+function FormatarMoeda(const AValor: Currency): string;
+var
+  FS: TFormatSettings;
+begin
+  FS := TFormatSettings.Create('pt-BR');
+  Result := FormatCurr('#,##0.00', AValor, FS);
 end;
 
 end.

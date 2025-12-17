@@ -38,7 +38,7 @@ implementation
 
 { TConectarBase }
 
-uses FuncoesController, uConstantesController;
+uses uFuncoesController, uConstantesController;
 
 procedure TConectarBaseController.Limpar;
 begin

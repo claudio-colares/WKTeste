@@ -71,7 +71,7 @@ implementation
 
 {$R *.dfm}
 
-uses FuncoesController, ProdutosModel, PedidoVendaItemModel, PedidoVendaItemController;
+uses uFuncoesController, ProdutosModel, PedidoVendaItemModel, PedidoVendaItemController;
 { TFrmPedidoVendaItem }
 
 procedure TFrmPedidoVendaItem.actListagemProdutosExecute(Sender: TObject);

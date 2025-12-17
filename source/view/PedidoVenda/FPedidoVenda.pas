@@ -1,25 +1,26 @@
-// -----------------------------------------------------------------------------
-// Projeto: wkTeste
-// Unit: FPredidoVenda
-//
-// Autor: Claudio Colares
-// Data: 15/12/2025
-//
-// Descrição:
-// Unit responsável pela tela de Pedido de Venda do sistema, realizando o controle de criação,
-// edição, carregamento e cancelamento de pedidos. Atua como interface entre o usuário e as regras de negócio,
-// integrando-se aos Controllers e Models.
-//
-// Principais funções:
-// Gerenciamento da interface do Pedido de Venda.
-// Persistência e carregamento dos dados do pedido e seus itens.
-// Integração com módulos de Cliente, Pedido de Venda e Itens.
-// Comunicação com banco de dados MySQL via FireDAC.
-//
-// Ambiente:
-// IDE: Delphi 12
-// Banco de Dados: MySQL
-// -----------------------------------------------------------------------------
+{ -----------------------------------------------------------------------------------#
+  # Projeto: wkTeste                                                                   #
+  # Unit: FPredidoVenda                                                                #
+  #                                                                                    #
+  # Autor: Claudio Colares                                                             #
+  # Data: 15/12/2025                                                                   #
+  #                                                                                    #
+  # Descrição:                                                                         #
+  # Unit responsável pela tela de Pedido de Venda do sistema,                          #
+  # realizando o controle de criação,# edição, carregamento e cancelamento de pedidos. #
+  # Atua como interface entre o usuário e as regras de negócio,                        #
+  # integrando-se aos Controllers e Models.                                            #
+  #                                                                                    #
+  # Principais funções:                                                                #
+  # Gerenciamento da interface do Pedido de Venda.                                     #
+  # Persistência e carregamento dos dados do pedido e seus itens.                      #
+  # Integração com módulos de Cliente, Pedido de Venda e Itens.                        #
+  # Comunicação com banco de dados MySQL via FireDAC.                                  #
+  #                                                                                    #
+  # Ambiente:                                                                          #
+  # IDE: Delphi 12                                                                     #
+  # Banco de Dados: MySQL                                                              #
+  ------------------------------------------------------------------------------------- }
 
 unit FPedidoVenda;
 
@@ -111,19 +112,22 @@ type
 
 	function TipoPersistenciaDados(aNumPedido: Integer): TTipoPersistencia;
 	function GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia): Boolean;
+	function TotalizarItens(DataSet: TDataSet): Currency;
+	procedure AtualizarTotalPedido;
 
   var
 	DBConexao     : TFDConnection;
 	BaseDados     : TConectarBaseController;
 	aIDVenda      : Integer;
 	PersistirDados: TTipoPersistencia;
+
   public
 	{ Public declarations }
 	procedure ObterDadosCliente(aID: Integer);
-	function  ObterDadosPedidoVenda(aID: Integer): Boolean;
+	function ObterDadosPedidoVenda(aID: Integer): Boolean;
 	procedure ObterItensPedidoVenda(nPedido: Integer);
 	procedure ExcluirItemPedidoVenda(nCodigo: Integer);
-    procedure ExcluirPedidoVenda(nCodigo: Integer);
+	procedure ExcluirPedidoVenda(nCodigo: Integer);
   end;
 
 var
@@ -133,7 +137,7 @@ implementation
 
 {$R *.dfm}
 
-uses FPedidoVendaItem, FuncoesController, FListagemCliente, FListagenPedidoVenda, ClienteModel;
+uses FPedidoVendaItem, uFuncoesController, FListagemCliente, FListagenPedidoVenda, ClienteModel;
 
 { TFrmPedidoVenda }
 
@@ -150,6 +154,11 @@ begin
 	FrmListagemCliente.Free;
   end;
   // ---------------------------------------------------------------------------
+end;
+
+procedure TFrmPedidoVenda.AtualizarTotalPedido;
+begin
+  editValorTotal.Text := TotalizarItens(dbgrdItens.DataSource.DataSet).ToString;
 end;
 
 procedure TFrmPedidoVenda.btnFecharClick(Sender: TObject);
@@ -185,11 +194,11 @@ end;
 procedure TFrmPedidoVenda.dbgrdItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if btneditCodigoCliente.Text = '' then
-    exit;
-  if key = VK_RETURN then
-  	actAlterarItem.Execute;
-  if key = VK_DELETE then;
-    actExcluirItem.Execute;
+	Exit;
+  if Key = VK_RETURN then
+	actAlterarItem.Execute;
+  if Key = VK_DELETE then;
+  actExcluirItem.Execute;
 end;
 
 procedure TFrmPedidoVenda.TelaObterNumPedidoVenda(aTipo: TTipoPersistencia);
@@ -213,6 +222,40 @@ begin
   else
 	Result := tpAlterar;
   // ---------------------------------------------------------------------------
+end;
+
+function TFrmPedidoVenda.TotalizarItens(DataSet: TDataSet): Currency;
+var
+  Bookmark: TBookmark;
+begin
+  Result := 0;
+
+  if not Assigned(dbgrdItens.DataSource) then
+    Exit;
+
+  DataSet := dbgrdItens.DataSource.DataSet;
+
+  if not  DataSet.Active or DataSet.IsEmpty then
+    Exit;
+
+  Bookmark := DataSet.GetBookmark;
+  try
+    DataSet.DisableControls;
+    DataSet.First;
+
+    while not DataSet.Eof do
+    begin
+      Result := Result +
+        DataSet.FieldByName('valor_total').AsCurrency;
+
+      DataSet.Next;
+    end;
+
+  finally
+    DataSet.GotoBookmark(Bookmark);
+    DataSet.FreeBookmark(Bookmark);
+    DataSet.EnableControls;
+  end;
 end;
 
 procedure TFrmPedidoVenda.actAlterarItemExecute(Sender: TObject);
@@ -249,12 +292,12 @@ end;
 
 procedure TFrmPedidoVenda.actExcluirItemExecute(Sender: TObject);
 var
-nCodigo: Integer;
+  nCodigo: Integer;
 begin
   // ---------------------------------------------------------------------------
   // EXCLUSAO DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
-nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger ;
+  nCodigo := QryPedidoVendaItens.FieldByName('codigo').AsInteger;
   if MessageDlg('Deseja realmente excluir este item?', mtWarning, [mbYes, mbNo], 0) = mrYes then
   begin
 	ExcluirItemPedidoVenda(nCodigo);
@@ -359,6 +402,7 @@ function TFrmPedidoVenda.GravarPedidoVenda(aTipoPersistencia: TTipoPersistencia)
 var
   PedidoVenda          : TPedidoVendaModel;
   PedidoVendaController: TPedidoVendaController;
+  vlrTotal             : Currency;
 begin
   // ---------------------------------------------------------------------------
   // PERSISTIR DADOS DO PEDIDO DE VENDA
@@ -374,7 +418,7 @@ begin
 	PedidoVenda.NumeroPedido  := aIDVenda;
 	PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
 	PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
-	PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal.Text, 0);
+	PedidoVenda.ValorTotal    := StrToFloat(FormatarMoeda(vlrTotal));
 
 	if aTipoPersistencia = tpNovo then
 	  if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then
@@ -409,6 +453,7 @@ begin
   // lIMPA OS DADOS DO PEDIDO DE VENDA
   // ---------------------------------------------------------------------------
   btneditNumeroPedido.Text   := '0';
+  editValorTotal.Text := FormatarMoeda(0.00);
   dateeditDataPedido.Enabled := true;
   dateeditDataPedido.Date    := now;
   btneditCodigoCliente.SetFocus;
@@ -528,6 +573,7 @@ begin
   PedidoVendaItem := TPedidoVendaItemModel.Create;
   try
 	PedidoVendaItemController.CarregarItensPedidoVenda(nPedido, QryPedidoVendaItens);
+    AtualizarTotalPedido;
 
   finally
 	FreeAndNil(PedidoVendaItem);
@@ -535,6 +581,7 @@ begin
   end;
   // ---------------------------------------------------------------------------
 end;
+
 
 procedure TFrmPedidoVenda.ExcluirItemPedidoVenda(nCodigo: Integer);
 var
@@ -544,9 +591,9 @@ begin
   try
 
 	if PedidoVendaItemController.DeletarItemPedidoVenda(nCodigo) then
-	  	ObterDadosPedidoVenda(aIDVenda)
-    else
-       Exit;
+	  ObterDadosPedidoVenda(aIDVenda)
+	else
+	  Exit;
 
   finally
 	FreeAndNil(PedidoVendaItemController);
@@ -560,12 +607,12 @@ begin
   PedidoVendaController := TPedidoVendaController.Create(DBConexao);
   try
 	if PedidoVendaController.DeletarPedidoVenda(nCodigo) then
-    begin
-        ShowMessage('Pedido excluído com successo!');
-	  	NovoPedidoVenda;
-    end
-    else
-       Exit;
+	begin
+	  ShowMessage('Pedido excluído com successo!');
+	  NovoPedidoVenda;
+	end
+	else
+	  Exit;
   finally
 	FreeAndNil(PedidoVendaController);
   end;
