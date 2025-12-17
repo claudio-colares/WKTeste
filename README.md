@@ -55,6 +55,7 @@ Exemplo conceitual:
 
 Isso garante integridade dos dados e segue boas práticas para sistemas corporativos.
 
+---
 
 🛠️ Considerações de Implementação
 
@@ -63,6 +64,7 @@ A estratégia adotada foi priorizar a entrega de uma aplicação funcional, com 
 Por conta do tempo disponível, não foi utilizada uma TList para gerenciar os itens do pedido no Model, mantendo o controle diretamente via dataset.
 Essa refatoração é viável e relativamente simples, mas foi postergada para não comprometer o prazo de entrega.
 
+---
 
 ## 🎯 Considerações Finais
 
