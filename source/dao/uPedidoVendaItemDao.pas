@@ -13,12 +13,11 @@ type
     constructor Create(aConnection: TFDConnection);
 
     procedure CarregarTabela(aQuery: TFDQuery);
-    function GetPedidoVendaItemByID(nCodigo: Integer; nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
+    function GetPedidoVendaItemByID(nCodigo: Integer;nPedido: Integer): TPedidoVendaItemModel;
     function NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
     function DeletarItemPedidoVenda(nCodigo: Integer): Boolean;
     procedure CarregarItensPedidoVenda(nPedido: Integer; aQuery: TFDQuery);
     function AlterarItemPedidoVenda(aPedidoVendaItemModel: TPedidoVendaItemModel): Boolean;
-
   end;
 
 implementation
@@ -29,8 +28,6 @@ function TPedidoVendaItemDAO.NovoItemPedidoVenda(aPedidoVendaItemModel: TPedidoV
 var
   aQuery                : TFDQuery;
   strSQL                : String;
-  aNumeroPedidoVenda    : Integer;
-  aNovoNumeroPedidoVenda: Integer;
 begin
   Result := False;
   // -------------------------------------------------------------------------
@@ -56,7 +53,7 @@ begin
     aQuery.ParamByName('valor_total').AsCurrency    := aPedidoVendaItemModel.ValorTotal;
 
     aQuery.ExecSQL;
-    aQuery.Connection.Commit;
+
     Result := true;
   finally
     aQuery.Free;
@@ -102,7 +99,6 @@ begin
     aQuery.ParamByName('valor_total').AsCurrency   := aPedidoVendaItemModel.ValorTotal;
 
     aQuery.ExecSQL;
-    aQuery.Connection.Commit;
 
     Result := True;
   finally
@@ -148,22 +144,19 @@ var
 begin
   Result := False;
   aQuery := TFDQuery.Create(nil);
-  Try
-	aQuery.Connection := DBConexao;
-
-	aQuery.SQL.Text :=
-    'DELETE FROM pedidos_vendas_itens ' +
-    'WHERE codigo = :pCodigo';
+  try
+	aQuery.Connection                       := DBConexao;
+	aQuery.SQL.Text                         := 'DELETE FROM pedidos_vendas_itens ' + 'WHERE codigo = :pCodigo';
 	aQuery.ParamByName('pCodigo').AsInteger := nCodigo;
 	aQuery.ExecSQL;
-    Result := True;
-  except
-	Result := False;
-  End;
 
+	Result := true;
+  finally
+	aQuery.Free;
+  end;
 end;
 
-function TPedidoVendaItemDAO.GetPedidoVendaItemByID(nCodigo: Integer;nProduto: Integer;nPedido: Integer): TPedidoVendaItemModel;
+function TPedidoVendaItemDAO.GetPedidoVendaItemByID(nCodigo: Integer;nPedido: Integer): TPedidoVendaItemModel;
 var
   aQuery         : TFDQuery;
   PedidoVendaItem: TPedidoVendaItemModel;
@@ -182,14 +175,13 @@ begin
      ' i.valor_total              '+
      'FROM pedidos_vendas_itens i '+
      'INNER JOIN produtos p       '+
-     'ON p.codigo           = :codigo_produto '+
+     'ON p.codigo           = i.codigo_produto '+
      'WHERE i.numero_pedido = :numero_pedido  '+
      'AND i.codigo          = :codigo ';
 
     aQuery.Connection := DBConexao;
     aQuery.SQL.Text   := strSQL;
     aQuery.ParamByName('codigo').AsInteger := nCodigo;
-    aQuery.ParamByName('codigo_produto').AsInteger := nProduto;
     aQuery.ParamByName('numero_pedido').AsInteger := nPedido;
     aQuery.Open;
 

@@ -241,7 +241,7 @@ begin
 	exit;
 
   PedidoVendaItemController := TPedidoVendaItemController.Create(DBConexao);
-  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigo, nProduto, nPedido);
+  PedidoVendaItem           := PedidoVendaItemController.GetPedidoVendaItemByID(nCodigo,nPedido);
 
   try
 	if PedidoVendaItem = nil then
