@@ -106,9 +106,9 @@ Alguns pontos podem ser refinados em uma evolução futura, como desacoplamento 
 
 ---
 
-## 👨‍💻 Autor
+👨‍💻 Autor
 
-**Claudio Colares**
+Claudio Colares
 Desenvolvedor Delphi
----
+GitHub: https://github.com/claudio-colares
 
