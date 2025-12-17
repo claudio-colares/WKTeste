@@ -110,7 +110,5 @@ Alguns pontos podem ser refinados em uma evolução futura, como desacoplamento 
 
 **Claudio Colares**
 Desenvolvedor Delphi
-Linkedln: [(https://github.com/claudio-colares](https://www.linkedin.com/in/claudio-colares/)](https://www.linkedin.com/in/claudio-colares/)](https://www.linkedin.com/in/claudio-colares/)
-
 ---
 
