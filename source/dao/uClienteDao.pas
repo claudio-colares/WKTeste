@@ -24,7 +24,7 @@ implementation
 procedure TClienteDAO.CarregarTabela(aQuery: TFDQuery);
 begin
   aQuery.Connection := BDConexao;
-  aQuery.SQL.Text   := 'SELECT Codigo, Nome, Cidade, UF FROM clientes';
+  aQuery.SQL.Text   := 'SELECT Codigo, Nome, Cidade, UF FROM clientes ORDER BY codigo';
   aQuery.Open;
 end;
 

@@ -71,7 +71,7 @@ begin
     ' quantidade,'+
     ' valor_unitario,'+
     ' valor_total '+
-    'FROM pedidos_vendas_itens';
+    'FROM pedidos_vendas_itens ORDER BY codigo';
   aQuery.Open;
 end;
 

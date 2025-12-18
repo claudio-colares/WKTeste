@@ -23,7 +23,7 @@ implementation
 procedure TProdutoDAO.CarregarTabela(aQuery: TFDQuery);
 begin
   aQuery.Connection := BDConexao;
-  aQuery.SQL.Text   := 'SELECT codigo, descricao, precoVenda FROM produtos';
+  aQuery.SQL.Text   := 'SELECT codigo, descricao, precoVenda FROM produtos ORDER BY codigo';
   aQuery.Open;
 end;
 
@@ -37,7 +37,6 @@ var
   aQuery : TFDQuery;
   Produto: TProdutoModel;
 begin
-  Produto := TProdutoModel.Create;
   aQuery  := TFDQuery.Create(nil);
   try
     aQuery.Connection := BDConexao;
@@ -46,7 +45,7 @@ begin
     aQuery.Open;
 
     if aQuery.IsEmpty then
-      Exit(nil);
+      Exit;
 
     Produto            := TProdutoModel.Create;
     Produto.Codigo     := aQuery.FieldByName('codigo').AsInteger;

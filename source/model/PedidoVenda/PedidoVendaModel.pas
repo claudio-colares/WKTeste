@@ -5,14 +5,12 @@ interface
 type
   TPedidoVendaModel = class
   private
-    FCodigo       : Integer;
     FNumeroPedido : Integer;
     FDataEmissao  : TDateTime;
     FCodigoCliente: Integer;
     FValorTotal   : Currency;
 
   public
-    property Codigo: Integer read FCodigo write FCodigo;
     property DataEmissao : TDateTime read FDataEmissao write FDataEmissao;
     property NumeroPedido: Integer read FNumeroPedido write FNumeroPedido;
     property CodigoCliente: Integer read FCodigoCliente write FCodigoCliente;

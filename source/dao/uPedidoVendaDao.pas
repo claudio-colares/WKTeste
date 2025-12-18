@@ -65,7 +65,8 @@ begin
   ' data_emissao,        '+
   ' codigo_cliente,      '+
   ' valor_total          '+
-  'FROM pedidos_venda';
+  'FROM pedidos_venda    '+
+  'ORDER BY numero_pedido';
   aQuery.Open;
 end;
 

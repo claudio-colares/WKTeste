@@ -124,7 +124,7 @@ type
   public
 	{ Public declarations }
 	procedure ObterDadosCliente(aID: Integer);
-	function ObterDadosPedidoVenda(aID: Integer): Boolean;
+	function  ObterDadosPedidoVenda(aID: Integer): Boolean;
 	procedure ObterItensPedidoVenda(nPedido: Integer);
 	procedure ExcluirItemPedidoVenda(nCodigo: Integer);
 	procedure ExcluirPedidoVenda(nCodigo: Integer);
@@ -412,6 +412,7 @@ begin
   Result := false;
   try
 	PedidoVendaController := TPedidoVendaController.Create(DBConexao);
+    vlrTotal := StrToCurr(editValorTotal.Text);
 
 	if aTipoPersistencia = tpNovo then
 	  aIDVenda := PedidoVendaController.GetNumeroPedidoVenda + 1;
@@ -420,7 +421,7 @@ begin
 	PedidoVenda.NumeroPedido  := aIDVenda;
 	PedidoVenda.DataEmissao   := dateeditDataPedido.Date;
 	PedidoVenda.CodigoCliente := StrToIntDef(btneditCodigoCliente.Text, 0);
-	PedidoVenda.ValorTotal    := StrToIntDef(editValorTotal .Text, 0);
+	PedidoVenda.ValorTotal    := vlrTotal;
 
 	if aTipoPersistencia = tpNovo then
 	  if PedidoVendaController.GravarPedidoVenda(PedidoVenda) then

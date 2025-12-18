@@ -9,7 +9,7 @@ type
     FNumeroPedido     : Integer;
     FCodigoProduto    : Integer;
     FDescricaoProduto : String;
-    FQuantidade       : Float32;
+    FQuantidade       : Double;
     FValorUnitario    : Currency;
     FValorTotal       : Currency;
 
@@ -18,7 +18,7 @@ type
     property NumeroPedido     : Integer read FNumeroPedido write FNumeroPedido;
     property CodigoProduto    : Integer read FCodigoProduto write FCodigoProduto;
     property DescricaoProduto : String read FDescricaoProduto write FDescricaoProduto;
-    property Quantidade       : Float32 read FQuantidade write FQuantidade;
+    property Quantidade       : Double read FQuantidade write FQuantidade;
     property ValorUnitario    : Currency read FValorUnitario write FValorUnitario;
     property ValorTotal       : currency read FValorTotal write FValorTotal;
     procedure Limpar;
